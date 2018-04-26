@@ -83,6 +83,17 @@ namespace ReactiveValidation.Extensions
 
         public static TNext GreaterThanOrEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            TProp valueToCompare,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+                where TProp : IComparable
+        {
+            return ruleBuilder.SetValidator(new GreaterThanOrEqualValidator<TObject, TProp>(_ => valueToCompare, validationMessageType));
+        }
+
+        public static TNext GreaterThanOrEqual<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
@@ -90,6 +101,17 @@ namespace ReactiveValidation.Extensions
                 where TProp : IComparable
         {
             return ruleBuilder.SetValidator(new GreaterThanOrEqualValidator<TObject, TProp>(valueToCompareExpression, validationMessageType));
+        }
+
+        public static TNext GreaterThan<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            TProp valueToCompare,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+                where TProp : IComparable
+        {
+            return ruleBuilder.SetValidator(new GreaterThanValidator<TObject, TProp>(_ => valueToCompare, validationMessageType));
         }
 
         public static TNext GreaterThan<TNext, TObject, TProp>(
@@ -112,6 +134,13 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (minLength < 0)
+                throw new ArgumentException("MinLength should be not less 0", nameof(minLength));
+
+            if (minLength > maxLength)
+                throw new ArgumentException("MinLength should be not less MaxLength", nameof(minLength));
+
+
             return ruleBuilder.SetValidator(new LengthValidator<TObject>(_ => minLength, _ => maxLength, validationMessageType));
         }
 
@@ -123,6 +152,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (minLength < 0)
+                throw new ArgumentException("MinLength should be not less 0", nameof(minLength));
+
             return ruleBuilder.SetValidator(new LengthValidator<TObject>(_ => minLength, maxLengthExpression, validationMessageType));
         }
 
@@ -134,6 +166,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (maxLength < 0)
+                throw new ArgumentException("MaxLength should be not less 0", nameof(maxLength));
+
             return ruleBuilder.SetValidator(new LengthValidator<TObject>(minLengthExpression, _ => maxLength, validationMessageType));
         }
 
@@ -155,6 +190,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (minLength < 0)
+                throw new ArgumentException("MinLength should be not less 0", nameof(minLength));
+
             return ruleBuilder.SetValidator(new MinLengthValidator<TObject>(_ => minLength, validationMessageType));
         }
 
@@ -175,6 +213,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (maxLength < 0)
+                throw new ArgumentException("MaxLength should be not less 0", nameof(maxLength));
+
             return ruleBuilder.SetValidator(new MaxLengthValidator<TObject>(_ => maxLength, validationMessageType));
         }
 
@@ -195,6 +236,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (length < 0)
+                throw new ArgumentException("Length should be not less 0", nameof(length));
+
             return ruleBuilder.SetValidator(new ExactLengthValidator<TObject>(_ => length, validationMessageType));
         }
 
@@ -211,6 +255,17 @@ namespace ReactiveValidation.Extensions
 
         public static TNext LessThanOrEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            TProp valueToCompare,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+                where TProp : IComparable
+        {
+            return ruleBuilder.SetValidator(new LessThanOrEqualValidator<TObject, TProp>(_ => valueToCompare, validationMessageType));
+        }
+
+        public static TNext LessThanOrEqual<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
@@ -218,6 +273,17 @@ namespace ReactiveValidation.Extensions
                 where TProp : IComparable
         {
             return ruleBuilder.SetValidator(new LessThanOrEqualValidator<TObject, TProp>(valueToCompareExpression, validationMessageType));
+        }
+
+        public static TNext LessThan<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            TProp valueToCompare,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+                where TProp : IComparable
+        {
+            return ruleBuilder.SetValidator(new LessThanValidator<TObject, TProp>(_ => valueToCompare, validationMessageType));
         }
 
         public static TNext LessThan<TNext, TObject, TProp>(
@@ -297,6 +363,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if(string.IsNullOrEmpty(regexPattern) == true)
+                throw new ArgumentException("RegexPattern should be not empty", nameof(regexPattern));
+
             return ruleBuilder.SetValidator(new RegularExpressionValidator<TObject>(_ => regexPattern, validationMessageType));
         }
 
@@ -308,6 +377,9 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
+            if (string.IsNullOrEmpty(regexPattern) == true)
+                throw new ArgumentException("RegexPattern should be not empty", nameof(regexPattern));
+
             return ruleBuilder.SetValidator(new RegularExpressionValidator<TObject>(_ => regexPattern, regexOptions, validationMessageType));
         }
 
