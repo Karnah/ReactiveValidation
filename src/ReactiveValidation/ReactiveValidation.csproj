@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{346D5F86-A0AE-4887-B429-2A55331F0208}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ReactiveValidation</RootNamespace>
+    <AssemblyName>ReactiveValidation</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="ReactiveUI, Version=7.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\reactiveui-core.7.4.0\lib\Net45\ReactiveUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Splat, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Splat.1.4.0\lib\Net45\Splat.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rx-XAML.2.2.5\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\DisplayNameAttribute.cs" />
+    <Compile Include="Exceptions\MethodAlreadyCalledException.cs" />
+    <Compile Include="Extensions\CollectionValidatorsExtensions.cs" />
+    <Compile Include="Extensions\GuardExtensions.cs" />
+    <Compile Include="IObjectValidatorBuilder.cs" />
+    <Compile Include="Resources\DisplayNamePropertySource.cs" />
+    <Compile Include="Validators\AbstractComparisonValidator.cs" />
+    <Compile Include="Validators\BetweenValidator.cs" />
+    <Compile Include="Validators\CollectionElementsAreValidValidator.cs" />
+    <Compile Include="Validators\CountValidator.cs" />
+    <Compile Include="Validators\EachElementValidator.cs" />
+    <Compile Include="Validators\GreaterThanOrEqualValidator.cs" />
+    <Compile Include="Validators\GreaterThanValidator.cs" />
+    <Compile Include="Validators\ModelIsValidValidator.cs" />
+    <Compile Include="Validators\LengthValidator.cs" />
+    <Compile Include="Validators\LessThanOrEqualValidator.cs" />
+    <Compile Include="Validators\LessThanValidator.cs" />
+    <Compile Include="Validators\NotEmptyCollectionValidator.cs" />
+    <Compile Include="Validators\NotEqualValidator.cs" />
+    <Compile Include="Validators\NullValidator.cs" />
+    <Compile Include="Validators\PredicateValidator.cs" />
+    <Compile Include="Validators\RegularExpressionValidator.cs" />
+    <Compile Include="WPF\Behaviors\ValidationBehavior.cs" />
+    <Compile Include="WPF\Controls\AttachedPopup.cs" />
+    <Compile Include="Extensions\CommonValidatorsExtensions.cs" />
+    <Compile Include="Helpers\ValidatorsNames.cs" />
+    <Compile Include="Adapters\BasePropertiesAdapter.cs" />
+    <Compile Include="Adapters\BaseSinglePropertyAdapter.cs" />
+    <Compile Include="Adapters\CollectionPropertyAdapter.cs" />
+    <Compile Include="Adapters\PropertiesAdapter.cs" />
+    <Compile Include="Adapters\SinglePropertyAdapter.cs" />
+    <Compile Include="Validators\ComplexValidator.cs" />
+    <Compile Include="Validators\WrappingValidator.cs" />
+    <Compile Include="Validators\PropertyValidator.cs" />
+    <Compile Include="Validators\EqualValidator.cs" />
+    <Compile Include="Validators\NotEmptyStringValidator.cs" />
+    <Compile Include="Validators\NotNullValidator.cs" />
+    <Compile Include="RuleBuilders\RuleBuilder.cs" />
+    <Compile Include="RuleBuilders\IAdapterBuilder.cs" />
+    <Compile Include="Adapters\IPropertiesAdapter.cs" />
+    <Compile Include="Validators\IPropertyValidator.cs" />
+    <Compile Include="Validators\IPropertyValidatorSettings.cs" />
+    <Compile Include="RuleBuilders\IRuleBuilder.cs" />
+    <Compile Include="RuleBuilders\IRuleBuilderInitial.cs" />
+    <Compile Include="IObjectValidator.cs" />
+    <Compile Include="RuleBuilders\IRuleBuilderOption.cs" />
+    <Compile Include="Resources\ILanguage.cs" />
+    <Compile Include="Resources\ILanguageManager.cs" />
+    <Compile Include="Resources\IStringSource.cs" />
+    <Compile Include="Resources\Languages\EnglishLanguage.cs" />
+    <Compile Include="Resources\Languages\RussianLanguage.cs" />
+    <Compile Include="Resources\StaticLanguage.cs" />
+    <Compile Include="Resources\LanguageManager.cs" />
+    <Compile Include="Resources\LanguageStringSource.cs" />
+    <Compile Include="Resources\StaticStringSource.cs" />
+    <Compile Include="Models\ParameterInfo.cs" />
+    <Compile Include="ValidatableObject.cs" />
+    <Compile Include="Enums\ValidationMessageType.cs" />
+    <Compile Include="Helpers\ReactiveValidationHelper.cs" />
+    <Compile Include="IValidatableObject.cs" />
+    <Compile Include="IValidationBuilder.cs" />
+    <Compile Include="Models\ValidationMessage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidationBuilder.cs" />
+    <Compile Include="ObjectValidator.cs" />
+    <Compile Include="Models\ValidationContext.cs" />
+    <Compile Include="ValidationOptions.cs" />
+    <Compile Include="WPF\Converters\ShowValidationPopupConverter.cs" />
+    <Compile Include="WPF\Converters\ErrorsToMarkColorConverter.cs" />
+    <Compile Include="WPF\Converters\ErrorContentToColorConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="WPF\Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

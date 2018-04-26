@@ -1,0 +1,78 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:rv="clr-namespace:ReactiveValidation"
+                    xmlns:converters="clr-namespace:ReactiveValidation.WPF.Converters"
+                    xmlns:controls="clr-namespace:ReactiveValidation.WPF.Controls">
+
+    <ControlTemplate x:Key="ValidationErrorTemplate">
+        <ControlTemplate.Resources>
+            <converters:ShowValidationPopupConverter x:Key="ShowValidationPopupConverter" />
+            <converters:ErrorContentToColorConverter x:Key="ErrorContentToColorConverter" />
+            <converters:ErrorsToMarkColorConverter x:Key="ErrorsToMarkColorConverter" />
+        </ControlTemplate.Resources>
+
+        <StackPanel Orientation="Horizontal">
+            <Border x:Name="PART_Border" BorderThickness="0,0,1,0" BorderBrush="Transparent" CornerRadius="0.7" VerticalAlignment="Top">
+                <Grid>
+                    <Polygon Grid.ZIndex="2" Margin="-1" Points="6,6 6,0 0,0"
+                             HorizontalAlignment="Right" VerticalAlignment="Top"
+                             IsHitTestVisible="True">
+                        <Polygon.Fill>
+                            <MultiBinding Converter="{StaticResource ErrorsToMarkColorConverter}">
+                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
+                                <!-- If binding only to Validation.Errors then binding doesn't call converter -->
+                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
+                            </MultiBinding>
+                        </Polygon.Fill>
+                    </Polygon>
+
+                    <Polyline Grid.ZIndex="3"
+                              Points="7,7 0,0" Margin="-1" HorizontalAlignment="Right"
+                              StrokeThickness="1"
+                              Stroke="White"
+                              VerticalAlignment="Top"
+                              IsHitTestVisible="True" />
+
+                    <AdornedElementPlaceholder x:Name="PART_Adorner" Margin="-1" />
+                </Grid>
+            </Border>
+
+            <controls:AttachedPopup x:Name="PART_ErrorPopup" AllowsTransparency="True"
+                                    PlacementTarget="{Binding ElementName=PART_Adorner, Path=AdornedElement, UpdateSourceTrigger=PropertyChanged}"
+                                    Placement="Right">
+                <Border IsHitTestVisible="False" MinHeight="22" MaxWidth="267">
+                    <ItemsControl Margin="3,-3,3,-3" Background="White"
+                                  ItemsSource="{Binding ElementName=PART_Adorner, Path=AdornedElement.(Validation.Errors)}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1"
+                                        BorderBrush="{Binding ErrorContent, Converter={StaticResource ErrorContentToColorConverter}, Mode=OneWay}"
+                                        Background="White" Margin="0,3,0,3" Padding="8,3,8,3">
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Black" TextWrapping="Wrap" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </controls:AttachedPopup>
+        </StackPanel>
+
+        <ControlTemplate.Triggers>
+            <DataTrigger Value="True">
+                <DataTrigger.Binding>
+                    <MultiBinding Converter="{StaticResource ShowValidationPopupConverter}">
+                        <MultiBinding.Bindings>
+                            <Binding ElementName="PART_ErrorPopup" Path="IsTargetVisible" />
+                            <Binding ElementName="PART_Adorner" Path="AdornedElement.IsKeyboardFocused" />
+                            <Binding ElementName="PART_Adorner" Path="AdornedElement.IsMouseOver" />
+                            <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
+                            <!--<Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />-->
+                        </MultiBinding.Bindings>
+                    </MultiBinding>
+                </DataTrigger.Binding>
+
+                <Setter TargetName="PART_ErrorPopup" Property="IsOpen" Value="True" />
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+</ResourceDictionary>

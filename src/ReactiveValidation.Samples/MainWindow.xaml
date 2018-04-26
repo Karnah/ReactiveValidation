@@ -1,0 +1,24 @@
+﻿<Window x:Class="ReactiveValidation.Samples.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ReactiveValidation.Samples"
+        xmlns:bs="clr-namespace:ReactiveValidation.Samples._1._BaseSample"
+        xmlns:dp="clr-namespace:ReactiveValidation.Samples._2._Dependent_properties"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="900">
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabItem Header="1. Base samples">
+                <bs:BaseSampleView />
+            </TabItem>
+
+            <TabItem Header="2. Dependent properties">
+                <TabItem.Content>
+                    <dp:DependentPropertiesView />
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
