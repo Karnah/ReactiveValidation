@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
@@ -11,6 +12,8 @@ namespace ReactiveValidation
     {
         private readonly Dictionary<string, ILanguage> _languages;
 
+        private CultureInfo _overridedCulture;
+
         public LanguageManager()
         {
             var languages = new ILanguage[] {
@@ -18,24 +21,48 @@ namespace ReactiveValidation
                 new EnglishLanguage(),
             };
             _languages = languages.ToDictionary(l => l.Name, l => l);
+
+            CurrentCulture = Culture ?? CultureInfo.CurrentUICulture;
         }
 
 
-        public CultureInfo Culture { get; set; }
+        public CultureInfo Culture {
+            get => _overridedCulture;
+            set {
+                if (Equals(_overridedCulture, value))
+                    return;
+
+                _overridedCulture = value;
+                OnCultureChanged();
+            }
+        }
+
+        public CultureInfo CurrentCulture { get; private set; }
 
         public ResourceManager DefaultResourceManager { get; set; }
 
+        public bool TrackCultureChanged { get; set; }
+
+
+        public event EventHandler<CultureChangedEventArgs> CultureChanged;
+
+
+        public void OnCultureChanged()
+        {
+            CurrentCulture = Culture ?? CultureInfo.CurrentUICulture;
+
+            CultureChanged?.Invoke(this, new CultureChangedEventArgs(CurrentCulture));
+        }
 
         public string GetString(string key)
         {
-            var culture = Culture ?? CultureInfo.CurrentUICulture;
-            var code = culture.Name;
+            var code = CurrentCulture.Name;
 
-            if (culture.IsNeutralCulture == false && _languages.ContainsKey(code) == false) {
-                code = culture.Parent.Name;
+            if (CurrentCulture.IsNeutralCulture == false && _languages.ContainsKey(code) == false) {
+                code = CurrentCulture.Parent.Name;
             }
 
-            var message = DefaultResourceManager?.GetString(key, culture);
+            var message = DefaultResourceManager?.GetString(key, CurrentCulture);
             if (string.IsNullOrEmpty(message) == true && _languages.ContainsKey(code)) {
                 message = _languages[code].GetTranslation(key);
             }

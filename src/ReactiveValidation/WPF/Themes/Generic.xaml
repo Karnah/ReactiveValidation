@@ -7,8 +7,9 @@
     <ControlTemplate x:Key="ValidationErrorTemplate">
         <ControlTemplate.Resources>
             <converters:ShowValidationPopupConverter x:Key="ShowValidationPopupConverter" />
-            <converters:ErrorContentToColorConverter x:Key="ErrorContentToColorConverter" />
+            <converters:MessageTypeToColorConverter x:Key="MessageTypeToColorConverter" />
             <converters:ErrorsToMarkColorConverter x:Key="ErrorsToMarkColorConverter" />
+            <converters:ErrorsToValidationMessagesConverter x:Key="ErrorsToValidationMessagesConverter" />
         </ControlTemplate.Resources>
 
         <StackPanel Orientation="Horizontal">
@@ -41,14 +42,21 @@
                                     PlacementTarget="{Binding ElementName=PART_Adorner, Path=AdornedElement, UpdateSourceTrigger=PropertyChanged}"
                                     Placement="Right">
                 <Border IsHitTestVisible="False" MinHeight="22" MaxWidth="267">
-                    <ItemsControl Margin="3,-3,3,-3" Background="White"
-                                  ItemsSource="{Binding ElementName=PART_Adorner, Path=AdornedElement.(Validation.Errors)}">
+                    <ItemsControl Margin="3,-3,3,-3" Background="White">
+                        <ItemsControl.ItemsSource>
+                            <MultiBinding Converter="{StaticResource ErrorsToValidationMessagesConverter}">
+                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
+                                <!-- If binding only to Validation.Errors then binding doesn't call converter -->
+                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
+                            </MultiBinding>
+                        </ItemsControl.ItemsSource>
+
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="rv:ValidationMessage">
                                 <Border BorderThickness="1"
-                                        BorderBrush="{Binding ErrorContent, Converter={StaticResource ErrorContentToColorConverter}, Mode=OneWay}"
+                                        BorderBrush="{Binding ValidationMessageType, Converter={StaticResource MessageTypeToColorConverter}, Mode=OneWay}"
                                         Background="White" Margin="0,3,0,3" Padding="8,3,8,3">
-                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Black" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Message}" Foreground="Black" TextWrapping="Wrap" />
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -66,7 +74,6 @@
                             <Binding ElementName="PART_Adorner" Path="AdornedElement.IsKeyboardFocused" />
                             <Binding ElementName="PART_Adorner" Path="AdornedElement.IsMouseOver" />
                             <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
-                            <!--<Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />-->
                         </MultiBinding.Bindings>
                     </MultiBinding>
                 </DataTrigger.Binding>

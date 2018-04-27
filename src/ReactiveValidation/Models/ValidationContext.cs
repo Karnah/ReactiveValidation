@@ -1,27 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace ReactiveValidation
 {
     public class ValidationContext <TObject, TProp>
         where TObject : IValidatableObject
     {
-        private readonly Dictionary<string, string> _messageArguments;
+        private readonly Dictionary<string, IStringSource> _messageArguments;
 
-        public ValidationContext(TObject validatableObject, string propertyName, string displayPropertyName, TProp propertyValue)
+        public ValidationContext(TObject validatableObject, string propertyName, IStringSource displayPropertySource, TProp propertyValue)
         {
             ValidatableObject = validatableObject;
             PropertyName = propertyName;
-            DisplayPropertyName = displayPropertyName;
+            DisplayPropertySource = displayPropertySource;
             PropertyValue = propertyValue;
 
-            _messageArguments = new Dictionary<string, string> {
-                { nameof(PropertyName), string.IsNullOrEmpty(DisplayPropertyName) == true ? PropertyName : DisplayPropertyName }
+            _messageArguments = new Dictionary<string, IStringSource> {
+                { nameof(PropertyName), DisplayPropertySource ?? new StaticStringSource(propertyName) }
             };
         }
 
         public ValidationContext(ValidationContext<TObject, TProp> parentContext)
-            : this(parentContext.ValidatableObject, parentContext.PropertyName, parentContext.DisplayPropertyName, parentContext.PropertyValue)
+            : this(parentContext.ValidatableObject, parentContext.PropertyName, parentContext.DisplayPropertySource, parentContext.PropertyValue)
         { }
 
 
@@ -29,7 +28,7 @@ namespace ReactiveValidation
 
         public string PropertyName { get; }
 
-        public string DisplayPropertyName { get; }
+        public IStringSource DisplayPropertySource { get; }
 
         public TProp PropertyValue { get; }
 
@@ -43,29 +42,18 @@ namespace ReactiveValidation
 
         public void RegisterMessageArgument<TParam>(string placeholderName, ParameterInfo<TObject, TParam> parameterInfo, TParam paramValue)
         {
-            var placeholderValue = parameterInfo?.DisplayName ?? parameterInfo?.Name;
-            if (string.IsNullOrEmpty(placeholderValue) == false) {
-                //todo need replace "{Placeholder}" on "filed {placeholderValue}"
+            if (parameterInfo?.DisplayNameSource != null) {
+                _messageArguments.Add(placeholderName, parameterInfo.DisplayNameSource);
             }
             else {
-                placeholderValue = paramValue?.ToString();
+                var stringSource = new StaticStringSource(parameterInfo?.Name ?? paramValue?.ToString());
+                _messageArguments.Add(placeholderName, stringSource);
             }
-
-            //todo if placeholderValue is null or empty, what i must do?
-
-
-            _messageArguments.Add(placeholderName, placeholderValue);
         }
 
-        public string GetMessage(IStringSource stringSource)
+        public IStringSource GetMessageSource(IStringSource stringSource)
         {
-            var messagePattern = new StringBuilder(stringSource.GetString());
-
-            foreach (var messageArgument in _messageArguments) {
-                messagePattern = messagePattern.Replace($"{{{messageArgument.Key}}}", messageArgument.Value);
-            }
-
-            return messagePattern.ToString();
+            return new ValidationMessageStringSource(stringSource, _messageArguments);
         }
     }
 }

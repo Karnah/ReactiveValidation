@@ -85,6 +85,20 @@
       <DependentUpon>DependentPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="2. Dependent properties\DependentPropertiesViewModel.cs" />
+    <Compile Include="3. Localization\LocalizationView.xaml.cs">
+      <DependentUpon>LocalizationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="3. Localization\LocalizationViewModel.cs" />
+    <Compile Include="Resources\Additional.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Additional.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\Default.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Default.resx</DependentUpon>
+    </Compile>
     <Compile Include="ValidationStateInfoControl.xaml.cs">
       <DependentUpon>ValidationStateInfoControl.xaml</DependentUpon>
     </Compile>
@@ -93,6 +107,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="2. Dependent properties\DependentPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="3. Localization\LocalizationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -135,6 +153,16 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Additional.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Additional.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Additional.ru.resx" />
+    <EmbeddedResource Include="Resources\Default.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Default.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Default.ru.resx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

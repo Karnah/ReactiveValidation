@@ -149,9 +149,8 @@ namespace ReactiveValidation
         internal ValidationContext<TObject, TProp> GetValidationContext<TProp>(string propertyName)
         {
             var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(_instance, propertyName);
-            var displayName = _displayNamesSources[propertyName]?.GetString();
 
-            return new ValidationContext<TObject, TProp>(_instance, propertyName, displayName, propertyValue);
+            return new ValidationContext<TObject, TProp>(_instance, propertyName, _displayNamesSources[propertyName], propertyValue);
         }
 
         internal TProp GetPropertyValue<TProp>(string propertyName)

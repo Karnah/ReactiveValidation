@@ -6,18 +6,21 @@
         xmlns:local="clr-namespace:ReactiveValidation.Samples"
         xmlns:bs="clr-namespace:ReactiveValidation.Samples._1._BaseSample"
         xmlns:dp="clr-namespace:ReactiveValidation.Samples._2._Dependent_properties"
+        xmlns:l="clr-namespace:ReactiveValidation.Samples._3._Localization"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="900">
+        Title="ReactiveValidation samples" Height="500" Width="900">
     <Grid>
         <TabControl TabStripPlacement="Left">
-            <TabItem Header="1. Base samples">
+            <TabItem Padding="3" Header="1. Base samples">
                 <bs:BaseSampleView />
             </TabItem>
 
-            <TabItem Header="2. Dependent properties">
-                <TabItem.Content>
-                    <dp:DependentPropertiesView />
-                </TabItem.Content>
+            <TabItem Padding="3" Header="2. Dependent properties">
+                <dp:DependentPropertiesView />
+            </TabItem>
+
+            <TabItem Padding="3" Header="3. Localization">
+                <l:LocalizationView />
             </TabItem>
         </TabControl>
     </Grid>

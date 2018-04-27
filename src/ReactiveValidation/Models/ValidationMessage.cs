@@ -1,17 +1,33 @@
-﻿namespace ReactiveValidation
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
+
+namespace ReactiveValidation
 {
-    public class ValidationMessage
+    public class ValidationMessage : INotifyPropertyChanged
     {
         public static ValidationMessage Empty = null;
 
 
-        public ValidationMessage(string message) : this(message, ValidationMessageType.Error)
-        { }
+        private readonly IStringSource _stringSource;
 
-        public ValidationMessage(string message, ValidationMessageType validationMessageType)
+        public ValidationMessage(IStringSource stringSource, ValidationMessageType validationMessageType)
         {
-            Message = message;
+            _stringSource = stringSource;
+
             ValidationMessageType = validationMessageType;
+            Message = _stringSource.GetString();
+
+            if (ValidationOptions.LanguageManager.TrackCultureChanged == true) {
+                WeakEventManager<ILanguageManager, CultureChangedEventArgs>.AddHandler(
+                    ValidationOptions.LanguageManager, nameof(ILanguageManager.CultureChanged), OnCultureChanged);
+            }
+        }
+
+        private void OnCultureChanged(object sender, CultureChangedEventArgs args)
+        {
+            Message = _stringSource.GetString();
+            OnPropertyChanged(nameof(Message));
         }
 
 
@@ -23,6 +39,14 @@
         public override string ToString()
         {
             return Message;
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

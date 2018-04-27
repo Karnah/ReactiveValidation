@@ -56,8 +56,8 @@ namespace ReactiveValidation.Validators
                 return new ValidationMessage[0];
 
 
-            var message = context.GetMessage(_overridedStringSource ?? _stringSource);
-            var validationMessage = new ValidationMessage(message, _validationMessageType);
+            var messageSource = context.GetMessageSource(_overridedStringSource ?? _stringSource);
+            var validationMessage = new ValidationMessage(messageSource, _validationMessageType);
             return new []{ validationMessage };
         }
 
