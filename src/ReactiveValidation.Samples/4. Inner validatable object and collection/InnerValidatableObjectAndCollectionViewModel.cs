@@ -8,6 +8,11 @@ using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._4._Inner_validatable_object_and_collection
 {
+    /// <summary>
+    /// This sample also shows the use of ReactiveUI and ReactiveUI.Fody.
+    /// More information: https://reactiveui.net/ and https://github.com/kswoll/ReactiveUI.Fody
+    /// Pay attention to the base class - it's inherit from ReactiveObject
+    /// </summary>
     public class InnerValidatableObjectAndCollectionViewModel : ReactiveValidatableObject
     {
         public InnerValidatableObjectAndCollectionViewModel()

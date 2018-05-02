@@ -14,6 +14,8 @@ namespace ReactiveValidation.WPF.Converters
             var errors = (values[0] as IReadOnlyCollection<ValidationError>)
                 ?.Select(ve => ve.ErrorContent)
                 .OfType<ValidationMessage>()
+                .OrderBy(vm => vm.ValidationMessageType)
+                .ThenBy(vm => vm.Message)
                 .ToList();
 
             return errors;

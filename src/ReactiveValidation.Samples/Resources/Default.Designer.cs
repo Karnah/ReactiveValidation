@@ -122,5 +122,14 @@ namespace ReactiveValidation.Samples.Resources {
                 return ResourceManager.GetString("PhoneNumberOrEmailRequired", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For a secure password, enter more than {MinLength} characters. You entered {TotalLength} characters.
+        /// </summary>
+        internal static string SecurePassword {
+            get {
+                return ResourceManager.GetString("SecurePassword", resourceCulture);
+            }
+        }
     }
 }

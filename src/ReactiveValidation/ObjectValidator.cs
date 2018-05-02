@@ -98,8 +98,7 @@ namespace ReactiveValidation
 
                 return _validationResults[propertyName]
                     .SelectMany(vm => vm.Value)
-                    .OrderBy(vm => vm.ValidationMessageType)
-                    .ThenBy(vm => vm.Message);
+                    .ToList();
             }
         }
 

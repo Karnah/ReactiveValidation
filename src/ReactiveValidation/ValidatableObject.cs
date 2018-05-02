@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace ReactiveValidation
 {
@@ -20,6 +21,11 @@ namespace ReactiveValidation
 
         bool INotifyDataErrorInfo.HasErrors => Validator?.IsValid == false || Validator?.HasWarnings == true;
 
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public virtual void OnPropertyMessagesChanged(string propertyName)
         {

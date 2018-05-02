@@ -1,17 +1,12 @@
-﻿using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-using ReactiveValidation.Extensions;
+﻿using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._1._BaseSample
 {
-    public class BaseSampleViewModel : ReactiveValidatableObject
+    public class BaseSampleViewModel : ValidatableObject
     {
         public BaseSampleViewModel()
         {
             Validator = GetValidator();
-
-            this.WhenAnyValue(vm => vm.PhoneNumber);
         }
 
         private IObjectValidator GetValidator()
@@ -38,16 +33,40 @@ namespace ReactiveValidation.Samples._1._BaseSample
         }
 
 
-        [Reactive]
-        public string Name { get; set; }
+        private string _name;
+        public string Name {
+            get => _name;
+            set {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string Surname { get; set; }
+        private string _surname;
+        public string Surname {
+            get => _surname;
+            set {
+                _surname = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string PhoneNumber { get; set; }
+        private string _phoneNumber;
+        public string PhoneNumber {
+            get => _phoneNumber;
+            set {
+                _phoneNumber = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public int Age { get; set; }
+        private int _age;
+        public int Age {
+            get => _age;
+            set {
+                _age = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

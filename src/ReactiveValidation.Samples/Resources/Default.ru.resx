@@ -138,4 +138,7 @@
   <data name="PhoneNumberOrEmailRequired" xml:space="preserve">
     <value>Необходимо указать телефонный номер или электронную почту</value>
   </data>
+  <data name="SecurePassword" xml:space="preserve">
+    <value>Для надёжного пароля введите более {MinLength} символов. Вы ввели {TotalLength} символов</value>
+  </data>
 </root>

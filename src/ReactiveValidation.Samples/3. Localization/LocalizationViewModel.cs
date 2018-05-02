@@ -9,6 +9,11 @@ using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._3._Localization
 {
+    /// <summary>
+    /// This sample also shows the use of ReactiveUI and ReactiveUI.Fody.
+    /// More information: https://reactiveui.net/ and https://github.com/kswoll/ReactiveUI.Fody
+    /// Pay attention to the base class - it's inherit from ReactiveObject
+    /// </summary>
     public class LocalizationViewModel : ReactiveValidatableObject
     {
         public LocalizationViewModel()
@@ -59,7 +64,8 @@ namespace ReactiveValidation.Samples._3._Localization
 
             builder.RuleFor(vm => vm.Password)
                 .NotEmpty()
-                .MinLength(8, ValidationMessageType.Warning);
+                .MinLength(8, ValidationMessageType.Warning)
+                    .WithLocalizedMessage(nameof(Resources.Default.SecurePassword));
 
             builder.RuleFor(vm => vm.ConfirmPassword)
                 .Equal(vm => vm.Password);

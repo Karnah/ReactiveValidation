@@ -138,4 +138,7 @@
   <data name="PhoneNumberOrEmailRequired" xml:space="preserve">
     <value>You need to specify a phone or email</value>
   </data>
+  <data name="SecurePassword" xml:space="preserve">
+    <value>For a secure password, enter more than {MinLength} characters. You entered {TotalLength} characters</value>
+  </data>
 </root>

@@ -1,11 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 
-using ReactiveUI.Fody.Helpers;
 using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._2._Dependent_properties
 {
-    public class DependentPropertiesViewModel : ReactiveValidatableObject
+    public class DependentPropertiesViewModel : ValidatableObject
     {
         public DependentPropertiesViewModel()
         {
@@ -33,7 +32,8 @@ namespace ReactiveValidation.Samples._2._Dependent_properties
 
             builder.RuleFor(vm => vm.Password)
                 .NotEmpty()
-                .MinLength(8, ValidationMessageType.Warning);
+                .MinLength(8, ValidationMessageType.Warning)
+                    .WithMessage("For a secure password, enter more than {MinLength} characters. You entered {TotalLength} characters");
 
             builder.RuleFor(vm => vm.ConfirmPassword)
                 .Equal(vm => vm.Password);
@@ -60,25 +60,67 @@ namespace ReactiveValidation.Samples._2._Dependent_properties
         }
 
 
-        [Reactive]
-        public string PhoneNumber { get; set; }
+        private string _phoneNumber;
+        public string PhoneNumber {
+            get => _phoneNumber;
+            set {
+                _phoneNumber = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string Email { get; set; }
+        private string _email;
+        public string Email {
+            get => _email;
+            set {
+                _email = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string Password { get; set; }
+        private string _password;
+        public string Password {
+            get => _password;
+            set {
+                _password = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string ConfirmPassword { get; set; }
+        private string _confirmPassword;
+        public string ConfirmPassword {
+            get => _confirmPassword;
+            set {
+                _confirmPassword = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public bool AdditionalInformation { get; set; }
+        private bool _additionalInformation;
+        public bool AdditionalInformation {
+            get => _additionalInformation;
+            set {
+                _additionalInformation = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string Country { get; set; }
+        private string _country;
+        public string Country {
+            get => _country;
+            set {
+                _country = value;
+                OnPropertyChanged();
+            }
+        }
 
-        [Reactive]
-        public string City { get; set; }
+        private string _city;
+        public string City {
+            get => _city;
+            set {
+                _city = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }
