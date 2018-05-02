@@ -5,7 +5,7 @@ using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._1._BaseSample
 {
-    public class BaseSampleViewModel : ValidatableObject
+    public class BaseSampleViewModel : ReactiveValidatableObject
     {
         public BaseSampleViewModel()
         {

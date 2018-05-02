@@ -37,10 +37,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ReactiveUI, Version=7.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\reactiveui-core.7.4.0\lib\Net45\ReactiveUI.dll</HintPath>
+      <HintPath>..\..\packages\reactiveui-core.7.4.0\lib\Net45\ReactiveUI.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI.Fody.Helpers, Version=2.2.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ReactiveUI.Fody.2.2.11\lib\net45\ReactiveUI.Fody.Helpers.dll</HintPath>
+      <HintPath>..\..\packages\ReactiveUI.Fody.2.2.11\lib\net45\ReactiveUI.Fody.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="Splat, Version=1.6.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Splat.1.6.0\lib\Net45\Splat.dll</HintPath>
@@ -89,6 +89,11 @@
       <DependentUpon>LocalizationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="3. Localization\LocalizationViewModel.cs" />
+    <Compile Include="4. Inner validatable object and collection\InnerValidatableObjectAndCollectionView.xaml.cs">
+      <DependentUpon>InnerValidatableObjectAndCollectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="4. Inner validatable object and collection\InnerValidatableObjectAndCollectionViewModel.cs" />
+    <Compile Include="ReactiveValidatableObject.cs" />
     <Compile Include="Resources\Additional.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -111,6 +116,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="3. Localization\LocalizationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="4. Inner validatable object and collection\InnerValidatableObjectAndCollectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

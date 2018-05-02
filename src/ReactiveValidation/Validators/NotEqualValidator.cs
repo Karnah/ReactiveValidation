@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 using ReactiveValidation.Helpers;
@@ -8,13 +9,16 @@ namespace ReactiveValidation.Validators
     public class NotEqualValidator <TObject, TProp> : PropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
+        private readonly IEqualityComparer<TProp> _comparer;
         private readonly ParameterInfo<TObject, TProp> _valueToCompare;
 
         public NotEqualValidator(
             Expression<Func<TObject, TProp>> valueToCompareExpression,
+            IEqualityComparer<TProp> comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.NotEqualValidator), validationMessageType, valueToCompareExpression)
         {
+            _comparer = comparer;
             _valueToCompare = valueToCompareExpression.GetParameterInfo();
         }
 
@@ -23,7 +27,7 @@ namespace ReactiveValidation.Validators
         {
             var paramValue = context.GetParamValue(_valueToCompare);
 
-            var isEquals = Equals(context.PropertyValue, paramValue);
+            var isEquals = _comparer?.Equals(context.PropertyValue, paramValue) ?? Equals(context.PropertyValue, paramValue);
             if (isEquals == true) {
                 context.RegisterMessageArgument("ValueToCompare", _valueToCompare, paramValue);
             }

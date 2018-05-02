@@ -5,7 +5,7 @@ using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._2._Dependent_properties
 {
-    public class DependentPropertiesViewModel : ValidatableObject
+    public class DependentPropertiesViewModel : ReactiveValidatableObject
     {
         public DependentPropertiesViewModel()
         {

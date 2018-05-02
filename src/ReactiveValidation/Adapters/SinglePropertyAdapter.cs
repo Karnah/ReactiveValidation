@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Reactive.Disposables;
 
 using ReactiveValidation.Validators;
 
@@ -15,37 +14,54 @@ namespace ReactiveValidation.Adapters
             IReadOnlyCollection<IPropertyValidator<TObject, TProp>> propertyValidators,
             string propertyName)
             : base(objectValidator, propertyValidators, propertyName)
-        { }
-
-
-        protected override bool IsPropertyTypeObservable()
         {
-            return typeof(TProp).IsAssignableFrom(typeof(INotifyPropertyChanged));
-        }
-
-        protected override IEnumerable<IDisposable> SubsribeToProperty(TProp property)
-        {
-            var observableProperty = property as INotifyPropertyChanged;
-            if (observableProperty == null)
-                return new[] { Disposable.Empty };
-
-            return new[] { new NotificationsSubscriber<INotifyPropertyChanged>(observableProperty, Subscribe, Unsubscribe) };
+            ObserverBuilders = GetObserverBuilders();
         }
 
 
-        private void Subscribe(INotifyPropertyChanged observableProperty)
+        private IEnumerable<Func<TObject, TProp, Action, IDisposable>> GetObserverBuilders()
         {
-            observableProperty.PropertyChanged += ObservablePropertyOnPropertyChanged;
+            var observables = new List<Func<TObject, TProp, Action, IDisposable>>();
+
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TProp)) == true) {
+                observables.Add((o, prop, action) => new NotifyPropertyChangedSubsriber((INotifyPropertyChanged) prop, action));
+            }
+
+            foreach (var propertyObservable in ValidationOptions.PropertyObservers) {
+                if (propertyObservable.CanObserve<TObject, TProp>()) {
+                    observables.Add(propertyObservable.CreateObserver);
+                }
+            }
+
+            return observables;
         }
 
-        private void Unsubscribe(INotifyPropertyChanged observableProperty)
-        {
-            observableProperty.PropertyChanged -= ObservablePropertyOnPropertyChanged;
-        }
 
-        private void ObservablePropertyOnPropertyChanged(object o, PropertyChangedEventArgs args)
+        protected override IEnumerable<Func<TObject, TProp, Action, IDisposable>> ObserverBuilders { get; }
+
+
+        private class NotifyPropertyChangedSubsriber : IDisposable
         {
-            Revalidate();
+            private readonly INotifyPropertyChanged _property;
+            private readonly Action _action;
+
+            public NotifyPropertyChangedSubsriber(INotifyPropertyChanged property, Action action)
+            {
+                _property = property;
+                _action = action;
+
+                _property.PropertyChanged += OnPropertyChanged;
+            }
+
+            public void Dispose()
+            {
+                _property.PropertyChanged -= OnPropertyChanged;
+            }
+
+            private void OnPropertyChanged(object o, PropertyChangedEventArgs args)
+            {
+                _action();
+            }
         }
     }
 }

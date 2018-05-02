@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using ReactiveValidation.Validators;
 
@@ -9,8 +10,7 @@ namespace ReactiveValidation.Adapters
         where TObject : IValidatableObject
     {
         private TProp _lastValue;
-        private IEnumerable<IDisposable> _propertySubscriptions;
-        private bool _isPropertyTypeObservable;
+        private IEnumerable<IDisposable> _propertyObservers;
 
         protected readonly string PropertyName;
 
@@ -21,35 +21,28 @@ namespace ReactiveValidation.Adapters
             : base(validator, propertyValidators)
         {
             PropertyName = propertyName;
-
-            CheckIfPropertyTypeIsObservable();
-        }
-
-        private void CheckIfPropertyTypeIsObservable()
-        {
-            _isPropertyTypeObservable = IsPropertyTypeObservable();
         }
 
 
-        protected abstract bool IsPropertyTypeObservable();
-
-        protected abstract IEnumerable<IDisposable> SubsribeToProperty(TProp property);
+        protected abstract IEnumerable<Func<TObject, TProp, Action, IDisposable>> ObserverBuilders { get; }
 
 
         protected void ResubscribeProperty(TProp newValue)
         {
-            if (_isPropertyTypeObservable == false)
+            if (ObserverBuilders?.Any() != true)
                 return;
 
             if (Equals(_lastValue, newValue) == true)
                 return;
 
-            foreach (var subscription in _propertySubscriptions) {
-                subscription.Dispose();
+            if (_propertyObservers?.Any() == false) {
+                foreach (var propertyObserver in _propertyObservers) {
+                    propertyObserver?.Dispose();
+                }
             }
 
             _lastValue = newValue;
-            _propertySubscriptions = SubsribeToProperty(newValue);
+            _propertyObservers = ObserverBuilders.Select(ob => ob.Invoke(Instance, newValue, Revalidate)).ToList();
         }
 
 
@@ -69,27 +62,6 @@ namespace ReactiveValidation.Adapters
 
             var propertyValue = GetPropertyValue(propertyName);
             ResubscribeProperty(propertyValue);
-        }
-
-
-        protected class NotificationsSubscriber<T> : IDisposable
-        {
-            private readonly T _value;
-            private readonly Action<T> _unsubscribe;
-
-            public NotificationsSubscriber(T value, Action<T> subsribe, Action<T> unsubscribe)
-            {
-                subsribe.Invoke(value);
-
-                _value = value;
-                _unsubscribe = unsubscribe;
-            }
-
-
-            public void Dispose()
-            {
-                _unsubscribe.Invoke(_value);
-            }
         }
     }
 }

@@ -6,6 +6,17 @@ namespace ReactiveValidation.Helpers
 {
     public static class ReactiveValidationHelper
     {
+        internal static PropertyInfo GetPropertyInfo(Type type, string propertyName)
+        {
+            const BindingFlags bindingAttributes = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            var propertyInfo = type.GetProperty(propertyName, bindingAttributes);
+
+            if (propertyInfo == null)
+                throw new ArgumentException($"Property {propertyName} not found in {type} type", nameof(propertyName));
+
+            return propertyInfo;
+        }
+
         internal static PropertyInfo GetPropertyInfo(Type type, LambdaExpression expression)
         {
             var member = expression.Body as MemberExpression;
@@ -23,6 +34,7 @@ namespace ReactiveValidation.Helpers
             return propInfo;
         }
 
+
         internal static string GetPropertyName(Type type, LambdaExpression expression)
         {
             try {
@@ -34,16 +46,18 @@ namespace ReactiveValidation.Helpers
             }
         }
 
+        internal static Type GetPropertyType(Type type, string propertyName)
+        {
+            var propertyInfo = GetPropertyInfo(type, propertyName);
+
+            return propertyInfo?.PropertyType;
+        }
 
         internal static TProp GetPropertyValue<TProp>(object instance, string propertyName)
         {
-            const BindingFlags bindingAttributes = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-            var property = instance.GetType().GetProperty(propertyName, bindingAttributes);
+            var propertyInfo = GetPropertyInfo(instance.GetType(), propertyName);
 
-            if (property == null)
-                throw new ArgumentException($"Property {propertyName} not found in {instance.GetType()} type", nameof(propertyName));
-
-            return (TProp)property.GetValue(instance);
+            return (TProp)propertyInfo.GetValue(instance);
         }
 
         internal static TParam GetParamFuncValue<TParam>(object instance, Func<object, TParam> paramFunc)

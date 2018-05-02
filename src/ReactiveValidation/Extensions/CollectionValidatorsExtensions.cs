@@ -10,6 +10,42 @@ namespace ReactiveValidation.Extensions
     {
         public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> Count<TObject, TCollection, TProp>(
             this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
+            int minCount,
+            int maxCount,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TObject : IValidatableObject
+                where TCollection : IEnumerable<TProp>
+                where TProp : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TProp>(_ => minCount, _ => maxCount, validationMessageType));
+        }
+
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> Count<TObject, TCollection, TProp>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
+            int minCount,
+            Expression<Func<TObject, int>> maxCountExpression,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TObject : IValidatableObject
+                where TCollection : IEnumerable<TProp>
+                where TProp : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TProp>(_ => minCount, maxCountExpression, validationMessageType));
+        }
+
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> Count<TObject, TCollection, TProp>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
+            Expression<Func<TObject, int>> minCountExpression,
+            int maxCount,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TObject : IValidatableObject
+                where TCollection : IEnumerable<TProp>
+                where TProp : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TProp>(minCountExpression, _ => maxCount, validationMessageType));
+        }
+
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> Count<TObject, TCollection, TProp>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
             Expression<Func<TObject, int>> minCountExpression,
             Expression<Func<TObject, int>> maxCountExpression,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
@@ -18,6 +54,17 @@ namespace ReactiveValidation.Extensions
                 where TProp : IValidatableObject
         {
             return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TProp>(minCountExpression, maxCountExpression, validationMessageType));
+        }
+
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> MinCount<TObject, TCollection, TProp>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
+            int minCount,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TObject : IValidatableObject
+                where TCollection : IEnumerable<TProp>
+                where TProp : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new MinCountValidator<TObject, TCollection, TProp>(_ => minCount, validationMessageType));
         }
 
         public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> MinCount<TObject, TCollection, TProp>(
@@ -33,6 +80,17 @@ namespace ReactiveValidation.Extensions
 
         public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> MaxCount<TObject, TCollection, TProp>(
             this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
+            int maxCount,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TObject : IValidatableObject
+                where TCollection : IEnumerable<TProp>
+                where TProp : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new MaxCountValidator<TObject, TCollection, TProp>(_ => maxCount, validationMessageType));
+        }
+
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> MaxCount<TObject, TCollection, TProp>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
             Expression<Func<TObject, int>> maxCountExpression,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
@@ -40,6 +98,17 @@ namespace ReactiveValidation.Extensions
                 where TProp : IValidatableObject
         {
             return ruleBuilder.SetValidator(new MaxCountValidator<TObject, TCollection, TProp>(maxCountExpression, validationMessageType));
+        }
+
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> Count<TObject, TCollection, TProp>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
+            int count,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TObject : IValidatableObject
+                where TCollection : IEnumerable<TProp>
+                where TProp : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new ExactCountValidator<TObject, TCollection, TProp>(_ => count, validationMessageType));
         }
 
         public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> Count<TObject, TCollection, TProp>(

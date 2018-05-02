@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -24,6 +25,22 @@ namespace ReactiveValidation
         }
 
 
+        internal static List<ObserverInfo> PropertyObservers { get; } = new List<ObserverInfo>();
+
+        internal static List<ObserverInfo> CollectionObservers { get; } = new List<ObserverInfo>();
+
+
+        public static void AddPropertyObserver(Func<Type, Type, bool> canObserve, Func<object, object, Action, IDisposable> createObserver)
+        {
+            PropertyObservers.Add(new ObserverInfo(canObserve, createObserver));
+        }
+
+        public static void AddCollectionObserver(Func<Type, Type, bool> canObserve, Func<object, object, Action, IDisposable> createObserver)
+        {
+            CollectionObservers.Add(new ObserverInfo(canObserve, createObserver));
+        }
+
+
         private static IStringSource DefaultDisplayNameResolver(Type type, PropertyInfo propertyInfo, LambdaExpression expression)
         {
             if (propertyInfo != null) {
@@ -46,6 +63,37 @@ namespace ReactiveValidation
             }
 
             return null;
+        }
+
+
+        internal class ObserverInfo
+        {
+            private readonly Func<Type, Type, bool> _canObserve;
+            private readonly Func<object, object, Action, IDisposable> _createObserver;
+
+            public ObserverInfo(Func<Type, Type, bool> canObserve, Func<object, object, Action, IDisposable> createObserver)
+            {
+                _canObserve = canObserve;
+                _createObserver = createObserver;
+            }
+
+
+            public bool CanObserve(Type instanceType, Type propertyType)
+            {
+                return _canObserve.Invoke(instanceType, propertyType);
+            }
+
+            public bool CanObserve<TObject, TProp>()
+                where TObject : IValidatableObject
+            {
+                return CanObserve(typeof(TObject), typeof(TProp));
+            }
+
+
+            public IDisposable CreateObserver<TObject, TProp>(TObject instance, TProp property, Action action)
+            {
+                return _createObserver.Invoke(instance, property, action);
+            }
         }
     }
 }

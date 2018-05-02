@@ -8,17 +8,20 @@ namespace ReactiveValidation.Validators
 {
     public class BetweenValidator <TObject, TProp> : PropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
-        where TProp : IComparable
+        where TProp : IComparable<TProp>
     {
+        private readonly IComparer<TProp> _comparer;
         private readonly ParameterInfo<TObject, TProp> _from;
         private readonly ParameterInfo<TObject, TProp> _to;
 
         public BetweenValidator(
             Expression<Func<TObject, TProp>> fromExpression,
             Expression<Func<TObject, TProp>> toExpression,
+            IComparer<TProp> comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.BetweenValidator), validationMessageType, fromExpression, toExpression)
         {
+            _comparer = comparer ?? Comparer<TProp>.Default;
             _from = fromExpression.GetParameterInfo();
             _to = toExpression.GetParameterInfo();
         }
@@ -29,8 +32,8 @@ namespace ReactiveValidation.Validators
             var fromValue = context.GetParamValue(_from);
             var toValue = context.GetParamValue(_to);
 
-            var isLessLowBound = Comparer<TProp>.Default.Compare(context.PropertyValue, fromValue) < 0;
-            var isGreaterTopBound = Comparer<TProp>.Default.Compare(context.PropertyValue, toValue) > 0;
+            var isLessLowBound = _comparer.Compare(context.PropertyValue, fromValue) < 0;
+            var isGreaterTopBound = _comparer.Compare(context.PropertyValue, toValue) > 0;
 
             if (isLessLowBound || isGreaterTopBound) {
                 context.RegisterMessageArgument("From", _from, fromValue);

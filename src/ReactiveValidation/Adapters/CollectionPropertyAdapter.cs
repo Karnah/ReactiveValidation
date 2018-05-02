@@ -1,58 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
-using ReactiveUI;
+using ReactiveValidation.Helpers;
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Adapters
 {
-    internal class CollectionPropertyAdapter<TObject, TCollection, TProp> : BaseSinglePropertyAdapter<TObject, TCollection>
+    internal class CollectionPropertyAdapter<TObject, TCollection, TItem> : BaseSinglePropertyAdapter<TObject, TCollection>
         where TObject : IValidatableObject
-        where TCollection : IEnumerable<TProp>
+        where TCollection : IEnumerable<TItem>
     {
         public CollectionPropertyAdapter(
             ObjectValidator<TObject> objectValidator,
             IReadOnlyCollection<IPropertyValidator<TObject, TCollection>> propertyValidators,
             string propertyName)
             : base(objectValidator, propertyValidators, propertyName)
-        { }
-
-
-        protected override bool IsPropertyTypeObservable()
         {
-            var isObservableCollection = typeof(TProp).IsAssignableFrom(typeof(INotifyCollectionChanged));
-            var isReactiveCollection = typeof(TProp).IsAssignableFrom(typeof(IReactiveNotifyCollectionItemChanged<>));
-
-            return isObservableCollection || isReactiveCollection;
+            ObserverBuilders = GetObserverBuilders();
         }
 
-        protected override IEnumerable<IDisposable> SubsribeToProperty(TCollection property)
+
+        private IEnumerable<Func<TObject, TCollection, Action, IDisposable>> GetObserverBuilders()
         {
-            if (property is INotifyCollectionChanged observableCollection) {
-                yield return new NotificationsSubscriber<INotifyCollectionChanged>(observableCollection,
-                    SubscribeCollectionChanged, UnsubscribeCollectionChanged);
+            var observerBuilders = new List<Func<TObject, TCollection, Action, IDisposable>>();
+
+            var propType = ReactiveValidationHelper.GetPropertyType(typeof(TObject), PropertyName);
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(propType) == true) {
+                observerBuilders.Add((o, collection, action) => new NotifyCollectionChangedSubsriber((INotifyCollectionChanged)collection, action));
             }
 
-            if (property is IReactiveNotifyCollectionItemChanged<TProp> reactiveCollection) {
-                yield return reactiveCollection.ItemChanged.Subscribe(args => Revalidate());
+            foreach (var propertyObservable in ValidationOptions.CollectionObservers) {
+                if (propertyObservable.CanObserve(typeof(TObject), propType)) {
+                    observerBuilders.Add(propertyObservable.CreateObserver);
+                }
             }
+
+            return observerBuilders;
         }
 
 
-        private void SubscribeCollectionChanged(INotifyCollectionChanged observableProperty)
-        {
-            observableProperty.CollectionChanged += OnCollectionChanged;
-        }
+        protected override IEnumerable<Func<TObject, TCollection, Action, IDisposable>> ObserverBuilders { get; }
 
-        private void UnsubscribeCollectionChanged(INotifyCollectionChanged observableProperty)
-        {
-            observableProperty.CollectionChanged -= OnCollectionChanged;
-        }
 
-        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        private class NotifyCollectionChangedSubsriber : IDisposable
         {
-            Revalidate();
+            private readonly INotifyCollectionChanged _collection;
+            private readonly Action _action;
+
+            public NotifyCollectionChangedSubsriber(INotifyCollectionChanged collection, Action action)
+            {
+                _collection = collection;
+                _action = action;
+
+                _collection.CollectionChanged += OnCollectionChanged;
+            }
+
+            public void Dispose()
+            {
+                _collection.CollectionChanged -= OnCollectionChanged;
+            }
+
+            private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+            {
+                _action();
+            }
         }
     }
 }

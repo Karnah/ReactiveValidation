@@ -4,7 +4,6 @@ namespace ReactiveValidation.Validators
 {
     public class NullValidator <TObject, TProp> : PropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
-        where TProp : class
     {
         public NullValidator(ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.NullValidator), validationMessageType)

@@ -2,18 +2,18 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace ReactiveValidation
+using ReactiveUI;
+
+namespace ReactiveValidation.Samples
 {
-    public class ValidatableObject : IValidatableObject
+    public class ReactiveValidatableObject : ReactiveObject, IValidatableObject
     {
-        public ValidatableObject()
-        {}
+        public ReactiveValidatableObject()
+        { }
 
 
         public IObjectValidator Validator { get; protected set; }
 
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
 

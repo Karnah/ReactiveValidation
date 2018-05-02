@@ -12,7 +12,6 @@ namespace ReactiveValidation
     internal class ObjectValidator<TObject> : IObjectValidator, INotifyPropertyChanged
         where TObject : IValidatableObject
     {
-        private readonly TObject _instance;
         private readonly List<IPropertiesAdapter> _adapters;
         private readonly IDictionary<string, Dictionary<IPropertiesAdapter, IEnumerable<ValidationMessage>>> _validationResults;
         private readonly Dictionary<string, IStringSource> _displayNamesSources;
@@ -23,8 +22,8 @@ namespace ReactiveValidation
 
         public ObjectValidator(TObject instance)
         {
-            _instance = instance;
-            _instance.PropertyChanged += OnPropertyChanged;
+            Instance = instance;
+            Instance.PropertyChanged += OnObjectPropertyChanged;
 
             _adapters = new List<IPropertiesAdapter>();
             _validationResults = new SortedDictionary<string, Dictionary<IPropertiesAdapter, IEnumerable<ValidationMessage>>>();
@@ -33,7 +32,7 @@ namespace ReactiveValidation
             FillDisplayNames();
         }
 
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void OnObjectPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             var propertyName = args.PropertyName;
 
@@ -51,6 +50,8 @@ namespace ReactiveValidation
             }
         }
 
+
+        #region IObjectValidator
 
         public bool IsValid {
             get => _isValid;
@@ -86,11 +87,11 @@ namespace ReactiveValidation
         }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-
         public IEnumerable<ValidationMessage> GetMessages(string propertyName)
         {
+            if (string.IsNullOrEmpty(propertyName) == true)
+                return null;
+
             lock (_validationResults) {
                 if (_validationResults.ContainsKey(propertyName) == false)
                     return null;
@@ -109,8 +110,25 @@ namespace ReactiveValidation
             }
         }
 
+        #endregion
 
-        internal void RegisterAdapter(IPropertiesAdapter adapter, params string[] propertiesNames)
+
+        #region INotifyPropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
+
+        public TObject Instance { get; }
+
+
+        public void RegisterAdapter(IPropertiesAdapter adapter, params string[] propertiesNames)
         {
             _adapters.Add(adapter);
 
@@ -125,7 +143,7 @@ namespace ReactiveValidation
             }
         }
 
-        internal void SetValidationMessages(string propertyName, IPropertiesAdapter adapter, IEnumerable<ValidationMessage> messages)
+        public void SetValidationMessages(string propertyName, IPropertiesAdapter adapter, IEnumerable<ValidationMessage> messages)
         {
             lock (_validationResults) {
                 _validationResults[propertyName][adapter] = messages;
@@ -142,27 +160,21 @@ namespace ReactiveValidation
                 ValidationMessages = aggregatedMessages;
             }
 
-            _instance.OnPropertyMessagesChanged(propertyName);
+            Instance.OnPropertyMessagesChanged(propertyName);
         }
 
 
-        internal ValidationContext<TObject, TProp> GetValidationContext<TProp>(string propertyName)
+        public ValidationContext<TObject, TProp> GetValidationContext<TProp>(string propertyName)
         {
-            var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(_instance, propertyName);
+            var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(Instance, propertyName);
 
-            return new ValidationContext<TObject, TProp>(_instance, propertyName, _displayNamesSources[propertyName], propertyValue);
+            return new ValidationContext<TObject, TProp>(Instance, propertyName, _displayNamesSources[propertyName], propertyValue);
         }
 
-        internal TProp GetPropertyValue<TProp>(string propertyName)
+        public TProp GetPropertyValue<TProp>(string propertyName)
         {
-            var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(_instance, propertyName);
+            var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(Instance, propertyName);
             return propertyValue;
-        }
-
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

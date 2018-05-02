@@ -9,7 +9,7 @@ using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Samples._3._Localization
 {
-    public class LocalizationViewModel : ValidatableObject
+    public class LocalizationViewModel : ReactiveValidatableObject
     {
         public LocalizationViewModel()
         {

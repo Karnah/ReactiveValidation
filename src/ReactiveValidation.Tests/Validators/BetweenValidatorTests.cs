@@ -1,80 +1,98 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Xunit;
 
 using ReactiveValidation.Extensions;
+using ReactiveValidation.Tests.Helpers;
+using ReactiveValidation.Tests.TestModels;
 using ReactiveValidation.Validators;
-
 
 namespace ReactiveValidation.Tests.Validators
 {
-    [TestClass]
     public class BetweenValidatorTests
     {
-        public class TestValidatableObject : ValidatableObject
+        [Theory]
+        [InlineData(0, 10, 20)]
+        [InlineData(25, 10, 20)]
+        public void BetweenValidator_NotValidTheory(int value, int from, int to)
         {
-            public int Number { get; set; }
+            var validationMessage = Between(value, from, to);
+
+            AssertValidationMessage.NotEmptyMessage(validationMessage);
+        }
+
+        [Theory]
+        [InlineData(10, 10, 20)]
+        [InlineData(15, 10, 20)]
+        [InlineData(20, 10, 20)]
+        public void BetweenValidator_ValidTheory(int value, int from, int to)
+        {
+            var validationMessage = Between(value, from, to);
+
+            AssertValidationMessage.EmptyMessage(validationMessage);
         }
 
 
-        [TestMethod]
-        public void ValidateProperty_0Between10And20_ErrorMessage()
+        [Theory]
+        [InlineData("b", "A", "C")]
+        [InlineData("B", "A", "C")]
+        public void BetweenValidatorWithoutComparer_ValidTheory(string value, string from, string to)
         {
-            const int num = 0;
-            const int from = 10;
-            const int to = 20;
+            var validationMessage = Between(value, from, to);
 
-            var betweenValidator = new BetweenValidator<TestValidatableObject, int>(_ => from, _ => to, ValidationMessageType.Error);
-            var context = new ValidationContext<TestValidatableObject, int>(null, nameof(TestValidatableObject.Number), null, num);
+            AssertValidationMessage.EmptyMessage(validationMessage);
+        }
+
+        [Theory]
+        [InlineData("b", "A", "C")]
+        [InlineData("B", "a", "c")]
+        public void BetweenValidatorWithComparer_NotValidTheory(string value, string from, string to)
+        {
+            var validationMessage = Between(value, from, to, StringComparer.Ordinal);
+
+            AssertValidationMessage.NotEmptyMessage(validationMessage);
+        }
+
+        [Theory]
+        [InlineData("b", "a", "c")]
+        [InlineData("b", "A", "c")]
+        [InlineData("B", "A", "C")]
+        public void BetweenValidatorWithComparer_ValidTheory(string value, string from, string to)
+        {
+            var validationMessage = Between(value, from, to, StringComparer.Ordinal);
+
+            AssertValidationMessage.EmptyMessage(validationMessage);
+        }
+
+        private ValidationMessage Between<TProp>(
+            TProp value,
+            TProp from,
+            TProp to,
+            IComparer<TProp> comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TProp : IComparable<TProp>
+        {
+            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
+            var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = betweenValidator.ValidateProperty(context).FirstOrDefault();
 
-            Assert.AreNotEqual(null, validationMessage);
-            Assert.AreEqual(ValidationMessageType.Error, validationMessage?.ValidationMessageType);
-            Assert.IsNotNull(validationMessage?.Message);
-            Assert.AreNotEqual(string.Empty, validationMessage?.Message);
+            return validationMessage;
         }
 
-        [TestMethod]
-        public void ValidateProperty_15Between10And20_EmptyMessage()
-        {
-            const int num = 15;
-            const int from = 10;
-            const int to = 20;
 
-            var betweenValidator = new BetweenValidator<TestValidatableObject, int>(_ => from, _ => to, ValidationMessageType.Error);
-            var context = new ValidationContext<TestValidatableObject, int>(null, nameof(TestValidatableObject.Number), null, num);
-            var validationMessage = betweenValidator.ValidateProperty(context).FirstOrDefault();
 
-            Assert.AreEqual(ValidationMessage.Empty, validationMessage);
-        }
 
-        [TestMethod]
-        public void ValidateProperty_25Between10And20_ErrorMessage()
-        {
-            const int num = 25;
-            const int from = 10;
-            const int to = 20;
-
-            var betweenValidator = new BetweenValidator<TestValidatableObject, int>(_ => from, _ => to, ValidationMessageType.Error);
-            var context = new ValidationContext<TestValidatableObject, int>(null, nameof(TestValidatableObject.Number), null, num);
-            var validationMessage = betweenValidator.ValidateProperty(context).FirstOrDefault();
-
-            Assert.AreNotEqual(null, validationMessage);
-            Assert.AreEqual(ValidationMessageType.Error, validationMessage?.ValidationMessageType);
-            Assert.IsNotNull(validationMessage?.Message);
-            Assert.AreNotEqual(string.Empty, validationMessage?.Message);
-        }
-
-        [TestMethod]
-        public void Between_Between20And10_Exception()
+        [Fact]
+        public void BetweenExtensions_Between20And10_Exception()
         {
             const int from = 20;
             const int to = 10;
 
             var ruleBuilder = Mock.Of<ISinglePropertyRuleBuilder<TestValidatableObject, int>>();
-            Assert.ThrowsException<ArgumentException>(() => ruleBuilder.Between(from, to));
+            Assert.Throws<ArgumentException>(() => ruleBuilder.Between(from, to));
         }
     }
 }

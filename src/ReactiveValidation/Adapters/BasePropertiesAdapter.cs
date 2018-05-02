@@ -40,16 +40,17 @@ namespace ReactiveValidation.Adapters
         public void Revalidate(string propertyName)
         {
             //If changed one of related properties - we should revalidate all target properties
-            if (_relatedProperties.Contains(propertyName))
-            {
+            if (_relatedProperties.Contains(propertyName)) {
                 Revalidate();
             }
             //If changed target property - revalidate only its
-            else if (IsTargetProperty(propertyName) == true)
-            {
+            else if (IsTargetProperty(propertyName) == true) {
                 RevalidateProperty(propertyName);
             }
         }
+
+
+        internal TObject Instance => _objectValidator.Instance;
 
 
         protected abstract bool IsTargetProperty(string propertyName);

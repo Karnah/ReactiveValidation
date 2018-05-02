@@ -7,6 +7,7 @@
         xmlns:bs="clr-namespace:ReactiveValidation.Samples._1._BaseSample"
         xmlns:dp="clr-namespace:ReactiveValidation.Samples._2._Dependent_properties"
         xmlns:l="clr-namespace:ReactiveValidation.Samples._3._Localization"
+        xmlns:iv="clr-namespace:ReactiveValidation.Samples._4._Inner_validatable_object_and_collection"
         mc:Ignorable="d"
         Title="ReactiveValidation samples" Height="500" Width="900">
     <Grid>
@@ -21,6 +22,10 @@
 
             <TabItem Padding="3" Header="3. Localization">
                 <l:LocalizationView />
+            </TabItem>
+
+            <TabItem Padding="3" Header="4. Inner property and collections">
+                <iv:InnerValidatableObjectAndCollectionView />
             </TabItem>
         </TabControl>
     </Grid>
