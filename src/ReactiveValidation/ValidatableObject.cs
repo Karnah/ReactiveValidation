@@ -11,7 +11,17 @@ namespace ReactiveValidation
         {}
 
 
-        public IObjectValidator Validator { get; protected set; }
+        private IObjectValidator _validator;
+        public IObjectValidator Validator {
+            get => _validator;
+            protected set {
+                if (_validator == value)
+                    return;
+
+                _validator = value;
+                OnPropertyChanged();
+            }
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
