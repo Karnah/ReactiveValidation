@@ -27,8 +27,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Last validator will check only if the condition is true
         /// </summary>
-        TBuilder When<TParam>(
-            Expression<Func<TObject, bool>> conditionProperty);
+        TBuilder When(Expression<Func<TObject, bool>> conditionProperty);
 
         /// <summary>
         /// Last validator will check only if the condition is true

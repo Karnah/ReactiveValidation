@@ -51,7 +51,7 @@ namespace ReactiveValidation
             return When(wrappedCondition);
         }
 
-        public TBuilder When<TParam>(Expression<Func<TObject, bool>> conditionProperty)
+        public TBuilder When(Expression<Func<TObject, bool>> conditionProperty)
         {
             var condition = conditionProperty.Compile();
             return When(condition, conditionProperty);

@@ -41,7 +41,7 @@ namespace ReactiveValidation
 
         public ResourceManager DefaultResourceManager { get; set; }
 
-        public bool TrackCultureChanged { get; set; }
+        public bool TrackCultureChanged { get; set; } = false;
 
 
         public event EventHandler<CultureChangedEventArgs> CultureChanged;
