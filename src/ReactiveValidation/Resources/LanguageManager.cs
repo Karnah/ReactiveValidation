@@ -10,6 +10,9 @@ namespace ReactiveValidation
 {
     public class LanguageManager : ILanguageManager
     {
+        private const string DefaultCultureCode = "en";
+        private readonly CultureInfo _defaultCulture = new CultureInfo(DefaultCultureCode);
+
         private readonly Dictionary<string, ILanguage> _languages;
 
         private CultureInfo _overridedCulture;
@@ -62,12 +65,25 @@ namespace ReactiveValidation
                 code = CurrentCulture.Parent.Name;
             }
 
-            var message = DefaultResourceManager?.GetString(key, CurrentCulture);
+            var message = GetLocalizedString(key, code, CurrentCulture);
+            if (string.IsNullOrEmpty(message) == true) {
+                message = GetLocalizedString(key, DefaultCultureCode, _defaultCulture);
+            }
+            if (string.IsNullOrEmpty(message) == true) {
+                message = key;
+            }
+
+            return message ?? string.Empty;
+        }
+
+        private string GetLocalizedString(string key, string code, CultureInfo culture)
+        {
+            var message = DefaultResourceManager?.GetString(key, culture);
             if (string.IsNullOrEmpty(message) == true && _languages.ContainsKey(code)) {
                 message = _languages[code].GetTranslation(key);
             }
 
-            return message ?? string.Empty;
+            return message;
         }
     }
 }
