@@ -66,7 +66,7 @@ Apply style and nothing more!
          Text="{Binding Model, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 <TextBlock Grid.Row="2" Grid.Column="0" Text="Has mileage: " />
-<CheckBox Grid.Row="2" Grid.Column="1" Margin="3"
+<CheckBox Grid.Row="2" Grid.Column="1"
           IsChecked="{Binding HasMileage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 <TextBlock Grid.Row="3" Grid.Column="0" Text="Mileage: " />
