@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace ReactiveValidation.WPF.Behaviors
 {
@@ -85,26 +86,22 @@ namespace ReactiveValidation.WPF.Behaviors
             if (element == null)
                 return;
 
-            var hasError = Validation.GetHasError(element);
+            //Set error template to null force redraw call
+            Validation.SetErrorTemplate(element, null);
 
+            var hasError = Validation.GetHasError(element);
             if (hasError == true) {
                 var errorTemplate = GetErrorTemplate(element);
-                if (errorTemplate == null) {
-                    element.ClearValue(Validation.ErrorTemplateProperty);
+                if (errorTemplate == null)
                     return;
-                }
 
-                Validation.SetErrorTemplate(element, null);
                 Validation.SetErrorTemplate(element, errorTemplate);
-            }
-            else {
-                Validation.SetErrorTemplate(element, null);
             }
         }
 
 
         public static readonly DependencyProperty ErrorTemplateProperty = DependencyProperty.RegisterAttached(
-            "ErrorTemplate", typeof(ControlTemplate), typeof(ReactiveValidation), new PropertyMetadata(default(ControlTemplate)));
+            "ErrorTemplate", typeof(ControlTemplate), typeof(ReactiveValidation), new PropertyMetadata(GetDefaultErrorTemplate()));
 
         public static void SetErrorTemplate(DependencyObject element, ControlTemplate value)
         {
@@ -114,6 +111,23 @@ namespace ReactiveValidation.WPF.Behaviors
         public static ControlTemplate GetErrorTemplate(DependencyObject element)
         {
             return (ControlTemplate)element.GetValue(ErrorTemplateProperty);
+        }
+
+
+        private static ControlTemplate GetDefaultErrorTemplate()
+        {
+            var controlTemplate = new ControlTemplate(typeof(Control));
+
+            var frameworkElementFactory = new FrameworkElementFactory(typeof(Border), "Border");
+            frameworkElementFactory.SetValue(Border.BorderBrushProperty, Brushes.Red);
+            frameworkElementFactory.SetValue(Border.BorderThicknessProperty, new Thickness(1.0));
+
+            var child = new FrameworkElementFactory(typeof(AdornedElementPlaceholder), "Placeholder");
+            frameworkElementFactory.AppendChild(child);
+
+            controlTemplate.VisualTree = frameworkElementFactory;
+            controlTemplate.Seal();
+            return controlTemplate;
         }
     }
 }
