@@ -2,12 +2,12 @@
 A small validation library for WPF that uses a fluent interface and allow display messages near controls in GUI with MVVM
 Inspired [FluentValidation](https://github.com/JeremySkinner/FluentValidation) by Jeremy Skinner
 
-### NuGet Package
+## NuGet Package
 ```
 Install-Package ReactiveValidation
 ```
 
-### Sample
+## Sample
 ```csharp
 public class CarViewModel : ValidatableObject
 {
@@ -38,6 +38,21 @@ public class CarViewModel : ValidatableObject
 }
 ```
 
+In xaml to control which displayed errors set attached property `ReactiveValidation.AutoRefreshErrorTemplate` equal `True` and binding your property
+``` xaml
+<TextBox b:ReactiveValidation.AutoRefreshErrorTemplate="True"
+         Text="{Binding Make, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+```
+
+Done!
+
+![wpferrortemplate](https://user-images.githubusercontent.com/6525732/39965683-45c34870-56b7-11e8-94b2-43d95253640e.PNG)
+
+
+**You also can use template which display errors messages near control**
+![myerrortemplate](https://user-images.githubusercontent.com/6525732/39965768-cc5c7176-56b8-11e8-90c2-defd7b02b70a.PNG)
+
+For this:
 * Merge dictionary with default ControlTemplate for validation
 * Create default style(optional, but recommended) with AutoRefreshErrorTemplate and ErrorTemplate properties 
 ```xaml
