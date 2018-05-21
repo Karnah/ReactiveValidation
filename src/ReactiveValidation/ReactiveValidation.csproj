@@ -113,6 +113,7 @@
     <Compile Include="WPF\Converters\ShowValidationPopupConverter.cs" />
     <Compile Include="WPF\Converters\ErrorsToMarkColorConverter.cs" />
     <Compile Include="WPF\Converters\MessageTypeToColorConverter.cs" />
+    <Compile Include="WPF\Templates\ErrorTemplates.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="WPF\Themes\Generic.xaml">
