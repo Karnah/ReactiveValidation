@@ -1,18 +1,19 @@
 ﻿<UserControl x:Class="ReactiveValidation.Samples._4._Inner_validatable_object_and_collection.InnerValidatableObjectAndCollectionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:behaviors="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
-             xmlns:samples="clr-namespace:ReactiveValidation.Samples"
              xmlns:local="clr-namespace:ReactiveValidation.Samples._4._Inner_validatable_object_and_collection"
+             xmlns:samples="clr-namespace:ReactiveValidation.Samples"
+             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:InnerValidatableObjectAndCollectionViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <!-- It is more convenient to create a base style for control -->
         <Style x:Key="TextBox" TargetType="TextBox">
-            <Setter Property="behaviors:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-            <Setter Property="behaviors:ReactiveValidation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
 
             <Setter Property="Margin" Value="3" />
         </Style>

@@ -12,10 +12,10 @@
             <converters:ErrorsToValidationMessagesConverter x:Key="ErrorsToValidationMessagesConverter" />
         </ControlTemplate.Resources>
 
-        <StackPanel Orientation="Horizontal">
-            <Border x:Name="PART_Border" BorderThickness="0,0,1,0" BorderBrush="Transparent" CornerRadius="0.7" VerticalAlignment="Top">
+        <Grid>
+            <Border x:Name="PART_Border" BorderThickness="0,0,1,0" BorderBrush="Transparent">
                 <Grid>
-                    <Polygon Grid.ZIndex="2" Margin="-1" Points="6,6 6,0 0,0"
+                    <Polygon Margin="-1" Points="6,6 6,0 0,0"
                              HorizontalAlignment="Right" VerticalAlignment="Top"
                              IsHitTestVisible="True">
                         <Polygon.Fill>
@@ -27,8 +27,7 @@
                         </Polygon.Fill>
                     </Polygon>
 
-                    <Polyline Grid.ZIndex="3"
-                              Points="7,7 0,0" Margin="-1" HorizontalAlignment="Right"
+                    <Polyline Points="7,7 0,0" Margin="-1" HorizontalAlignment="Right"
                               StrokeThickness="1"
                               Stroke="White"
                               VerticalAlignment="Top"
@@ -63,7 +62,7 @@
                     </ItemsControl>
                 </Border>
             </controls:AttachedPopup>
-        </StackPanel>
+        </Grid>
 
         <ControlTemplate.Triggers>
             <DataTrigger Value="True">
@@ -81,5 +80,11 @@
                 <Setter TargetName="PART_ErrorPopup" Property="IsOpen" Value="True" />
             </DataTrigger>
         </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="WpfErrorTemplate">
+        <Border BorderBrush="Red" BorderThickness="1">
+            <AdornedElementPlaceholder />
+        </Border>
     </ControlTemplate>
 </ResourceDictionary>

@@ -4,22 +4,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReactiveValidation.Samples._3._Localization"
-             xmlns:behaviors="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
              xmlns:samples="clr-namespace:ReactiveValidation.Samples"
+             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance local:LocalizationViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <!-- It is more convenient to create a base style for control  -->
         <Style x:Key="TextBox" TargetType="TextBox">
-            <Setter Property="behaviors:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-            <Setter Property="behaviors:ReactiveValidation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
 
             <Setter Property="Margin" Value="3" />
         </Style>
 
         <Style x:Key="CheckBox" TargetType="CheckBox">
-            <Setter Property="behaviors:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-            <Setter Property="behaviors:ReactiveValidation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
 
             <Setter Property="Margin" Value="3" />
         </Style>
