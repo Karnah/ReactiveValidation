@@ -40,6 +40,8 @@ public class CarViewModel : ValidatableObject
 
 In xaml to control which displayed errors set attached property `ReactiveValidation.AutoRefreshErrorTemplate` equal `True` and binding your property
 ``` xaml
+xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+...
 <TextBox b:ReactiveValidation.AutoRefreshErrorTemplate="True"
          Text="{Binding Make, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 ```
@@ -52,20 +54,15 @@ Done!
 **You also can use template which display errors messages near control**
 ![myerrortemplate](https://user-images.githubusercontent.com/6525732/39965768-cc5c7176-56b8-11e8-90c2-defd7b02b70a.PNG)
 
-For this:
-* Merge dictionary with default ControlTemplate for validation
-* Create default style(optional, but recommended) with AutoRefreshErrorTemplate and ErrorTemplate properties 
+To do this, set to attached property `ReactiveValidation.ErrorTemplate` value from static class `ErrorTemplates.ExtendedErrorTemplate`. If you are use default styles this will be look like this:
 ```xaml
 xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation"
+xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation"
 ...
 <ResourceDictionary>
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/ReactiveValidation;component/WPF/Themes/Generic.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-
     <Style x:Key="TextBox" TargetType="TextBox">
         <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-        <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}" />
+        <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
     </Style>
 </ResourceDictionary>
 ```
