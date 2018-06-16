@@ -11,7 +11,11 @@ namespace ReactiveValidation
 
         private readonly IStringSource _stringSource;
 
-        public ValidationMessage(IStringSource stringSource, ValidationMessageType validationMessageType)
+        public ValidationMessage(string message, ValidationMessageType validationMessageType = ValidationMessageType.Error)
+            : this(new StaticStringSource(message), validationMessageType)
+        { }
+
+        public ValidationMessage(IStringSource stringSource, ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             _stringSource = stringSource;
 

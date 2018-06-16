@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using ReactiveValidation.Validators;
 
@@ -74,9 +75,16 @@ namespace ReactiveValidation.Adapters
             var messages = new List<ValidationMessage>();
             foreach (var propertyValidator in _propertyValidators) {
                 var context = new ValidationContext<TObject, TProp>(parentContext);
-                var validationMessage = propertyValidator.ValidateProperty(context);
 
-                messages.AddRange(validationMessage);
+                IEnumerable<ValidationMessage> validationMessages;
+                try {
+                    validationMessages = propertyValidator.ValidateProperty(context);
+                }
+                catch (Exception e) {
+                    validationMessages = new[] { new ValidationMessage(new ExceptionSource(e)) };
+                }
+
+                messages.AddRange(validationMessages);
             }
 
             _objectValidator.SetValidationMessages(parentContext.PropertyName, this, messages);

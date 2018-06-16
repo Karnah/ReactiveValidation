@@ -58,9 +58,17 @@ namespace ReactiveValidation.Validators
             var validationMessages = new List<ValidationMessage>();
             foreach (var validator in _innerValidators) {
                 var context = new ValidationContext<TObject, TProp>(parentContext);
-                var innerMessages = validator.ValidateProperty(context)
-                    .Where(vm => vm != ValidationMessage.Empty)
-                    .ToList();
+
+                ValidationMessage[] innerMessages;
+                try {
+                    innerMessages = validator.ValidateProperty(context)
+                        .Where(vm => vm != ValidationMessage.Empty)
+                        .ToArray();
+                }
+                catch (Exception e) {
+                    innerMessages = new[] { new ValidationMessage(new ExceptionSource(e)) };
+                }
+
                 if (innerMessages.Any() == true) {
                     validationMessages.AddRange(innerMessages);
                 }
