@@ -47,6 +47,7 @@
     <Compile Include="IObjectValidatorBuilder.cs" />
     <Compile Include="Models\CultureChangedEventArgs.cs" />
     <Compile Include="Resources\DisplayNamePropertySource.cs" />
+    <Compile Include="Resources\ExceptionSource.cs" />
     <Compile Include="Resources\ValidationMessageStringSource.cs" />
     <Compile Include="Validators\AbstractComparisonValidator.cs" />
     <Compile Include="Validators\BetweenValidator.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="WPF\Converters\ShowValidationPopupConverter.cs" />
     <Compile Include="WPF\Converters\ErrorsToMarkColorConverter.cs" />
     <Compile Include="WPF\Converters\MessageTypeToColorConverter.cs" />
+    <Compile Include="WPF\Templates\ErrorTemplates.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="WPF\Themes\Generic.xaml">

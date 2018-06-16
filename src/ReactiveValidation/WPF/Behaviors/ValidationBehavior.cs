@@ -3,7 +3,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
+
+using ReactiveValidation.WPF.Templates;
 
 namespace ReactiveValidation.WPF.Behaviors
 {
@@ -101,7 +102,7 @@ namespace ReactiveValidation.WPF.Behaviors
 
 
         public static readonly DependencyProperty ErrorTemplateProperty = DependencyProperty.RegisterAttached(
-            "ErrorTemplate", typeof(ControlTemplate), typeof(ReactiveValidation), new PropertyMetadata(GetDefaultErrorTemplate()));
+            "ErrorTemplate", typeof(ControlTemplate), typeof(ReactiveValidation), new PropertyMetadata(ErrorTemplates.WpfErrorTemplate));
 
         public static void SetErrorTemplate(DependencyObject element, ControlTemplate value)
         {
@@ -111,23 +112,6 @@ namespace ReactiveValidation.WPF.Behaviors
         public static ControlTemplate GetErrorTemplate(DependencyObject element)
         {
             return (ControlTemplate)element.GetValue(ErrorTemplateProperty);
-        }
-
-
-        private static ControlTemplate GetDefaultErrorTemplate()
-        {
-            var controlTemplate = new ControlTemplate(typeof(Control));
-
-            var frameworkElementFactory = new FrameworkElementFactory(typeof(Border), "Border");
-            frameworkElementFactory.SetValue(Border.BorderBrushProperty, Brushes.Red);
-            frameworkElementFactory.SetValue(Border.BorderThicknessProperty, new Thickness(1.0));
-
-            var child = new FrameworkElementFactory(typeof(AdornedElementPlaceholder), "Placeholder");
-            frameworkElementFactory.AppendChild(child);
-
-            controlTemplate.VisualTree = frameworkElementFactory;
-            controlTemplate.Seal();
-            return controlTemplate;
         }
     }
 }
