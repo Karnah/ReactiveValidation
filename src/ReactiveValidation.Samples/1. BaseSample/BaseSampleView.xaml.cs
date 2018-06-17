@@ -8,7 +8,7 @@ namespace ReactiveValidation.Samples._1._BaseSample
         {
             InitializeComponent();
 
-            this.DataContext = new BaseSampleViewModel();
+            DataContext = new BaseSampleViewModel();
         }
     }
 }

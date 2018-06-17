@@ -34,12 +34,9 @@ namespace ReactiveValidation.Attributes
 
         internal string GetDisplayName()
         {
-            if (string.IsNullOrEmpty(DisplayNameKey) == false) {
-                if (_resourceManager != null) {
-                    return _resourceManager.GetString(DisplayNameKey, ValidationOptions.LanguageManager.CurrentCulture);
-                }
-
-                return ValidationOptions.LanguageManager.GetString(DisplayNameKey);
+            if (string.IsNullOrEmpty(DisplayNameKey) == false)
+            {
+                return _resourceManager != null ? _resourceManager.GetString(DisplayNameKey, ValidationOptions.LanguageManager.CurrentCulture) : ValidationOptions.LanguageManager.GetString(DisplayNameKey);
             }
 
             return DisplayName;

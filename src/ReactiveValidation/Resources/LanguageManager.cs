@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
-
 using ReactiveValidation.Languages;
 
 namespace ReactiveValidation
@@ -21,7 +20,7 @@ namespace ReactiveValidation
         {
             var languages = new ILanguage[] {
                 new RussianLanguage(),
-                new EnglishLanguage(),
+                new EnglishLanguage()
             };
             _languages = languages.ToDictionary(l => l.Name, l => l);
 
@@ -66,10 +65,10 @@ namespace ReactiveValidation
             }
 
             var message = GetLocalizedString(key, code, CurrentCulture);
-            if (string.IsNullOrEmpty(message) == true) {
+            if (string.IsNullOrEmpty(message)) {
                 message = GetLocalizedString(key, DefaultCultureCode, _defaultCulture);
             }
-            if (string.IsNullOrEmpty(message) == true) {
+            if (string.IsNullOrEmpty(message)) {
                 message = key;
             }
 
@@ -79,7 +78,7 @@ namespace ReactiveValidation
         private string GetLocalizedString(string key, string code, CultureInfo culture)
         {
             var message = DefaultResourceManager?.GetString(key, culture);
-            if (string.IsNullOrEmpty(message) == true && _languages.ContainsKey(code)) {
+            if (string.IsNullOrEmpty(message) && _languages.ContainsKey(code)) {
                 message = _languages[code].GetTranslation(key);
             }
 

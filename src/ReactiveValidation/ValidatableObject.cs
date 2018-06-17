@@ -7,10 +7,6 @@ namespace ReactiveValidation
 {
     public class ValidatableObject : IValidatableObject
     {
-        public ValidatableObject()
-        {}
-
-
         private IObjectValidator _validator;
         public IObjectValidator Validator {
             get => _validator;

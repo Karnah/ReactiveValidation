@@ -30,7 +30,7 @@ namespace ReactiveValidation.Samples._4._Inner_validatable_object_and_collection
             AddItemCommand = ReactiveCommand.Create(AddItem);
             DeleteItemCommand = ReactiveCommand.Create<InnerObject>(DeleteItem);
 
-            this.Validator = GetValidator();
+            Validator = GetValidator();
         }
 
 
@@ -95,7 +95,7 @@ namespace ReactiveValidation.Samples._4._Inner_validatable_object_and_collection
         {
             public InnerObject()
             {
-                this.Validator = GetValidator();
+                Validator = GetValidator();
             }
 
             private IObjectValidator GetValidator()

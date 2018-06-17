@@ -8,7 +8,7 @@ namespace ReactiveValidation.Samples._3._Localization
         {
             InitializeComponent();
 
-            this.DataContext = new LocalizationViewModel();
+            DataContext = new LocalizationViewModel();
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -33,17 +32,18 @@ namespace ReactiveValidation.Validators
 
         protected override bool IsValid(ValidationContext<TObject, string> context)
         {
-            if (string.IsNullOrEmpty(context.PropertyValue) == true)
+            if (string.IsNullOrEmpty(context.PropertyValue))
                 return true;
 
             var regexPatternValue = context.GetParamValue(_regexPattern);
-            if (string.IsNullOrEmpty(regexPatternValue) == true)
+            if (string.IsNullOrEmpty(regexPatternValue))
                 return true;
 
             var regex = _regexOptions == null
                 ? new Regex(regexPatternValue)
                 : new Regex(regexPatternValue, _regexOptions.Value);
-            if (regex.IsMatch(context.PropertyValue) == false) {
+            if (regex.IsMatch(context.PropertyValue) == false)
+            {
                 context.RegisterMessageArgument("RegexPattern", _regexPattern, regexPatternValue);
 
                 return false;

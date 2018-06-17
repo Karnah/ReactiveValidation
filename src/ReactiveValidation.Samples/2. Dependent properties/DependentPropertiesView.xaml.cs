@@ -8,7 +8,7 @@ namespace ReactiveValidation.Samples._2._Dependent_properties
         {
             InitializeComponent();
 
-            this.DataContext = new DependentPropertiesViewModel();
+            DataContext = new DependentPropertiesViewModel();
         }
     }
 }

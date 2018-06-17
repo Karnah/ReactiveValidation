@@ -20,19 +20,20 @@ namespace ReactiveValidation.WPF.Controls
 
         private void OnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            var element = sender as FrameworkElement;
-            if (element == null)
+            if (!(sender is FrameworkElement element))
                 return;
 
             element.Loaded -= OnLoaded;
 
             var target = PlacementTarget as FrameworkElement;
-            if (target != null) {
+            if (target != null)
+            {
                 target.LayoutUpdated += TargetOnLayoutUpdated;
             }
 
             var window = Window.GetWindow(target ?? this);
-            if (window != null) {
+            if (window != null)
+            {
                 window.LocationChanged += WindowOnLocationChanged;
                 window.SizeChanged += WindowOnSizeChanged;
             }
@@ -41,8 +42,9 @@ namespace ReactiveValidation.WPF.Controls
         }
 
 
-        public bool IsTargetVisible {
-            get => (bool) GetValue(IsTargetVisibleProperty);
+        public bool IsTargetVisible
+        {
+            get => (bool)GetValue(IsTargetVisibleProperty);
             set => SetValue(IsTargetVisibleProperty, value);
         }
 
@@ -75,8 +77,7 @@ namespace ReactiveValidation.WPF.Controls
 
         private void CheckTargetVisibility()
         {
-            var target = PlacementTarget as FrameworkElement;
-            if (target == null)
+            if (!(PlacementTarget is FrameworkElement target))
                 return;
 
             var window = Window.GetWindow(target);
@@ -87,13 +88,14 @@ namespace ReactiveValidation.WPF.Controls
             var childCenter = target.TranslatePoint(new Point(target.ActualWidth / 2, target.ActualHeight / 2), window);
             var control = window.InputHitTest(childCenter) as UIElement;
 
-            if (Equals(_lastInputHitTest, control) == true)
+            if (Equals(_lastInputHitTest, control))
                 return;
 
             _lastInputHitTest = control;
 
             var parent = control;
-            while (parent != null && Equals(target, parent) == false) {
+            while (parent != null && Equals(target, parent) == false)
+            {
                 parent = VisualTreeHelper.GetParent(parent) as UIElement;
             }
 

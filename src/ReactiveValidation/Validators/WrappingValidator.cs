@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -26,18 +25,22 @@ namespace ReactiveValidation.Validators
 
         private void UnionRelatedProperties(LambdaExpression[] baseRelatedProperties)
         {
-            if (baseRelatedProperties?.Any() != true) {
+            if (baseRelatedProperties?.Any() != true)
+            {
                 RelatedProperties = InnerValidator.RelatedProperties;
             }
-            else {
+            else
+            {
                 var relatedProperties = new HashSet<string>();
-                foreach (var expression in baseRelatedProperties) {
+                foreach (var expression in baseRelatedProperties)
+                {
                     var propertyName = ReactiveValidationHelper.GetPropertyName(typeof(TObject), expression);
                     if (string.IsNullOrEmpty(propertyName) == false)
                         relatedProperties.Add(propertyName);
                 }
 
-                foreach (var relatedProperty in InnerValidator.RelatedProperties) {
+                foreach (var relatedProperty in InnerValidator.RelatedProperties)
+                {
                     relatedProperties.Add(relatedProperty);
                 }
 

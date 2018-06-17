@@ -13,7 +13,8 @@ namespace ReactiveValidation.WPF.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var validationMessageType = value as ValidationMessageType?;
-            switch (validationMessageType) {
+            switch (validationMessageType)
+            {
                 case null:
                 case ValidationMessageType.Error:
                 case ValidationMessageType.SimpleError:

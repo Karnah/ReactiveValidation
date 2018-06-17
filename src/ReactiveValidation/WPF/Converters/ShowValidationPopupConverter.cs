@@ -11,18 +11,17 @@ namespace ReactiveValidation.WPF.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var isTargetVisible = (bool) values[0];
+            var isTargetVisible = (bool)values[0];
             if (isTargetVisible == false)
                 return false;
 
-            var isKeyboardFocused = (bool) values[1];
-            var isMouseOver = (bool) values[2];
+            var isKeyboardFocused = (bool)values[1];
+            var isMouseOver = (bool)values[2];
             if (isKeyboardFocused == false && isMouseOver == false)
                 return false;
 
 
-            var errors = values[3] as IReadOnlyCollection<ValidationError>;
-            if (errors == null)
+            if (!(values[3] is IReadOnlyCollection<ValidationError> errors))
                 throw new ArgumentNullException(nameof(errors));
 
 
@@ -30,9 +29,9 @@ namespace ReactiveValidation.WPF.Converters
                 errors.Select(result => result.ErrorContent as ValidationMessage)
                     .Any(message => message?.ValidationMessageType == ValidationMessageType.Error ||
                                     message?.ValidationMessageType == ValidationMessageType.Warning ||
-                                    isMouseOver == true);
+                                    isMouseOver);
 
-            return existsVisibleMessages == true;
+            return existsVisibleMessages;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

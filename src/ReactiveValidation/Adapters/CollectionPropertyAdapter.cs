@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Validators;
 
@@ -27,7 +26,7 @@ namespace ReactiveValidation.Adapters
             var observerBuilders = new List<Func<TObject, TCollection, Action, IDisposable>>();
 
             var propType = ReactiveValidationHelper.GetPropertyType(typeof(TObject), PropertyName);
-            if (typeof(INotifyPropertyChanged).IsAssignableFrom(propType) == true) {
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(propType)) {
                 observerBuilders.Add((o, collection, action) => new NotifyCollectionChangedSubsriber((INotifyCollectionChanged)collection, action));
             }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Adapters
@@ -23,7 +22,7 @@ namespace ReactiveValidation.Adapters
         {
             var observables = new List<Func<TObject, TProp, Action, IDisposable>>();
 
-            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TProp)) == true) {
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TProp))) {
                 observables.Add((o, prop, action) => new NotifyPropertyChangedSubsriber((INotifyPropertyChanged) prop, action));
             }
 

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-
 using ReactiveValidation.Adapters;
 using ReactiveValidation.Helpers;
 
@@ -89,7 +88,7 @@ namespace ReactiveValidation
 
         public IEnumerable<ValidationMessage> GetMessages(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName) == true)
+            if (string.IsNullOrEmpty(propertyName))
                 return null;
 
             lock (_validationResults) {

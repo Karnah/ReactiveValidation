@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
 using ReactiveValidation.Extensions;
 using ReactiveValidation.Helpers;
 
@@ -34,13 +33,13 @@ namespace ReactiveValidation.Validators
 
         public void SetStringSource(IStringSource stringSource)
         {
-            _overridedStringSource.GuardNotCallTwice($"Methods 'WithMessage'/'WithLocalizedMessage' already have been called for {this.GetType()}");
+            _overridedStringSource.GuardNotCallTwice($"Methods 'WithMessage'/'WithLocalizedMessage' already have been called for {GetType()}");
             _overridedStringSource = stringSource;
         }
 
         public void ValidateWhen(Func<TObject, bool> condition, params LambdaExpression[] relatedProperties)
         {
-            _condition.GuardNotCallTwice($"Method 'When' already have been called for {this.GetType()}");
+            _condition.GuardNotCallTwice($"Method 'When' already have been called for {GetType()}");
             _condition = condition;
 
             AddRelatedProperties(relatedProperties);
@@ -52,13 +51,13 @@ namespace ReactiveValidation.Validators
             if (_condition != null && _condition.Invoke(context.ValidatableObject) == false)
                 return new ValidationMessage[0];
 
-            if (IsValid(context) == true)
+            if (IsValid(context))
                 return new ValidationMessage[0];
 
 
             var messageSource = context.GetMessageSource(_overridedStringSource ?? _stringSource);
             var validationMessage = new ValidationMessage(messageSource, _validationMessageType);
-            return new []{ validationMessage };
+            return new[] { validationMessage };
         }
 
         protected abstract bool IsValid(ValidationContext<TObject, TProp> context);

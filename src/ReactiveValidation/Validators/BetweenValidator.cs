@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -35,14 +34,13 @@ namespace ReactiveValidation.Validators
             var isLessLowBound = _comparer.Compare(context.PropertyValue, fromValue) < 0;
             var isGreaterTopBound = _comparer.Compare(context.PropertyValue, toValue) > 0;
 
-            if (isLessLowBound || isGreaterTopBound) {
-                context.RegisterMessageArgument("From", _from, fromValue);
-                context.RegisterMessageArgument("To", _to, toValue);
+            if (!isLessLowBound && !isGreaterTopBound)
+                return true;
+            context.RegisterMessageArgument("From", _from, fromValue);
+            context.RegisterMessageArgument("To", _to, toValue);
 
-                return false;
-            }
+            return false;
 
-            return true;
         }
     }
 }
