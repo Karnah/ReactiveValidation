@@ -13,7 +13,8 @@ namespace ReactiveValidation.WPF.Templates
 
         private static ControlTemplate GetControlTemplate(string templateName)
         {
-            var templateDictionary = new ResourceDictionary {
+            var templateDictionary = new ResourceDictionary
+            {
                 Source = new Uri("/ReactiveValidation;component/WPF/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
             };
 

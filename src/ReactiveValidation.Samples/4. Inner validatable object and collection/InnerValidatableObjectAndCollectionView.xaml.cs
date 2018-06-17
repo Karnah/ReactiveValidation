@@ -8,7 +8,7 @@ namespace ReactiveValidation.Samples._4._Inner_validatable_object_and_collection
         {
             InitializeComponent();
 
-            this.DataContext = new InnerValidatableObjectAndCollectionViewModel();
+            DataContext = new InnerValidatableObjectAndCollectionViewModel();
         }
     }
 }

@@ -13,10 +13,7 @@ namespace ReactiveValidation.Validators
 
         protected override bool IsValid(ValidationContext<TObject, TProp> context)
         {
-            if (context.PropertyValue?.Validator?.IsValid == false)
-                return false;
-
-            return true;
+            return context.PropertyValue?.Validator?.IsValid != false;
         }
     }
 }

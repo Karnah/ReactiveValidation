@@ -49,14 +49,14 @@ namespace ReactiveValidation.Samples._3._Localization
 
             builder.RuleFor(vm => vm.PhoneNumber)
                 .NotEmpty()
-                    .When(vm => Email, email => string.IsNullOrEmpty(email) == true)
+                    .When(vm => Email, string.IsNullOrEmpty)
                     .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberOrEmailRequired))
                 .Matches(@"^\d{11}$")
                     .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberFormat));
 
             builder.RuleFor(vm => vm.Email)
                 .NotEmpty()
-                    .When(vm => PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber) == true)
+                    .When(vm => PhoneNumber, string.IsNullOrEmpty)
                     .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberOrEmailRequired))
                 .Must(IsValidEmail)
                     .WithLocalizedMessage(Resources.Additional.ResourceManager, nameof(Resources.Additional.NotValidEmail));
@@ -85,7 +85,7 @@ namespace ReactiveValidation.Samples._3._Localization
 
         private static bool IsValidEmail(string email)
         {
-            if (string.IsNullOrEmpty(email) == true)
+            if (string.IsNullOrEmpty(email))
                 return true;
 
             return Regex.IsMatch(email, @"^\w+@\w+.\w+$");

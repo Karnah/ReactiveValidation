@@ -22,7 +22,7 @@ namespace ReactiveValidation
             ValidationMessageType = validationMessageType;
             Message = _stringSource.GetString();
 
-            if (ValidationOptions.LanguageManager.TrackCultureChanged == true) {
+            if (ValidationOptions.LanguageManager.TrackCultureChanged) {
                 WeakEventManager<ILanguageManager, CultureChangedEventArgs>.AddHandler(
                     ValidationOptions.LanguageManager, nameof(ILanguageManager.CultureChanged), OnCultureChanged);
             }

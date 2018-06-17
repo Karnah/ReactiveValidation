@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Adapters
@@ -45,7 +44,7 @@ namespace ReactiveValidation.Adapters
                 Revalidate();
             }
             //If changed target property - revalidate only its
-            else if (IsTargetProperty(propertyName) == true) {
+            else if (IsTargetProperty(propertyName)) {
                 RevalidateProperty(propertyName);
             }
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -69,7 +68,7 @@ namespace ReactiveValidation.Validators
                     innerMessages = new[] { new ValidationMessage(new ExceptionSource(e)) };
                 }
 
-                if (innerMessages.Any() == true) {
+                if (innerMessages.Any()) {
                     validationMessages.AddRange(innerMessages);
                 }
             }

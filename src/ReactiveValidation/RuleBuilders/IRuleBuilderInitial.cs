@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation

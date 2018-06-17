@@ -2,7 +2,7 @@
 
 namespace ReactiveValidation.Validators
 {
-    public class NullValidator <TObject, TProp> : PropertyValidator<TObject, TProp>
+    public class NullValidator<TObject, TProp> : PropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
         public NullValidator(ValidationMessageType validationMessageType)

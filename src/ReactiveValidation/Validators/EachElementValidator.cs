@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -24,7 +23,7 @@ namespace ReactiveValidation.Validators
             if (context.PropertyValue?.Any() != true)
                 return true;
 
-            return context.PropertyValue.All(element => _validCondition.Invoke(element) != false);
+            return context.PropertyValue.All(element => _validCondition.Invoke(element));
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-
 using ReactiveValidation.Attributes;
 using ReactiveValidation.Helpers;
 
@@ -14,12 +13,14 @@ namespace ReactiveValidation
         private static Func<Type, PropertyInfo, LambdaExpression, IStringSource> _displayNameResolver = DefaultDisplayNameResolver;
 
 
-        public static ILanguageManager LanguageManager {
+        public static ILanguageManager LanguageManager
+        {
             get => _languageManager;
             set => _languageManager = value ?? throw new ArgumentNullException(nameof(value));
         }
 
-        public static Func<Type, PropertyInfo, LambdaExpression, IStringSource> DisplayNameResolver {
+        public static Func<Type, PropertyInfo, LambdaExpression, IStringSource> DisplayNameResolver
+        {
             get => _displayNameResolver;
             set => _displayNameResolver = value ?? DefaultDisplayNameResolver;
         }
@@ -43,7 +44,8 @@ namespace ReactiveValidation
 
         private static IStringSource DefaultDisplayNameResolver(Type type, PropertyInfo propertyInfo, LambdaExpression expression)
         {
-            if (propertyInfo != null) {
+            if (propertyInfo != null)
+            {
                 var displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
 
                 return displayNameAttribute == null
@@ -51,9 +53,10 @@ namespace ReactiveValidation
                     : new DisplayNamePropertySource(displayNameAttribute);
             }
 
-            if (type != null && expression != null) {
+            if (type != null && expression != null)
+            {
                 var propertyName = ReactiveValidationHelper.GetPropertyName(type, expression);
-                if (string.IsNullOrEmpty(propertyName) == true)
+                if (string.IsNullOrEmpty(propertyName))
                     return null;
 
                 var displayNameAttribute = type.GetProperty(propertyName)?.GetCustomAttribute<DisplayNameAttribute>();

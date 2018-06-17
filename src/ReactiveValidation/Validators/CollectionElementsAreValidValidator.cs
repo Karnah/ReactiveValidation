@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -17,10 +16,7 @@ namespace ReactiveValidation.Validators
 
         protected override bool IsValid(ValidationContext<TObject, TCollection> context)
         {
-            if (context.PropertyValue?.Any() != true)
-                return true;
-
-            return context.PropertyValue.All(element => element?.Validator.IsValid != false);
+            return context.PropertyValue?.Any() != true || context.PropertyValue.All(element => element?.Validator.IsValid != false);
         }
     }
 }

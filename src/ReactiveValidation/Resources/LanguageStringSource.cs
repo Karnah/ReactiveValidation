@@ -21,10 +21,7 @@ namespace ReactiveValidation
 
         public string GetString()
         {
-            if (_resourceManager != null)
-                return _resourceManager.GetString(_key, ValidationOptions.LanguageManager.CurrentCulture);
-
-            return ValidationOptions.LanguageManager.GetString(_key);
+            return _resourceManager != null ? _resourceManager.GetString(_key, ValidationOptions.LanguageManager.CurrentCulture) : ValidationOptions.LanguageManager.GetString(_key);
         }
     }
 }

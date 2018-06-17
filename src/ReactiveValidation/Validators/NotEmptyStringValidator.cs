@@ -7,7 +7,7 @@ namespace ReactiveValidation.Validators
     {
         public NotEmptyStringValidator(ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.NotEmptyStringValidator), validationMessageType)
-        {}
+        { }
 
 
         protected override bool IsValid(ValidationContext<TObject, string> context)

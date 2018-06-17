@@ -31,8 +31,7 @@ namespace ReactiveValidation.Helpers
         /// <returns>Property info or exception if expression is not a property</returns>
         internal static PropertyInfo GetPropertyInfo(Type type, LambdaExpression expression)
         {
-            var member = expression.Body as MemberExpression;
-            if (member == null)
+            if (!(expression.Body is MemberExpression member))
                 throw new ArgumentException($"Expression '{expression}' refers to a method, not a property.");
 
             var propInfo = member.Member as PropertyInfo;
@@ -53,8 +52,7 @@ namespace ReactiveValidation.Helpers
         /// <returns>Property name or null if expression is not a property</returns>
         internal static string GetPropertyName(Type type, LambdaExpression expression)
         {
-            var member = expression.Body as MemberExpression;
-            if (member == null)
+            if (!(expression.Body is MemberExpression member))
                 return null;
 
             var propInfo = member.Member as PropertyInfo;
@@ -109,7 +107,7 @@ namespace ReactiveValidation.Helpers
             var paramName = GetPropertyName(typeof(TObject), paramExpression);
             var funcValue = paramExpression.Compile();
 
-            if (string.IsNullOrEmpty(paramName) == true)
+            if (string.IsNullOrEmpty(paramName))
                 return new ParameterInfo<TObject, TParam>(paramName, null, funcValue);
 
             var displayNameSource = ValidationOptions.DisplayNameResolver(typeof(TObject), null, paramExpression);

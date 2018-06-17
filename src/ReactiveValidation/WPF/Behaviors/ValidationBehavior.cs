@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-
 using ReactiveValidation.WPF.Templates;
 
 namespace ReactiveValidation.WPF.Behaviors
@@ -31,17 +30,18 @@ namespace ReactiveValidation.WPF.Behaviors
 
         private static void AutoRefreshErrorTemplatePropertyChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
-            var element = obj as FrameworkElement;
-            if (element == null)
+            if (!(obj is FrameworkElement element))
                 return;
 
-            var autoResfreshTemplate = (bool) args.NewValue;
+            var autoResfreshTemplate = (bool)args.NewValue;
 
-            if (autoResfreshTemplate == true) {
+            if (autoResfreshTemplate)
+            {
                 element.Loaded += ElementOnLoaded;
                 element.Unloaded += ElementOnUnloaded;
             }
-            else {
+            else
+            {
                 element.Loaded -= ElementOnLoaded;
                 element.Unloaded -= ElementOnUnloaded;
             }
@@ -49,12 +49,12 @@ namespace ReactiveValidation.WPF.Behaviors
 
         private static void ElementOnLoaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            var element = sender as FrameworkElement;
-            if (element == null)
+            if (!(sender is FrameworkElement element))
                 return;
 
             //Revalidate all Bindings
-            foreach (var be in BindingOperations.GetSourceUpdatingBindings(element)) {
+            foreach (var be in BindingOperations.GetSourceUpdatingBindings(element))
+            {
                 be.UpdateSource();
             }
 
@@ -70,8 +70,7 @@ namespace ReactiveValidation.WPF.Behaviors
 
         private static void ElementOnUnloaded(object sender, RoutedEventArgs routedEventArgs)
         {
-            var element = sender as FrameworkElement;
-            if (element == null)
+            if (!(sender is FrameworkElement element))
                 return;
 
             DependencyPropertyDescriptor
@@ -83,15 +82,15 @@ namespace ReactiveValidation.WPF.Behaviors
 
         private static void ChangeErrorTemplate(object sender, EventArgs eventArgs)
         {
-            var element = sender as FrameworkElement;
-            if (element == null)
+            if (!(sender is FrameworkElement element))
                 return;
 
             //Set error template to null force redraw call
             Validation.SetErrorTemplate(element, null);
 
             var hasError = Validation.GetHasError(element);
-            if (hasError == true) {
+            if (hasError)
+            {
                 var errorTemplate = GetErrorTemplate(element);
                 if (errorTemplate == null)
                     return;

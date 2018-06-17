@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Extensions
@@ -729,7 +728,7 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
-            if(string.IsNullOrEmpty(regexPattern) == true)
+            if(string.IsNullOrEmpty(regexPattern))
                 throw new ArgumentException("RegexPattern should be not empty", nameof(regexPattern));
 
             return ruleBuilder.SetValidator(new RegularExpressionValidator<TObject>(_ => regexPattern, validationMessageType));
@@ -754,7 +753,7 @@ namespace ReactiveValidation.Extensions
                 where TNext : IRuleBuilder<TObject, string, TNext>
                 where TObject : IValidatableObject
         {
-            if (string.IsNullOrEmpty(regexPattern) == true)
+            if (string.IsNullOrEmpty(regexPattern))
                 throw new ArgumentException("RegexPattern should be not empty", nameof(regexPattern));
 
             return ruleBuilder.SetValidator(new RegularExpressionValidator<TObject>(_ => regexPattern, regexOptions, validationMessageType));

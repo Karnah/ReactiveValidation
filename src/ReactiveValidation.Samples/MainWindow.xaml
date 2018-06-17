@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ReactiveValidation.Samples"
         xmlns:bs="clr-namespace:ReactiveValidation.Samples._1._BaseSample"
         xmlns:dp="clr-namespace:ReactiveValidation.Samples._2._Dependent_properties"
         xmlns:l="clr-namespace:ReactiveValidation.Samples._3._Localization"

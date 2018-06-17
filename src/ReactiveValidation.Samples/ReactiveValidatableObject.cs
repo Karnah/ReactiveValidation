@@ -8,10 +8,6 @@ namespace ReactiveValidation.Samples
 {
     public class ReactiveValidatableObject : ReactiveObject, IValidatableObject
     {
-        public ReactiveValidatableObject()
-        { }
-
-
         public IObjectValidator Validator { get; protected set; }
 
 

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators

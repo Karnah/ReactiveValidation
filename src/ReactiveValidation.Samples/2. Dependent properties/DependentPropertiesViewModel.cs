@@ -17,14 +17,14 @@ namespace ReactiveValidation.Samples._2._Dependent_properties
 
             builder.RuleFor(vm => vm.PhoneNumber)
                 .NotEmpty()
-                    .When(vm => Email, email => string.IsNullOrEmpty(email) == true)
+                    .When(vm => Email, string.IsNullOrEmpty)
                     .WithMessage("You need to specify a phone or email")
                 .Matches(@"^\d{11}$")
                     .WithMessage("Phone number must contain 11 digits");
 
             builder.RuleFor(vm => vm.Email)
                 .NotEmpty()
-                    .When(vm => PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber) == true)
+                    .When(vm => PhoneNumber, string.IsNullOrEmpty)
                     .WithMessage("You need to specify a phone or email")
                 .Must(IsValidEmail)
                     .WithMessage("Not valid email");
@@ -53,7 +53,7 @@ namespace ReactiveValidation.Samples._2._Dependent_properties
 
         private static bool IsValidEmail(string email)
         {
-            if (string.IsNullOrEmpty(email) == true)
+            if (string.IsNullOrEmpty(email))
                 return true;
 
             return Regex.IsMatch(email, @"^\w+@\w+.\w+$");

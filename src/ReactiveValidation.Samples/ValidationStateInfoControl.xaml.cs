@@ -1,8 +1,6 @@
-﻿using System.Windows.Controls;
-
-namespace ReactiveValidation.Samples
+﻿namespace ReactiveValidation.Samples
 {
-    public partial class ValidationStateInfoControl : UserControl
+    public partial class ValidationStateInfoControl
     {
         public ValidationStateInfoControl()
         {

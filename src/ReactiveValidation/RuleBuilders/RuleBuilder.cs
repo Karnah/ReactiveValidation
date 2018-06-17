@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Resources;
-
 using ReactiveValidation.Adapters;
 using ReactiveValidation.Exceptions;
 using ReactiveValidation.Extensions;
@@ -11,13 +10,10 @@ using ReactiveValidation.Validators;
 
 namespace ReactiveValidation
 {
-    internal abstract class BaseRuleBuilder<TObject, TProp, TInitial, TBuilder> :
-        IRuleBuilderInitial<TObject, TProp, TBuilder>,
-        IRuleBuilder<TObject, TProp, TBuilder>,
+    internal abstract class BaseRuleBuilder<TObject, TProp, TBuilder> : IRuleBuilder<TObject, TProp, TBuilder>,
         IAdapterBuilder<TObject>
             where TObject : IValidatableObject
-            where TInitial : IRuleBuilderInitial<TObject, TProp, TBuilder>
-            where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
+        where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
         private readonly List<IPropertyValidator<TObject, TProp>> _propertyValidators;
         private readonly IList<LambdaExpression> _relatedProperties;
@@ -284,8 +280,7 @@ namespace ReactiveValidation
 
 
     internal class SinglePropertyRuleBuilder<TObject, TProp> :
-        BaseRuleBuilder<TObject, TProp, ISinglePropertyRuleBuilderInitial<TObject, TProp>, ISinglePropertyRuleBuilder<TObject, TProp>>,
-        ISinglePropertyRuleBuilderInitial<TObject, TProp>,
+        BaseRuleBuilder<TObject, TProp, ISinglePropertyRuleBuilder<TObject, TProp>>,
         ISinglePropertyRuleBuilder<TObject, TProp>
             where TObject : IValidatableObject
     {
@@ -302,8 +297,7 @@ namespace ReactiveValidation
 
 
     internal class PropertiesRuleBuilder<TObject> :
-        BaseRuleBuilder<TObject, object, IPropertiesRuleBuilderInitial<TObject>, IPropertiesRuleBuilder<TObject>>,
-        IPropertiesRuleBuilderInitial<TObject>,
+        BaseRuleBuilder<TObject, object, IPropertiesRuleBuilder<TObject>>,
         IPropertiesRuleBuilder<TObject>
             where TObject : IValidatableObject
     {
@@ -320,8 +314,7 @@ namespace ReactiveValidation
 
 
     internal class CollectionPropertyRuleBuilder<TObject, TCollection, TProp> :
-        BaseRuleBuilder<TObject, TCollection, ICollectionRuleBuilderInitial<TObject, TCollection, TProp>, ICollectionRuleBuilder<TObject, TCollection, TProp>>,
-        ICollectionRuleBuilderInitial<TObject, TCollection, TProp>,
+        BaseRuleBuilder<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TProp>>,
         ICollectionRuleBuilder<TObject, TCollection, TProp>
             where TObject : IValidatableObject
             where TCollection : IEnumerable<TProp>

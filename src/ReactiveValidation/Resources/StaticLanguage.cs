@@ -25,11 +25,7 @@ namespace ReactiveValidation
 
         public string GetTranslation(string key)
         {
-            if (_translations.TryGetValue(key, out var message) == true) {
-                return message;
-            }
-
-            return null;
+            return _translations.TryGetValue(key, out var message) ? message : null;
         }
     }
 }
