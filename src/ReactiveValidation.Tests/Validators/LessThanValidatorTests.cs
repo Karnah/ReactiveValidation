@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 using Xunit;
@@ -46,6 +46,7 @@ namespace ReactiveValidation.Tests.Validators
         [Theory]
         [InlineData("B", "b")]
         [InlineData("b", "B")]
+        [InlineData("b", null)]
         public void LessThanValidatorWithComparer_NotValidTheory(string value, string valueToCompare)
         {
             var validationMessage = LessThan(value, valueToCompare, StringComparer.OrdinalIgnoreCase);
@@ -57,7 +58,7 @@ namespace ReactiveValidation.Tests.Validators
         private ValidationMessage LessThan<TProp>(
             TProp value,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
