@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq.Expressions;
 
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
-    public class GreaterThanOrEqualValidator<TObject, TProp> : AbstractComparisonValidator<TObject, TProp>
+    public class GreaterThanOrEqualValidator<TObject, TProp, TParam> : AbstractComparisonValidator<TObject, TProp, TParam>
         where TObject : IValidatableObject
-        where TProp : IComparable<TProp>
     {
         public GreaterThanOrEqualValidator(
-            Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IComparer<TProp> comparer,
+            Expression<Func<TObject, TParam>> valueToCompareExpression,
+            IComparer comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.GreaterThanOrEqualValidator), valueToCompareExpression, comparer, validationMessageType)
         { }
@@ -22,5 +21,17 @@ namespace ReactiveValidation.Validators
         {
             return comparationResult >= 0;
         }
+    }
+
+    public class GreaterThanOrEqualValidator<TObject, TProp> : GreaterThanOrEqualValidator<TObject, TProp, TProp>
+        where TObject : IValidatableObject
+        where TProp : IComparable<TProp>
+    {
+        public GreaterThanOrEqualValidator(
+            Expression<Func<TObject, TProp>> valueToCompareExpression,
+            IComparer comparer,
+            ValidationMessageType validationMessageType)
+            : base(valueToCompareExpression, comparer, validationMessageType)
+        { }
     }
 }

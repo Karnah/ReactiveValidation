@@ -26,8 +26,8 @@ namespace ReactiveValidation.Samples._1._BaseSample
                 .Matches(@"^\d{9,12}$");
 
             builder.RuleFor(vm => vm.Age)
+                .NotNull()
                 .Between(18, 35);
-
 
             return builder.Build(this);
         }
@@ -60,8 +60,8 @@ namespace ReactiveValidation.Samples._1._BaseSample
             }
         }
 
-        private int _age;
-        public int Age {
+        private int? _age;
+        public int? Age {
             get => _age;
             set {
                 _age = value;

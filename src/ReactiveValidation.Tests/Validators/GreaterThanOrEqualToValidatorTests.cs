@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 using Xunit;
@@ -65,11 +65,11 @@ namespace ReactiveValidation.Tests.Validators
         private ValidationMessage GreaterThanOrEqualTo<TProp>(
             TProp value,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
-            var greaterThanOrEqualToValidator = new GreaterThanOrEqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
+            var greaterThanOrEqualToValidator = new GreaterThanOrEqualValidator<TestValidatableObject, TProp, TProp>(_ => valueToCompare, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = greaterThanOrEqualToValidator.ValidateProperty(context).FirstOrDefault();
 

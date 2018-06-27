@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq.Expressions;
 
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
-    public class EqualValidator <TObject, TProp> : PropertyValidator<TObject, TProp>
+    public class EqualValidator<TObject, TProp, TParam> : PropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
-        private readonly IEqualityComparer<TProp> _comparer;
-        private readonly ParameterInfo<TObject, TProp> _valueToCompare;
+        private readonly IEqualityComparer _comparer;
+        private readonly ParameterInfo<TObject, TParam> _valueToCompare;
 
         public EqualValidator(
-            Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IEqualityComparer<TProp> comparer,
+            Expression<Func<TObject, TParam>> valueToCompareExpression,
+            IEqualityComparer comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.EqualValidator), validationMessageType, valueToCompareExpression)
         {
@@ -24,8 +24,11 @@ namespace ReactiveValidation.Validators
 
         protected override bool IsValid(ValidationContext<TObject, TProp> context)
         {
-            var paramValue = context.GetParamValue(_valueToCompare);
+            var propertyValue = context.PropertyValue;
+            if (propertyValue == null)
+                return true;
 
+            var paramValue = context.GetParamValue(_valueToCompare);
             var isEquals = _comparer?.Equals(context.PropertyValue, paramValue) ?? Equals(context.PropertyValue, paramValue);
             if (isEquals == false) {
                 context.RegisterMessageArgument("ValueToCompare", _valueToCompare, paramValue);
@@ -33,5 +36,16 @@ namespace ReactiveValidation.Validators
 
             return isEquals;
         }
+    }
+
+    public class EqualValidator<TObject, TProp> : EqualValidator<TObject, TProp, TProp>
+        where TObject : IValidatableObject
+    {
+        public EqualValidator(
+            Expression<Func<TObject, TProp>> valueToCompareExpression,
+            IEqualityComparer comparer,
+            ValidationMessageType validationMessageType)
+            : base(valueToCompareExpression, comparer, validationMessageType)
+        { }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 using Xunit;
@@ -36,6 +36,7 @@ namespace ReactiveValidation.Tests.Validators
 
         [Theory]
         [InlineData("B", "b")]
+        [InlineData("b", null)]
         public void GreaterThanValidatorWithoutComparer_ValidTheory(string value, string valueToCompare)
         {
             var validationMessage = GreaterThan(value, valueToCompare);
@@ -57,11 +58,11 @@ namespace ReactiveValidation.Tests.Validators
         private ValidationMessage GreaterThan<TProp>(
             TProp value,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
-            var greaterThanValidator = new GreaterThanValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
+            var greaterThanValidator = new GreaterThanValidator<TestValidatableObject, TProp, TProp>(_ => valueToCompare, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = greaterThanValidator.ValidateProperty(context).FirstOrDefault();
 

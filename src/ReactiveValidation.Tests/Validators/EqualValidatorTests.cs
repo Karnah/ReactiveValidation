@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 using Xunit;
@@ -45,10 +45,10 @@ namespace ReactiveValidation.Tests.Validators
         private ValidationMessage Equal<TProp>(
             TProp value,
             TProp valueToCompare,
-            IEqualityComparer<TProp> comparer = null,
+            IEqualityComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
-            var equalValidator = new EqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
+            var equalValidator = new EqualValidator<TestValidatableObject, TProp, TProp>(_ => valueToCompare, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = equalValidator.ValidateProperty(context).FirstOrDefault();
 

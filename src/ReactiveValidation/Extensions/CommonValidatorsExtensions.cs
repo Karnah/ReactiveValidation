@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
@@ -26,7 +27,7 @@ namespace ReactiveValidation.Extensions
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp from,
             TProp to,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
@@ -46,6 +47,35 @@ namespace ReactiveValidation.Extensions
         /// <typeparam name="TObject">The type of validatable object</typeparam>
         /// <typeparam name="TProp">The type of validatable property</typeparam>
         /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="from">The lowest allowed value</param>
+        /// <param name="to">The highest allowed value</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext Between<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp from,
+            TProp to,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            if ((comparer ?? Comparer<TProp>.Default).Compare(from, to) > 0)
+                throw new ArgumentException("'To' should be larger than 'From' in BetweenValidator");
+
+            return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp?, TProp>(_ => from, _ => to, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
         /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
         /// <param name="to">The highest allowed value</param>
         /// <param name="comparer">Comparer to use</param>
@@ -55,13 +85,39 @@ namespace ReactiveValidation.Extensions
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> fromExpression,
             TProp to,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
             return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp>(fromExpression, _ => to, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
+        /// <param name="to">The highest allowed value</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext Between<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            Expression<Func<TObject, TProp>> fromExpression,
+            TProp to,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp?, TProp>(fromExpression, _ => to, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -81,13 +137,39 @@ namespace ReactiveValidation.Extensions
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp from,
             Expression<Func<TObject, TProp>> toExpression,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
             return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp>(_ => from, toExpression, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="from">The lowest allowed value</param>
+        /// <param name="toExpression">The expression from which will be calculated highest allowed value</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext Between<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp from,
+            Expression<Func<TObject, TProp>> toExpression,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp?, TProp>(_ => from, toExpression, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -107,13 +189,39 @@ namespace ReactiveValidation.Extensions
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> fromExpression,
             Expression<Func<TObject, TProp>> toExpression,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
             return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp>(fromExpression, toExpression, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
+        /// <param name="toExpression">The expression from which will be calculated highest allowed value</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext Between<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            Expression<Func<TObject, TProp>> fromExpression,
+            Expression<Func<TObject, TProp>> toExpression,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new BetweenValidator<TObject, TProp?, TProp>(fromExpression, toExpression, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -131,12 +239,36 @@ namespace ReactiveValidation.Extensions
         public static TNext Equal<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
-            IEqualityComparer<TProp> comparer = null,
+            IEqualityComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(new EqualValidator<TObject, TProp>(_ => valueToCompare, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an 'equals' validator on the current rule builder.
+        /// Validation will fail if the specified value is not equal to the value of the property.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="valueToCompare">The value to compare</param>
+        /// <param name="comparer">Equality Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext Equal<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp valueToCompare,
+            IEqualityComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct
+        {
+            return ruleBuilder.SetValidator(new EqualValidator<TObject, TProp?, TProp>(_ => valueToCompare, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -154,12 +286,12 @@ namespace ReactiveValidation.Extensions
         public static TNext Equal<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IEqualityComparer<TProp> comparer = null,
+            IEqualityComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
         {
-            return ruleBuilder.SetValidator(new EqualValidator<TObject,TProp>(valueToCompareExpression, comparer, validationMessageType));
+            return ruleBuilder.SetValidator(new EqualValidator<TObject, TProp>(valueToCompareExpression, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -178,13 +310,38 @@ namespace ReactiveValidation.Extensions
         public static TNext GreaterThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
             return ruleBuilder.SetValidator(new GreaterThanOrEqualValidator<TObject, TProp>(_ => valueToCompare, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines a 'greater than or equal' validator on the current rule builder. 
+        /// The validation will succeed if the property value is greater than or equal the specified value.
+        /// The validation will fail if the property value is less than the specified value.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="valueToCompare">The value being compared</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext GreaterThanOrEqualTo<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp valueToCompare,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new GreaterThanOrEqualValidator<TObject, TProp?, TProp>(_ => valueToCompare, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -203,7 +360,7 @@ namespace ReactiveValidation.Extensions
         public static TNext GreaterThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
@@ -228,13 +385,38 @@ namespace ReactiveValidation.Extensions
         public static TNext GreaterThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
             return ruleBuilder.SetValidator(new GreaterThanValidator<TObject, TProp>(_ => valueToCompare, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines a 'greater than' validator on the current rule builder. 
+        /// The validation will succeed if the property value is greater than the specified value.
+        /// The validation will fail if the property value is less than or equal the specified value.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="valueToCompare">The value being compared</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext GreaterThan<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp valueToCompare,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new GreaterThanValidator<TObject, TProp?, TProp>(_ => valueToCompare, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -253,13 +435,13 @@ namespace ReactiveValidation.Extensions
         public static TNext GreaterThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
-            return ruleBuilder.SetValidator(new GreaterThanValidator<TObject, TProp>(valueToCompareExpression, comparer, validationMessageType));
+            return ruleBuilder.SetValidator(new GreaterThanValidator<TObject, TProp> (valueToCompareExpression, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -508,13 +690,38 @@ namespace ReactiveValidation.Extensions
         public static TNext LessThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
                 where TProp : IComparable<TProp>
         {
             return ruleBuilder.SetValidator(new LessThanOrEqualValidator<TObject, TProp>(_ => valueToCompare, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines a 'less than or equal' validator on the current rule builder.
+        /// The validation will succeed if the property value is less than or equal to the specified value.
+        /// The validation will fail if the property value is greater than the specified value.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="valueToCompare">The value being compared</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext LessThanOrEqualTo<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp valueToCompare,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new LessThanOrEqualValidator<TObject, TProp?, TProp>(_ => valueToCompare, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -533,7 +740,7 @@ namespace ReactiveValidation.Extensions
         public static TNext LessThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
@@ -557,7 +764,7 @@ namespace ReactiveValidation.Extensions
         public static TNext LessThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
@@ -575,13 +782,37 @@ namespace ReactiveValidation.Extensions
         /// <typeparam name="TObject">The type of validatable object</typeparam>
         /// <typeparam name="TProp">The type of validatable property</typeparam>
         /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="valueToCompare">The value being compared</param>
+        /// <param name="comparer">Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        public static TNext LessThan<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp valueToCompare,
+            IComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct, IComparable<TProp>
+        {
+            return ruleBuilder.SetValidator(new LessThanValidator<TObject, TProp?, TProp>(_ => valueToCompare, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines a 'less than' validator on the current rule builder.
+        /// The validation will succeed if the property value is less than the specified value.
+        /// The validation will fail if the property value is greater than or equal to the specified value.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
         /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
         /// <param name="comparer">Comparer to use</param>
         /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
         public static TNext LessThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
@@ -642,12 +873,36 @@ namespace ReactiveValidation.Extensions
         public static TNext NotEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
-            IEqualityComparer<TProp> comparer = null,
+            IEqualityComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(new NotEqualValidator<TObject, TProp>(_ => valueToCompare, comparer, validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an 'not equal' validator on the current rule builder.
+        /// Validation will fail if the specified value is equal to the value of the property.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
+        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <param name="valueToCompare">The value to compare</param>
+        /// <param name="comparer">Equality Comparer to use</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <returns></returns>
+        public static TNext NotEqual<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
+            TProp valueToCompare,
+            IEqualityComparer comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
+                where TNext : IRuleBuilder<TObject, TProp?, TNext>
+                where TObject : IValidatableObject
+                where TProp : struct
+        {
+            return ruleBuilder.SetValidator(new NotEqualValidator<TObject, TProp?, TProp>(_ => valueToCompare, comparer, validationMessageType));
         }
 
         /// <summary>
@@ -665,7 +920,7 @@ namespace ReactiveValidation.Extensions
         public static TNext NotEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IEqualityComparer<TProp> comparer = null,
+            IEqualityComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
                 where TNext : IRuleBuilder<TObject, TProp, TNext>
                 where TObject : IValidatableObject

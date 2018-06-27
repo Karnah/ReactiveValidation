@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -71,11 +72,11 @@ namespace ReactiveValidation.Tests.Validators
             TProp value,
             TProp from,
             TProp to,
-            IComparer<TProp> comparer = null,
+            IComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
-            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
+            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp, TProp>(_ => from, _ => to, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = betweenValidator.ValidateProperty(context).FirstOrDefault();
 
