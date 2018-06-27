@@ -76,7 +76,7 @@ namespace ReactiveValidation.Tests.Validators
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
-            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp, TProp>(_ => from, _ => to, comparer, validationMessageType);
+            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = betweenValidator.ValidateProperty(context).FirstOrDefault();
 

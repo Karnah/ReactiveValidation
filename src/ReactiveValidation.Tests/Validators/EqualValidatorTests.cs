@@ -48,7 +48,7 @@ namespace ReactiveValidation.Tests.Validators
             IEqualityComparer comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
-            var equalValidator = new EqualValidator<TestValidatableObject, TProp, TProp>(_ => valueToCompare, comparer, validationMessageType);
+            var equalValidator = new EqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = equalValidator.ValidateProperty(context).FirstOrDefault();
 

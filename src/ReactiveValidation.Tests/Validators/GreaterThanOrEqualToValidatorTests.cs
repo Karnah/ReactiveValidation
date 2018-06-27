@@ -69,7 +69,7 @@ namespace ReactiveValidation.Tests.Validators
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
-            var greaterThanOrEqualToValidator = new GreaterThanOrEqualValidator<TestValidatableObject, TProp, TProp>(_ => valueToCompare, comparer, validationMessageType);
+            var greaterThanOrEqualToValidator = new GreaterThanOrEqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
             var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
             var validationMessage = greaterThanOrEqualToValidator.ValidateProperty(context).FirstOrDefault();
 
