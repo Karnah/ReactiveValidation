@@ -162,11 +162,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Additional.de.resx" />
     <EmbeddedResource Include="Resources\Additional.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Additional.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Additional.ru.resx" />
+    <EmbeddedResource Include="Resources\Default.de.resx" />
     <EmbeddedResource Include="Resources\Default.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Default.Designer.cs</LastGenOutput>

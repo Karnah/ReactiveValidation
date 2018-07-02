@@ -32,6 +32,9 @@ namespace ReactiveValidation.Samples._3._Localization
             SetRussianLanguageCommand = ReactiveCommand.Create(() => {
                 ValidationOptions.LanguageManager.Culture = new CultureInfo("ru-RU");
             });
+            SetGermanLanguageCommand = ReactiveCommand.Create(() => {
+                ValidationOptions.LanguageManager.Culture = new CultureInfo("de-DE");
+            });
 
             //SetEnglishLanguageCommand = ReactiveCommand.Create(() => {
             //    CultureInfo.CurrentUICulture = new CultureInfo("en-US");
@@ -118,5 +121,7 @@ namespace ReactiveValidation.Samples._3._Localization
         public ICommand SetEnglishLanguageCommand { get; }
 
         public ICommand SetRussianLanguageCommand { get; }
+
+        public ICommand SetGermanLanguageCommand { get; }
     }
 }
