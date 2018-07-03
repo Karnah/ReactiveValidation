@@ -48,6 +48,7 @@
     <Compile Include="Models\CultureChangedEventArgs.cs" />
     <Compile Include="Resources\DisplayNamePropertySource.cs" />
     <Compile Include="Resources\ExceptionSource.cs" />
+    <Compile Include="Resources\Languages\GermanLanguage.cs" />
     <Compile Include="Resources\ValidationMessageStringSource.cs" />
     <Compile Include="Validators\AbstractComparisonValidator.cs" />
     <Compile Include="Validators\BetweenValidator.cs" />

@@ -22,6 +22,7 @@ namespace ReactiveValidation
             var languages = new ILanguage[] {
                 new RussianLanguage(),
                 new EnglishLanguage(),
+                new GermanLanguage()
             };
             _languages = languages.ToDictionary(l => l.Name, l => l);
 
