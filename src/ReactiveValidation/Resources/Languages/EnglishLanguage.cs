@@ -17,8 +17,8 @@ namespace ReactiveValidation.Languages
             AddTranslations(ValidatorsNames.GreaterThanOrEqualValidator, "{PropertyName} must be greater than or equal to {ValueToCompare}");
             AddTranslations(ValidatorsNames.GreaterThanValidator, "{PropertyName} must be greater than {ValueToCompare}");
             AddTranslations(ValidatorsNames.LengthValidator, "{PropertyName} must be between {MinLength} and {MaxLength} characters. You entered {TotalLength} characters");
-            AddTranslations(ValidatorsNames.MinLengthValidator, "{PropertyName} must be more than {MinLength} characters. You entered {TotalLength} characters");
-            AddTranslations(ValidatorsNames.MaxLengthValidator, "{PropertyName} must be less than {MaxLength} characters. You entered {TotalLength} characters");
+            AddTranslations(ValidatorsNames.MinLengthValidator, "{PropertyName} must be not less than {MinLength} characters. You entered {TotalLength} characters");
+            AddTranslations(ValidatorsNames.MaxLengthValidator, "{PropertyName} must be not more than {MaxLength} characters. You entered {TotalLength} characters");
             AddTranslations(ValidatorsNames.ExactLengthValidator, "{PropertyName} must be {MaxLength} characters in length. You entered {TotalLength} characters");
             AddTranslations(ValidatorsNames.LessThanOrEqualValidator, "{PropertyName} must be less than or equal to {ValueToCompare}");
             AddTranslations(ValidatorsNames.LessThanValidator, "{PropertyName} must be less than {ValueToCompare}");
