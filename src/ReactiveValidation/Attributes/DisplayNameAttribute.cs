@@ -36,7 +36,7 @@ namespace ReactiveValidation.Attributes
         {
             if (string.IsNullOrEmpty(DisplayNameKey) == false) {
                 if (_resourceManager != null) {
-                    return _resourceManager.GetString(DisplayNameKey, ValidationOptions.LanguageManager.CurrentCulture);
+                    return _resourceManager.GetString(DisplayNameKey, ValidationOptions.LanguageManager.Culture);
                 }
 
                 return ValidationOptions.LanguageManager.GetString(DisplayNameKey);

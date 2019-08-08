@@ -53,7 +53,7 @@ namespace ReactiveValidation
 
             if (type != null && expression != null) {
                 var propertyName = ReactiveValidationHelper.GetPropertyName(type, expression);
-                if (string.IsNullOrEmpty(propertyName) == true)
+                if (string.IsNullOrEmpty(propertyName))
                     return null;
 
                 var displayNameAttribute = type.GetProperty(propertyName)?.GetCustomAttribute<DisplayNameAttribute>();

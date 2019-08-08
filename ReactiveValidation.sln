@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveValidation", "src\ReactiveValidation\ReactiveValidation.csproj", "{346D5F86-A0AE-4887-B429-2A55331F0208}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReactiveValidation", "src\ReactiveValidation\ReactiveValidation.csproj", "{0280AFF9-F7C2-4B2A-B1E4-20D25CA1C0E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveValidation.Tests", "src\ReactiveValidation.Tests\ReactiveValidation.Tests.csproj", "{C8E506EB-F029-47E9-8C34-C63526D20C09}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveValidation.Wpf", "src\ReactiveValidation.Wpf\ReactiveValidation.Wpf.csproj", "{346D5F86-A0AE-4887-B429-2A55331F0208}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveValidation.Samples", "src\ReactiveValidation.Samples\ReactiveValidation.Samples.csproj", "{B3D4CA4B-4822-4F86-9337-598D19D0B3A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveValidation.Wpf.Samples", "src\ReactiveValidation.Wpf.Samples\ReactiveValidation.Wpf.Samples.csproj", "{B3D4CA4B-4822-4F86-9337-598D19D0B3A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveValidation.Tests", "src\ReactiveValidation.Tests\ReactiveValidation.Tests.csproj", "{B863F686-D3DA-4CA5-A71D-3670B2DA5353}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,18 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0280AFF9-F7C2-4B2A-B1E4-20D25CA1C0E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0280AFF9-F7C2-4B2A-B1E4-20D25CA1C0E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0280AFF9-F7C2-4B2A-B1E4-20D25CA1C0E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0280AFF9-F7C2-4B2A-B1E4-20D25CA1C0E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{346D5F86-A0AE-4887-B429-2A55331F0208}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{346D5F86-A0AE-4887-B429-2A55331F0208}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{346D5F86-A0AE-4887-B429-2A55331F0208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{346D5F86-A0AE-4887-B429-2A55331F0208}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C8E506EB-F029-47E9-8C34-C63526D20C09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8E506EB-F029-47E9-8C34-C63526D20C09}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8E506EB-F029-47E9-8C34-C63526D20C09}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8E506EB-F029-47E9-8C34-C63526D20C09}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3D4CA4B-4822-4F86-9337-598D19D0B3A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3D4CA4B-4822-4F86-9337-598D19D0B3A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3D4CA4B-4822-4F86-9337-598D19D0B3A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3D4CA4B-4822-4F86-9337-598D19D0B3A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B863F686-D3DA-4CA5-A71D-3670B2DA5353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B863F686-D3DA-4CA5-A71D-3670B2DA5353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B863F686-D3DA-4CA5-A71D-3670B2DA5353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B863F686-D3DA-4CA5-A71D-3670B2DA5353}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
