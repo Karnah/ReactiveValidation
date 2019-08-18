@@ -1,5 +1,5 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Legacy;
@@ -11,16 +11,13 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
     /// This sample also shows the use of ReactiveUI and ReactiveUI.Fody.
     /// More information: https://reactiveui.net/ and https://github.com/kswoll/ReactiveUI.Fody
     /// Pay attention to the base class - it's inherit from ReactiveObject
+    ///
+    /// Please see how setup CollectionObserver in <see cref="App.OnStartup" />.
     /// </summary>
     public class InnerValidatableObjectAndCollectionViewModel : ReactiveValidatableObject
     {
         public InnerValidatableObjectAndCollectionViewModel()
         {
-            //If you are using Reactive UI, you can add custom logic to ReactiveList
-            //In your project this is better do in App.xaml.cs
-            ValidationOptions.AddCollectionObserver(CanObserve, CreateReactiveCollectionItemChangedObserver);
-
-
             InnerObjectValue = new InnerObject();
             InnerObjectsCollection = new ReactiveList<InnerObject>() {
                 ChangeTrackingEnabled = true
@@ -29,23 +26,8 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
             AddItemCommand = ReactiveCommand.Create(AddItem);
             DeleteItemCommand = ReactiveCommand.Create<InnerObject>(DeleteItem);
 
-            this.Validator = GetValidator();
+            Validator = GetValidator();
         }
-
-
-        private static bool CanObserve(Type objectType, Type propertyType)
-        {
-            return typeof(IReactiveNotifyCollectionItemChanged<object>).IsAssignableFrom(propertyType);
-        }
-
-        private static IDisposable CreateReactiveCollectionItemChangedObserver(object o, object propertyValue, Action action)
-        {
-            if (propertyValue is IReactiveNotifyCollectionItemChanged<object> collection)
-                return collection.ItemChanged.Subscribe(args => action());
-
-            return null;
-        }
-
 
         private IObjectValidator GetValidator()
         {

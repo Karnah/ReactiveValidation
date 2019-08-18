@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveValidation.Attributes;
@@ -12,37 +13,34 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
     /// This sample also shows the use of ReactiveUI and ReactiveUI.Fody.
     /// More information: https://reactiveui.net/ and https://github.com/kswoll/ReactiveUI.Fody
     /// Pay attention to the base class - it's inherit from ReactiveObject.
+    ///
+    /// Please see how setup base ResourceManager and TrackCultureChanged in <see cref="App.OnStartup" />.
     /// </summary>
     public class LocalizationViewModel : ReactiveValidatableObject
     {
         public LocalizationViewModel()
         {
-            //In your project this is better do in App.xaml.cs.
-            ValidationOptions.LanguageManager.TrackCultureChanged = true;
-            ValidationOptions.LanguageManager.DefaultResourceManager = Resources.Default.ResourceManager;
-
             Validator = GetValidator();
 
 
-            // You can change both the CurrentUICulture and ValidationOptions.LanguageManager.Culture.
-            SetEnglishLanguageCommand = ReactiveCommand.Create(() => {
-                ValidationOptions.LanguageManager.Culture = new CultureInfo("en-US");
+            SetEnglishLanguageCommand = ReactiveCommand.Create(() =>
+            {
+                var culture = new CultureInfo("en-US");
+                CultureInfo.CurrentUICulture = culture;
+                ValidationOptions.LanguageManager.Culture = culture;
             });
-            SetRussianLanguageCommand = ReactiveCommand.Create(() => {
-                ValidationOptions.LanguageManager.Culture = new CultureInfo("ru-RU");
+            SetRussianLanguageCommand = ReactiveCommand.Create(() =>
+            {
+                var culture = new CultureInfo("ru-RU");
+                CultureInfo.CurrentUICulture = culture;
+                ValidationOptions.LanguageManager.Culture = culture;
             });
-            SetGermanLanguageCommand = ReactiveCommand.Create(() => {
-                ValidationOptions.LanguageManager.Culture = new CultureInfo("de-DE");
+            SetGermanLanguageCommand = ReactiveCommand.Create(() =>
+            {
+                var culture = new CultureInfo("de-DE");
+                CultureInfo.CurrentUICulture = culture;
+                ValidationOptions.LanguageManager.Culture = culture;
             });
-
-            //SetEnglishLanguageCommand = ReactiveCommand.Create(() => {
-            //    CultureInfo.CurrentUICulture = new CultureInfo("en-US");
-            //    ValidationOptions.LanguageManager.OnCultureChanged();
-            //});
-            //SetRussianLanguageCommand = ReactiveCommand.Create(() => {
-            //    CultureInfo.CurrentUICulture = new CultureInfo("ru-RU");
-            //    ValidationOptions.LanguageManager.OnCultureChanged();
-            //});
         }
 
         private IObjectValidator GetValidator()
@@ -51,14 +49,14 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
 
             builder.RuleFor(vm => vm.PhoneNumber)
                 .NotEmpty()
-                    .When(vm => Email, email => string.IsNullOrEmpty(email) == true)
+                    .When(vm => vm.Email, email => string.IsNullOrEmpty(email))
                     .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberOrEmailRequired))
                 .Matches(@"^\d{11}$")
                     .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberFormat));
 
             builder.RuleFor(vm => vm.Email)
                 .NotEmpty()
-                    .When(vm => PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber) == true)
+                    .When(vm => vm.PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber))
                     .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberOrEmailRequired))
                 .Must(IsValidEmail)
                     .WithLocalizedMessage(Resources.Additional.ResourceManager, nameof(Resources.Additional.NotValidEmail));

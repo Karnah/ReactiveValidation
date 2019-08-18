@@ -112,7 +112,7 @@ namespace ReactiveValidation.Helpers
             if (string.IsNullOrEmpty(paramName) == true)
                 return new ParameterInfo<TObject, TParam>(paramName, null, funcValue);
 
-            var displayNameSource = ValidationOptions.DisplayNameResolver(typeof(TObject), null, paramExpression);
+            var displayNameSource = ValidationOptions.DisplayNameResolver.GetPropertyNameSource(typeof(TObject), null, paramExpression);
             return new ParameterInfo<TObject, TParam>(paramName, displayNameSource, funcValue);
         }
     }
