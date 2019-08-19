@@ -2,10 +2,13 @@
 
 namespace ReactiveValidation.Extensions
 {
+    /// <summary>
+    /// Allows check conditions and throws exceptions.
+    /// </summary>
     internal static class GuardExtensions
     {
         /// <summary>
-        /// Check and throw exception if value already been assign
+        /// Check and throw exception if value already been assign.
         /// </summary>
         public static void GuardNotCallTwice(this object o, string message)
         {

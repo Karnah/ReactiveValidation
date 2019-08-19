@@ -46,7 +46,7 @@ namespace ReactiveValidation
             const BindingFlags bindingAttributes = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
             var properties = typeof(TObject).GetProperties(bindingAttributes);
             foreach (var property in properties) {
-                _displayNamesSources.Add(property.Name, ValidationOptions.DisplayNameResolver.Invoke(typeof(TObject), property, null));
+                _displayNamesSources.Add(property.Name, ValidationOptions.DisplayNameResolver.GetPropertyNameSource(typeof(TObject), property, null));
             }
         }
 

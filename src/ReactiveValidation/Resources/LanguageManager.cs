@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Resources;
+
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Languages;
 
 namespace ReactiveValidation
 {
-    /// <inheritdoc />
-    public class LanguageManager : ILanguageManager
+    /// <summary>
+    /// Manager, which allows use different localization for validation messages.
+    /// </summary>
+    public sealed class LanguageManager
     {
         /// <summary>
         /// Culture code which using when message in current culture not found.
@@ -35,14 +38,14 @@ namespace ReactiveValidation
         private readonly object _cultureEventLock = new object();
 
         /// <summary>
-        /// Culture which overriding by <see cref="ILanguageManager" />.
+        /// Current culture.
         /// </summary>
-        private CultureInfo _overriddenCulture;
+        private CultureInfo _culture;
 
         /// <summary>
         /// Create new LanguageManager.
         /// </summary>
-        public LanguageManager()
+        internal LanguageManager()
         {
             var languages = new ILanguage[]
             {
@@ -52,31 +55,42 @@ namespace ReactiveValidation
             };
             _languages = languages.ToDictionary(l => l.Name, l => l);
             _cultureChangedCollection = new WeakCollection<EventHandler<CultureChangedEventArgs>>();
+
+            Culture = CultureInfo.CurrentUICulture;
         }
 
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Current culture for validation messages.
+        /// If not set - using <see cref="CultureInfo.CurrentUICulture" /> by default.
+        /// </summary>
         public CultureInfo Culture
         {
-            get => _overriddenCulture ?? CultureInfo.CurrentUICulture;
+            get => _culture;
             set
             {
-                if (Equals(_overriddenCulture, value))
+                if (Equals(_culture, value))
                     return;
 
-                _overriddenCulture = value;
+                _culture = value;
                 OnCultureChanged();
             }
         }
 
-        /// <inheritdoc />
-        public ResourceManager DefaultResourceManager { get; set; }
+        /// <summary>
+        /// ResourceManager, which keeping strings for localization.
+        /// </summary>
+        public ResourceManager DefaultResourceManager { get; internal set; }
 
-        /// <inheritdoc />
-        public bool TrackCultureChanged { get; set; } = false;
+        /// <summary>
+        /// If <see langword="true"/> all validation messages will change its message on <see cref="CultureChanged" /> event.
+        /// </summary>
+        public bool TrackCultureChanged { get; internal set; }
 
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Event, which fires when culture changed in application.
+        /// </summary>
         public event EventHandler<CultureChangedEventArgs> CultureChanged
         {
             add
@@ -96,20 +110,9 @@ namespace ReactiveValidation
         }
 
 
-        /// <inheritdoc />
-        public void OnCultureChanged()
-        {
-            lock (_cultureEventLock)
-            {
-                var eventArgs = new CultureChangedEventArgs(Culture);
-                foreach (var eventHandler in _cultureChangedCollection.GetLiveItems())
-                {
-                    eventHandler(this, eventArgs);
-                }
-            }
-        }
-
-        /// <inheritdoc />
+        /// <summary>
+        /// Get localized string by its key.
+        /// </summary>
         public string GetString(string key)
         {
             var code = Culture.Name;
@@ -140,11 +143,27 @@ namespace ReactiveValidation
         private string GetLocalizedString(string key, string languageCode, CultureInfo culture)
         {
             var message = DefaultResourceManager?.GetString(key, culture);
-            if (string.IsNullOrEmpty(message) && _languages.ContainsKey(languageCode)) {
+            if (string.IsNullOrEmpty(message) && _languages.ContainsKey(languageCode))
+            {
                 message = _languages[languageCode].GetTranslation(key);
             }
 
             return message;
+        }
+
+        /// <summary>
+        /// Raise <see cref="CultureChanged" /> event.
+        /// </summary>
+        private void OnCultureChanged()
+        {
+            lock (_cultureEventLock)
+            {
+                var eventArgs = new CultureChangedEventArgs(Culture);
+                foreach (var eventHandler in _cultureChangedCollection.GetLiveItems())
+                {
+                    eventHandler(this, eventArgs);
+                }
+            }
         }
     }
 }

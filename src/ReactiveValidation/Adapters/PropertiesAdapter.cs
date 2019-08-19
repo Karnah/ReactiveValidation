@@ -3,9 +3,15 @@ using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Adapters
 {
+    /// <summary>
+    /// Adapter for which checks several properties at once.
+    /// </summary>
     internal class PropertiesAdapter<TObject> : BasePropertiesAdapter<TObject, object>
         where TObject : IValidatableObject
     {
+        /// <summary>
+        /// List of names of target properties.
+        /// </summary>
         private readonly SortedSet<string> _propertiesNames;
 
         public PropertiesAdapter(
@@ -18,6 +24,7 @@ namespace ReactiveValidation.Adapters
         }
 
 
+        /// <inheritdoc />
         public override void Revalidate()
         {
             foreach (var propertiesName in _propertiesNames) {
@@ -26,11 +33,13 @@ namespace ReactiveValidation.Adapters
         }
 
 
+        /// <inheritdoc />
         protected override bool IsTargetProperty(string propertyName)
         {
             return _propertiesNames.Contains(propertyName);
         }
 
+        /// <inheritdoc />
         protected override void RevalidateProperty(string propertyName)
         {
             InnerRevalidateProperty(propertyName);

@@ -70,6 +70,11 @@
       <DependentUpon>InnerValidatableObjectAndCollectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="4. Inner validatable object and collection\InnerValidatableObjectAndCollectionViewModel.cs" />
+    <Compile Include="5. Validation builder factory\ValidationBuilderFactoryViewModel.cs" />
+    <Compile Include="5. Validation builder factory\ValidationBuilderFactoryView.xaml.cs">
+      <DependentUpon>ValidationBuilderFactoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="5. Validation builder factory\ViewModelValidation.cs" />
     <Compile Include="ReactiveValidatableObject.cs" />
     <Compile Include="Resources\Additional.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -97,6 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="4. Inner validatable object and collection\InnerValidatableObjectAndCollectionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="5. Validation builder factory\ValidationBuilderFactoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

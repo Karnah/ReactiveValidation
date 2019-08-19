@@ -11,7 +11,7 @@ namespace ReactiveValidation.Wpf.Samples
         { }
 
 
-        public IObjectValidator Validator { get; protected set; }
+        public IObjectValidator Validator { get; set; }
 
 
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
