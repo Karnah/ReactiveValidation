@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Resources;
 
 using ReactiveValidation.Attributes;
 using ReactiveValidation.Exceptions;
@@ -15,28 +14,28 @@ namespace ReactiveValidation
     /// </summary>
     public class ValidationOptionsBuilder
     {
-        private bool _isUseDefaultResourceManagerCalled;
+        private bool _isUseStringProviderCalled;
         private bool _isTrackCultureChangedCalled;
         private bool _isUseCustomDisplayNameResolverCalled;
         private bool _isUseCustomValidatorFactoryCalled;
         private bool _isUsedDefaultValidatorFactory;
 
         /// <summary>
-        /// Set passed resource manager as default.
-        /// It will allow create <see cref="DisplayNameAttribute" /> and <see cref="LanguageStringSource" /> without passing ResourceManager.
+        /// Set string provider for text and localized strings.
+        /// It will use by <see cref="DisplayNameAttribute" /> and <see cref="LanguageStringSource" />.
         /// </summary>
-        /// <param name="resourceManager">Default resource manager.</param>
-        public ValidationOptionsBuilder UseDefaultResourceManager(ResourceManager resourceManager)
+        /// <param name="stringProvider">String provider.</param>
+        public ValidationOptionsBuilder UseStringProvider(IStringProvider stringProvider)
         {
-            if (resourceManager == null)
-                throw new ArgumentNullException(nameof(resourceManager));
+            if (stringProvider == null)
+                throw new ArgumentNullException(nameof(stringProvider));
 
-            if (_isUseDefaultResourceManagerCalled)
-                throw new MethodAlreadyCalledException("Cannot change default resource manager twice");
+            if (_isUseStringProviderCalled)
+                throw new MethodAlreadyCalledException("Cannot change string provider twice");
 
-            ValidationOptions.LanguageManager.DefaultResourceManager = resourceManager;
+            ValidationOptions.LanguageManager.StringProvider = stringProvider;
 
-            _isUseDefaultResourceManagerCalled = true;
+            _isUseStringProviderCalled = true;
             return this;
         }
 

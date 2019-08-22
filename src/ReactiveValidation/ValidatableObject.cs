@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
+
+using ReactiveValidation.Exceptions;
+using ReactiveValidation.Internal;
 
 namespace ReactiveValidation
 {
-    /// <inheritdoc />
-    public class ValidatableObject : IValidatableObject
+    /// <inheritdoc cref="IValidatableObject" />
+    public class ValidatableObject : BaseNotifyPropertyChanged, IValidatableObject
     {
         private IObjectValidator _validator;
 
@@ -21,17 +23,13 @@ namespace ReactiveValidation
             get => _validator;
             set
             {
-                if (_validator == value)
-                    return;
+                if (_validator != null)
+                    throw new MethodAlreadyCalledException("Object already has validator");
 
-                _validator = value;
-                OnPropertyChanged();
+                SetAndRaiseIfChanged(ref _validator, value);
             }
         }
 
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <inheritdoc />
         public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
@@ -39,14 +37,6 @@ namespace ReactiveValidation
 
         /// <inheritdoc />
         bool INotifyDataErrorInfo.HasErrors => Validator?.IsValid == false || Validator?.HasWarnings == true;
-
-        /// <summary>
-        /// Raise event <see cref="INotifyPropertyChanged.PropertyChanged" />.
-        /// </summary>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         /// <inheritdoc />
         public virtual void OnPropertyMessagesChanged(string propertyName)

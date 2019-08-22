@@ -1,30 +1,38 @@
-﻿using System.Resources;
-
-namespace ReactiveValidation
+﻿namespace ReactiveValidation
 {
+    /// <summary>
+    /// Source which return localized message by its key and resource.
+    /// </summary>
     public class LanguageStringSource : IStringSource
     {
         private readonly string _key;
-        private readonly ResourceManager _resourceManager;
+        private readonly string _resource;
 
+        /// <summary>
+        /// Create new language source by its key.
+        /// </summary>
+        /// <param name="key">Key of string.</param>
         public LanguageStringSource(string key)
         {
             _key = key;
         }
 
-        public LanguageStringSource(ResourceManager resourceManager, string key)
+        /// <summary>
+        /// Create new language source by its resource and key.
+        /// </summary>
+        /// <param name="resource">Name of resource.</param>
+        /// <param name="key">Key of string.</param>
+        public LanguageStringSource(string resource, string key)
         {
             _key = key;
-            _resourceManager = resourceManager;
+            _resource = resource;
         }
 
 
+        /// <inheritdoc />
         public string GetString()
         {
-            if (_resourceManager != null)
-                return _resourceManager.GetString(_key, ValidationOptions.LanguageManager.Culture);
-
-            return ValidationOptions.LanguageManager.GetString(_key);
+            return ValidationOptions.LanguageManager.GetString(_key, _resource);
         }
     }
 }

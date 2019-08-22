@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Resources;
 
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Languages;
@@ -78,9 +77,9 @@ namespace ReactiveValidation
         }
 
         /// <summary>
-        /// ResourceManager, which keeping strings for localization.
+        /// String provider, which keeping strings (including for localization).
         /// </summary>
-        public ResourceManager DefaultResourceManager { get; internal set; }
+        public IStringProvider StringProvider { get; internal set; }
 
         /// <summary>
         /// If <see langword="true"/> all validation messages will change its message on <see cref="CultureChanged" /> event.
@@ -113,19 +112,18 @@ namespace ReactiveValidation
         /// <summary>
         /// Get localized string by its key.
         /// </summary>
-        public string GetString(string key)
+        public string GetString(string key, string resource = null)
         {
             var code = Culture.Name;
-            if (!Culture.IsNeutralCulture && !_languages.ContainsKey(code)) {
+            if (!Culture.IsNeutralCulture && !_languages.ContainsKey(code))
                 code = Culture.Parent.Name;
-            }
 
             // First try get string for current culture.
-            var message = GetLocalizedString(key, code, Culture);
+            var message = GetLocalizedString(resource, key, code, Culture);
 
             // If empty, than try return string for default culture.
             if (string.IsNullOrEmpty(message))
-                message = GetLocalizedString(key, DEFAULT_CULTURE_CODE, _defaultCulture);
+                message = GetLocalizedString(resource, key, DEFAULT_CULTURE_CODE, _defaultCulture);
 
             // Otherwise - just return key.
             if (string.IsNullOrEmpty(message))
@@ -137,16 +135,20 @@ namespace ReactiveValidation
         /// <summary>
         /// Get localized string from resource manager.
         /// </summary>
+        /// <param name="resource">Name of resource.</param>
         /// <param name="key">Key of string.</param>
         /// <param name="languageCode">Code of language for static resources.</param>
         /// <param name="culture">Culture for resource manager.</param>
-        private string GetLocalizedString(string key, string languageCode, CultureInfo culture)
+        private string GetLocalizedString(string resource, string key, string languageCode, CultureInfo culture)
         {
-            var message = DefaultResourceManager?.GetString(key, culture);
+            // First trying get from string provider.
+            var message = string.IsNullOrEmpty(resource)
+                ? StringProvider?.GetString(key, culture)
+                : StringProvider?.GetString(resource, key, culture);
+
+            // If empty - trying get from languages.
             if (string.IsNullOrEmpty(message) && _languages.ContainsKey(languageCode))
-            {
                 message = _languages[languageCode].GetTranslation(key);
-            }
 
             return message;
         }
