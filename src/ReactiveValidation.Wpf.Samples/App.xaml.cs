@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Resources;
 using System.Windows;
 
 using ReactiveUI.Legacy;
@@ -16,7 +17,12 @@ namespace ReactiveValidation.Wpf.Samples
                 .Setup()
 
                 // For sample 3.
-                .UseDefaultResourceManager(Samples.Resources.Default.ResourceManager)
+                .UseStringProvider(new ResourceStringProvider(
+                    Samples.Resources.Default.ResourceManager,
+                    new Dictionary<string, ResourceManager>
+                    {
+                        { nameof(Samples.Resources.Additional), Samples.Resources.Additional.ResourceManager },
+                    }))
                 .TrackCultureChanged()
 
                 // For sample 4.

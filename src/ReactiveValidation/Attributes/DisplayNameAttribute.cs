@@ -1,46 +1,38 @@
 ﻿using System;
-using System.Resources;
 
 namespace ReactiveValidation.Attributes
 {
+    /// <summary>
+    /// Attribute which allow set display name of property.
+    /// Display name will be used in validation messages.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
     public class DisplayNameAttribute : Attribute
     {
-        private Type _resourceType;
-        private ResourceManager _resourceManager;
-
+        /// <summary>
+        /// Display name for property.
+        /// </summary>
         public string DisplayName { get; set; }
 
+        /// <summary>
+        /// Key of display name for <see cref="IStringProvider" /> in <see cref="ValidationOptions.LanguageManager" />.
+        /// </summary>
         public string DisplayNameKey { get; set; }
 
-        public Type ResourceType {
-            get => _resourceType;
-            set {
-                if (_resourceType == value)
-                    return;
-
-                _resourceType = value;
-
-                _resourceManager = new ResourceManager(_resourceType);
-                try {
-                    _resourceManager.GetString(string.Empty);
-                }
-                catch (MissingManifestResourceException) {
-                    throw new ArgumentException($"Can not create ResourceManager from {_resourceType}");
-                }
-            }
-        }
+        /// <summary>
+        /// Name of resource for <see cref="IStringProvider" /> in <see cref="ValidationOptions.LanguageManager" />.
+        /// </summary>
+        public string DisplayNameResource { get; set; }
 
 
+        /// <summary>
+        /// Get display name of property.
+        /// </summary>
+        /// <returns>Localized display name.</returns>
         internal string GetDisplayName()
         {
-            if (string.IsNullOrEmpty(DisplayNameKey) == false) {
-                if (_resourceManager != null) {
-                    return _resourceManager.GetString(DisplayNameKey, ValidationOptions.LanguageManager.Culture);
-                }
-
-                return ValidationOptions.LanguageManager.GetString(DisplayNameKey);
-            }
+            if (!string.IsNullOrEmpty(DisplayNameKey))
+                return ValidationOptions.LanguageManager.GetString(DisplayNameKey, DisplayNameResource);
 
             return DisplayName;
         }

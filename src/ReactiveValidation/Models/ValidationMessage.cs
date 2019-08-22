@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using ReactiveValidation.Internal;
 
 namespace ReactiveValidation
 {
-    public class ValidationMessage : INotifyPropertyChanged
+    public class ValidationMessage : BaseNotifyPropertyChanged
     {
         /// <summary>
         /// Empty validation message which doesn't display or affect on <see cref="IObjectValidator.IsValid" /> property.
@@ -15,15 +13,6 @@ namespace ReactiveValidation
         /// Source which allow dynamic get messages.
         /// </summary>
         private readonly IStringSource _stringSource;
-
-        /// <remarks>
-        /// This is very important thing. <see cref="LanguageManager.CultureChanged" /> uses a weak reference to delegates.
-        /// If there is no reference to delegate, target will be collected by GC.
-        /// ValidationMessage keep this reference until it will be collected.
-        /// After this WeakReference will be collected too.
-        /// </remarks>
-        /// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private readonly EventHandler<CultureChangedEventArgs> _eventHandler;
 
         /// <summary>
         /// Create new validation message with static message.
@@ -41,13 +30,6 @@ namespace ReactiveValidation
 
             ValidationMessageType = validationMessageType;
             Message = _stringSource.GetString();
-
-            var languageManager = ValidationOptions.LanguageManager;
-            if (languageManager.TrackCultureChanged)
-            {
-                _eventHandler = OnCultureChanged;
-                languageManager.CultureChanged += _eventHandler;
-            }
         }
 
         /// <summary>
@@ -68,28 +50,13 @@ namespace ReactiveValidation
         }
 
         /// <summary>
-        /// Handle culture changed event.
+        /// Update message.
         /// </summary>
-        private void OnCultureChanged(object sender, CultureChangedEventArgs args)
+        internal void UpdateMessage()
         {
             Message = _stringSource.GetString();
             OnPropertyChanged(nameof(Message));
+
         }
-
-
-        #region INotifyPropertyChanged
-
-        /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// Raise <see cref="PropertyChanged" /> event.
-        /// </summary>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
     }
 }

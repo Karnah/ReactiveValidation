@@ -57,9 +57,9 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
             builder.RuleFor(vm => vm.Email)
                 .NotEmpty()
                     .When(vm => vm.PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber))
-                    .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberOrEmailRequired))
+                .WithLocalizedMessage(nameof(Resources.Default.PhoneNumberOrEmailRequired))
                 .Must(IsValidEmail)
-                    .WithLocalizedMessage(Resources.Additional.ResourceManager, nameof(Resources.Additional.NotValidEmail));
+                    .WithLocalizedMessage(nameof(Resources.Additional), nameof(Resources.Additional.NotValidEmail));
 
 
             builder.RuleFor(vm => vm.Password)
@@ -108,7 +108,7 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
         public bool AdditionalInformation { get; set; }
 
         [Reactive]
-        [DisplayName(ResourceType = typeof(Resources.Additional), DisplayNameKey = nameof(Resources.Additional.Country))]
+        [DisplayName(DisplayNameResource = nameof(Resources.Additional), DisplayNameKey = nameof(Resources.Additional.Country))]
         public string Country { get; set; }
 
         [Reactive, DisplayName(DisplayNameKey = nameof(Resources.Default.City))]
