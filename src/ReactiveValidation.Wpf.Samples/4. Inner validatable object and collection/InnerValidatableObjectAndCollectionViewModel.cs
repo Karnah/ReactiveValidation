@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.ComponentModel;
+using System.Windows.Input;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -16,6 +18,8 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
     /// </summary>
     public class InnerValidatableObjectAndCollectionViewModel : ReactiveValidatableObject
     {
+        //private readonly ObjectObserver<InnerValidatableObjectAndCollectionViewModel> _observer;
+
         public InnerValidatableObjectAndCollectionViewModel()
         {
             InnerObjectValue = new InnerObject();
@@ -27,7 +31,17 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
             DeleteItemCommand = ReactiveCommand.Create<InnerObject>(DeleteItem);
 
             Validator = GetValidator();
+
+            //_observer = new ObjectObserver<InnerValidatableObjectAndCollectionViewModel>(this);
+            //_observer.TrackPropertyValue(nameof(InnerObjectValue));
+            //_observer.TrackPropertyValue(nameof(InnerObjectsCollection));
+            //_observer.PropertyChanged += ObserverOnPropertyChanged;
         }
+
+        //private void ObserverOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        //{
+        //    Console.WriteLine(e.PropertyName);
+        //}
 
         private IObjectValidator GetValidator()
         {
@@ -41,7 +55,7 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
             builder.RuleForCollection(vm => vm.InnerObjectsCollection)
                 .NotNull()
                 .Count(3, 5)
-                .CollectionElementsAreValid(i => i.Validator?.IsValid != false);
+                .CollectionElementsAreValid();
 
 
             return builder.Build(this);

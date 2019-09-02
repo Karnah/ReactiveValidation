@@ -11,8 +11,8 @@ namespace ReactiveValidation.Validators
         where TObject : IValidatableObject
     {
         private readonly IComparer _comparer;
-        private readonly ParameterInfo<TObject, TParam> _from;
-        private readonly ParameterInfo<TObject, TParam> _to;
+        private readonly ValidatorParameter<TObject, TParam> _from;
+        private readonly ValidatorParameter<TObject, TParam> _to;
 
         public BetweenValidator(
             Expression<Func<TObject, TParam>> fromExpression,
@@ -22,8 +22,8 @@ namespace ReactiveValidation.Validators
             : base(new LanguageStringSource(ValidatorsNames.BetweenValidator), validationMessageType, fromExpression, toExpression)
         {
             _comparer = comparer ?? Comparer<TProp>.Default;
-            _from = fromExpression.GetParameterInfo();
-            _to = toExpression.GetParameterInfo();
+            _from = new ValidatorParameter<TObject, TParam>(fromExpression);
+            _to = new ValidatorParameter<TObject, TParam>(toExpression);
         }
 
 

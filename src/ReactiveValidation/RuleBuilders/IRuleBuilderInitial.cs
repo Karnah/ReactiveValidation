@@ -18,7 +18,7 @@ namespace ReactiveValidation
         where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
         where TObject : IValidatableObject
     {
-        TBuilder SetValidator(IPropertyValidator<TObject, TProp> validator);
+        TBuilder SetValidator(IPropertyValidator<TObject> validator);
     }
 
 

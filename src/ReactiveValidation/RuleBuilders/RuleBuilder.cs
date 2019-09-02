@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-using ReactiveValidation.Adapters;
 using ReactiveValidation.Exceptions;
 using ReactiveValidation.Extensions;
 using ReactiveValidation.Validators;
@@ -18,34 +17,47 @@ namespace ReactiveValidation
     /// <typeparam name="TInitial">Type of initial rule builder.</typeparam>
     /// <typeparam name="TBuilder">Type of main rule builder.</typeparam>
     internal abstract class BaseRuleBuilder<TObject, TProp, TInitial, TBuilder> :
+        IRuleBuilder<TObject>,
         IRuleBuilderInitial<TObject, TProp, TBuilder>,
-        IRuleBuilder<TObject, TProp, TBuilder>,
-        IAdapterBuilder<TObject>
+        IRuleBuilder<TObject, TProp, TBuilder>
             where TObject : IValidatableObject
             where TInitial : IRuleBuilderInitial<TObject, TProp, TBuilder>
             where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
-        private readonly List<IPropertyValidator<TObject, TProp>> _propertyValidators;
+        private readonly List<IPropertyValidator<TObject>> _propertyValidators;
         private readonly IList<LambdaExpression> _relatedProperties;
 
-        private IPropertyValidator<TObject, TProp> _currentValidator;
+        private IPropertyValidator<TObject> _currentValidator;
         private Func<TObject, bool> _commonCondition;
 
         /// <summary>
         /// Create new base rule builder instance.
         /// </summary>
-        protected BaseRuleBuilder()
+        /// <param name="validatableProperties">List of properties names which validating by this rules.</param>
+        protected BaseRuleBuilder(IReadOnlyList<string> validatableProperties)
         {
-            _propertyValidators = new List<IPropertyValidator<TObject, TProp>>();
+            ValidatableProperties = validatableProperties;
+
+            _propertyValidators = new List<IPropertyValidator<TObject>>();
             _relatedProperties = new List<LambdaExpression>();
         }
 
 
         /// <inheritdoc />
-        public abstract IPropertiesAdapter Build(ObjectValidator<TObject> validator, params string[] properties);
+        public IReadOnlyList<string> ValidatableProperties { get; }
 
         /// <inheritdoc />
-        public TBuilder SetValidator(IPropertyValidator<TObject, TProp> validator)
+        public IReadOnlyList<IPropertyValidator<TObject>> GetValidators()
+        {
+            if (_commonCondition == null)
+                return _propertyValidators;
+
+            var complexValidator = new ComplexValidator<TObject>(_commonCondition, _propertyValidators, _relatedProperties.ToArray());
+            return new[] { complexValidator };
+        }
+
+        /// <inheritdoc />
+        public TBuilder SetValidator(IPropertyValidator<TObject> validator)
         {
             _propertyValidators.Add(validator);
             _currentValidator = validator;
@@ -107,13 +119,13 @@ namespace ReactiveValidation
             {
                 validatorSettings.ValidateWhen(condition, relatedProperties);
             }
-            else if (_currentValidator is WrappingValidator<TObject, TProp> wrappingValidator)
+            else if (_currentValidator is WrappingValidator<TObject> wrappingValidator)
             {
                 throw new MethodAlreadyCalledException($"Method 'When' already have been called for {wrappingValidator.InnerValidator.GetType()}");
             }
             else
             {
-                var wrappedValidator = new WrappingValidator<TObject, TProp>(condition, _currentValidator, relatedProperties);
+                var wrappedValidator = new WrappingValidator<TObject>(condition, _currentValidator, relatedProperties);
 
                 ReplaceValidator(_currentValidator, wrappedValidator);
                 _currentValidator = wrappedValidator;
@@ -251,18 +263,6 @@ namespace ReactiveValidation
         /// </summary>
         protected abstract TBuilder This { get; }
 
-        /// <summary>
-        /// Get all registered property validators.
-        /// </summary>
-        protected IReadOnlyCollection<IPropertyValidator<TObject, TProp>> GetPropertyValidators()
-        {
-            if (_commonCondition == null)
-                return _propertyValidators;
-
-            var complexValidator = new ComplexValidator<TObject, TProp>(_commonCondition, _propertyValidators, _relatedProperties.ToArray());
-            return new[] { complexValidator };
-        }
-
 
         /// <summary>
         /// Replace one validator by another.
@@ -270,8 +270,8 @@ namespace ReactiveValidation
         /// <param name="oldValidator">Old validator.</param>
         /// <param name="newValidator">New validator.</param>
         private void ReplaceValidator(
-            IPropertyValidator<TObject, TProp> oldValidator,
-            IPropertyValidator<TObject, TProp> newValidator)
+            IPropertyValidator<TObject> oldValidator,
+            IPropertyValidator<TObject> newValidator)
         {
             var index = _propertyValidators.IndexOf(oldValidator);
             _propertyValidators[index] = newValidator;
@@ -338,16 +338,12 @@ namespace ReactiveValidation
             where TObject : IValidatableObject
     {
         /// <inheritdoc />
-        protected override ISinglePropertyRuleBuilder<TObject, TProp> This => this;
+        public SinglePropertyRuleBuilder(string validatablePropertyName) : base(new []{ validatablePropertyName })
+        {
+        }
 
         /// <inheritdoc />
-        public override IPropertiesAdapter Build(ObjectValidator<TObject> validator, params string[] properties)
-        {
-            var adapter = new SinglePropertyAdapter<TObject, TProp>(
-                validator, GetPropertyValidators(), properties.First());
-
-            return adapter;
-        }
+        protected override ISinglePropertyRuleBuilder<TObject, TProp> This => this;
     }
 
 
@@ -362,16 +358,12 @@ namespace ReactiveValidation
             where TObject : IValidatableObject
     {
         /// <inheritdoc />
-        protected override IPropertiesRuleBuilder<TObject> This => this;
+        public PropertiesRuleBuilder(IReadOnlyList<string> validatableProperties) : base(validatableProperties)
+        {
+        }
 
         /// <inheritdoc />
-        public override IPropertiesAdapter Build(ObjectValidator<TObject> validator, params string[] properties)
-        {
-            var adapter = new PropertiesAdapter<TObject>(
-                validator, GetPropertyValidators(), properties);
-
-            return adapter;
-        }
+        protected override IPropertiesRuleBuilder<TObject> This => this;
     }
 
 
@@ -389,15 +381,11 @@ namespace ReactiveValidation
             where TCollection : IEnumerable<TProp>
     {
         /// <inheritdoc />
-        protected override ICollectionRuleBuilder<TObject, TCollection, TProp> This => this;
+        public CollectionPropertyRuleBuilder(string validatablePropertyName) : base(new[] { validatablePropertyName })
+        {
+        }
 
         /// <inheritdoc />
-        public override IPropertiesAdapter Build(ObjectValidator<TObject> validator, params string[] properties)
-        {
-            var adapter = new CollectionPropertyAdapter<TObject, TCollection, TProp>(
-                validator, GetPropertyValidators(), properties.First());
-
-            return adapter;
-        }
+        protected override ICollectionRuleBuilder<TObject, TCollection, TProp> This => this;
     }
 }

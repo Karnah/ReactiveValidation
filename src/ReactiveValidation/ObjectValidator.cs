@@ -4,9 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
-using ReactiveValidation.Adapters;
-using ReactiveValidation.Helpers;
 using ReactiveValidation.Internal;
+using ReactiveValidation.Validators;
 
 namespace ReactiveValidation
 {
@@ -14,9 +13,12 @@ namespace ReactiveValidation
     internal class ObjectValidator<TObject> : BaseNotifyPropertyChanged, IObjectValidator
         where TObject : IValidatableObject
     {
-        private readonly List<IPropertiesAdapter> _adapters;
-        private readonly IDictionary<string, Dictionary<IPropertiesAdapter, IReadOnlyList<ValidationMessage>>> _validationResults;
-        private readonly IDictionary<string, IStringSource> _displayNamesSources;
+        private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
+
+        private readonly ObjectObserver<TObject> _observer;
+        private readonly IDictionary<string, ValidatablePropertyInfo<TObject>> _validatableProperties;
+
+        private readonly object _lock = new object();
 
         private bool _isValid;
         private bool _hasWarnings;
@@ -35,14 +37,16 @@ namespace ReactiveValidation
         /// Create new instance of object validator.
         /// </summary>
         /// <param name="instance">Instance of validatable object.</param>
-        public ObjectValidator(TObject instance)
+        /// <param name="ruleBuilders">List of rules builders.</param>
+        public ObjectValidator(TObject instance, IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
         {
             Instance = instance;
-            Instance.PropertyChanged += OnInstancePropertyChanged;
 
-            _adapters = new List<IPropertiesAdapter>();
-            _validationResults = new SortedDictionary<string, Dictionary<IPropertiesAdapter, IReadOnlyList<ValidationMessage>>>();
+            _observer = new ObjectObserver<TObject>(Instance);
+            _observer.PropertyChanged += OnInstancePropertyChanged;
+
             _displayNamesSources = GetDisplayNames();
+            _validatableProperties = GetValidatableProperties(ruleBuilders);
 
             if (ValidationOptions.LanguageManager.TrackCultureChanged)
             {
@@ -50,6 +54,11 @@ namespace ReactiveValidation
                 ValidationOptions.LanguageManager.CultureChanged += _cultureChangedEventHandler;
             }
         }
+
+        /// <summary>
+        /// Instance of validatable object.
+        /// </summary>
+        public TObject Instance { get; }
 
         #region IObjectValidator
 
@@ -81,118 +90,109 @@ namespace ReactiveValidation
             if (string.IsNullOrEmpty(propertyName))
                 return null;
 
-            lock (_validationResults)
+            lock (_lock)
             {
-                if (!_validationResults.ContainsKey(propertyName))
+                if (!_validatableProperties.ContainsKey(propertyName))
                     return null;
 
-                return _validationResults[propertyName]
-                    .SelectMany(vm => vm.Value)
-                    .ToList();
+                return _validatableProperties[propertyName].ValidationMessages;
             }
         }
 
         /// <inheritdoc />
         public void Revalidate()
         {
-            foreach (var validator in _adapters)
-            {
-                validator.Revalidate();
-            }
+            RevalidateInternal();
         }
 
         #endregion
-
-        /// <summary>
-        /// Instance of validatable object.
-        /// </summary>
-        public TObject Instance { get; }
-
-
-        /// <summary>
-        /// Register new property adapter.
-        /// </summary>
-        /// <param name="adapter">Properties adapter.</param>
-        /// <param name="propertiesNames">Names of validatable properties.</param>
-        public void RegisterAdapter(IPropertiesAdapter adapter, params string[] propertiesNames)
-        {
-            _adapters.Add(adapter);
-
-            lock (_validationResults)
-            {
-                foreach (var propertyName in propertiesNames)
-                {
-                    if (_validationResults.ContainsKey(propertyName) == false)
-                        _validationResults.Add(propertyName, new Dictionary<IPropertiesAdapter, IReadOnlyList<ValidationMessage>>());
-
-                    _validationResults[propertyName].Add(adapter, new ValidationMessage[0]);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Set validation messages for specified property.
-        /// </summary>
-        /// <param name="propertyName">Name of validated property.</param>
-        /// <param name="adapter">Adapter which validated property.</param>
-        /// <param name="messages">List of messages.</param>
-        public void SetValidationMessages(string propertyName, IPropertiesAdapter adapter, IReadOnlyList<ValidationMessage> messages)
-        {
-            lock (_validationResults)
-            {
-                _validationResults[propertyName][adapter] = messages;
-
-                var aggregatedMessages = _validationResults
-                    .SelectMany(vm => vm.Value)
-                    .SelectMany(vm => vm.Value)
-                    .ToList();
-
-                IsValid = !aggregatedMessages.Any(vm => vm?.ValidationMessageType == ValidationMessageType.Error ||
-                                                        vm?.ValidationMessageType == ValidationMessageType.SimpleError);
-
-                HasWarnings = aggregatedMessages.Any(vm => vm?.ValidationMessageType == ValidationMessageType.Warning ||
-                                                           vm?.ValidationMessageType == ValidationMessageType.SimpleWarning);
-
-                ValidationMessages = aggregatedMessages;
-            }
-
-            Instance.OnPropertyMessagesChanged(propertyName);
-        }
-
-        /// <summary>
-        /// Create new validation context.
-        /// </summary>
-        /// <typeparam name="TProp">Type of validatable property.</typeparam>
-        /// <param name="propertyName">Name of validatable property.</param>
-        public ValidationContext<TObject, TProp> GetValidationContext<TProp>(string propertyName)
-        {
-            var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(Instance, propertyName);
-
-            return new ValidationContext<TObject, TProp>(Instance, propertyName, _displayNamesSources[propertyName], propertyValue);
-        }
-
-        /// <summary>
-        /// Get property value by its name for current instance.
-        /// </summary>
-        /// <typeparam name="TProp">Type of property.</typeparam>
-        /// <param name="propertyName">Name of property.</param>
-        /// <returns>Value of property.</returns>
-        public TProp GetPropertyValue<TProp>(string propertyName)
-        {
-            var propertyValue = ReactiveValidationHelper.GetPropertyValue<TProp>(Instance, propertyName);
-            return propertyValue;
-        }
-
 
         /// <summary>
         /// Handle instance <see cref="INotifyPropertyChanged.PropertyChanged" /> event.
         /// </summary>
         private void OnInstancePropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            var propertyName = args.PropertyName;
-            foreach (var adapter in _adapters)
+            RevalidateInternal(args.PropertyName);
+        }
+
+        /// <summary>
+        /// Revalidate properties.
+        /// </summary>
+        /// <param name="propertyName">
+        /// Name of changed property.
+        /// <see langword="null" /> if all properties should be revalidated.
+        /// </param>
+        private void RevalidateInternal(string propertyName = null)
+        {
+            lock (_lock)
             {
-                adapter.Revalidate(propertyName);
+                var aggregatedValidationContext = new AggregatedValidationContext<TObject>(Instance, _displayNamesSources);
+                var changedProperties = new List<string>();
+
+                foreach (var validatableProperty in _validatableProperties)
+                {
+                    var info = validatableProperty.Value;
+                    bool isTarget = string.IsNullOrEmpty(propertyName) || info.PropertyName == propertyName;
+                    bool isErrorsChanged = false;
+
+                    foreach (var propertyValidator in info.Validators)
+                    {
+                        if (!isTarget && !propertyValidator.RelatedProperties.Contains(propertyName))
+                            continue;
+
+                        var contextProvider = aggregatedValidationContext.CreateContextFactory(info.PropertyName);
+                        var messages = ValidateProperty(propertyValidator, contextProvider);
+                        if (messages.SequenceEqual(info.ValidatorsValidationMessages[propertyValidator]))
+                            continue;
+
+                        info.ValidatorsValidationMessages[propertyValidator] = messages;
+                        isErrorsChanged = true;
+                    }
+
+                    if (isErrorsChanged)
+                        changedProperties.Add(info.PropertyName);
+                }
+
+                if (changedProperties.Count == 0)
+                    return;
+
+                ValidationMessages = _validatableProperties
+                    .Values
+                    .SelectMany(vp => vp.ValidationMessages)
+                    .ToList();
+
+                IsValid = !ValidationMessages.Any(vm => vm?.ValidationMessageType == ValidationMessageType.Error ||
+                                                        vm?.ValidationMessageType == ValidationMessageType.SimpleError);
+
+                HasWarnings = ValidationMessages.Any(vm => vm?.ValidationMessageType == ValidationMessageType.Warning ||
+                                                           vm?.ValidationMessageType == ValidationMessageType.SimpleWarning);
+
+                foreach (var changedProperty in changedProperties)
+                {
+                    Instance.OnPropertyMessagesChanged(changedProperty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Validate property by specified validator.
+        /// </summary>
+        /// <param name="propertyValidator">Property validator.</param>
+        /// <param name="contextFactory">Context factory.</param>
+        private static IReadOnlyList<ValidationMessage> ValidateProperty(
+            IPropertyValidator<TObject> propertyValidator,
+            ValidationContextFactory<TObject> contextFactory)
+        {
+            try
+            {
+                return propertyValidator.ValidateProperty(contextFactory);
+            }
+            catch (Exception e)
+            {
+                return new[]
+                {
+                    new ValidationMessage(new ExceptionSource(e)),
+                };
             }
         }
 
@@ -210,7 +210,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Create list of display name for all properties of instance.
         /// </summary>
-        private static IDictionary<string, IStringSource> GetDisplayNames()
+        private static IReadOnlyDictionary<string, IStringSource> GetDisplayNames()
         {
             const BindingFlags bindingAttributes = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
@@ -222,6 +222,30 @@ namespace ReactiveValidation
             }
 
             return displayNamesSources;
+        }
+
+        /// <summary>
+        /// Get information of validatable properties.
+        /// </summary>
+        /// <param name="ruleBuilders">Rule builder.</param>
+        private IDictionary<string, ValidatablePropertyInfo<TObject>> GetValidatableProperties(IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
+        {
+            var propertyValidators = new Dictionary<string, List<IPropertyValidator<TObject>>>();
+            foreach (var ruleBuilder in ruleBuilders)
+            {
+                var validators = ruleBuilder.GetValidators();
+                foreach (var validatableProperty in ruleBuilder.ValidatableProperties)
+                {
+                    if (!propertyValidators.ContainsKey(validatableProperty))
+                        propertyValidators[validatableProperty] = new List<IPropertyValidator<TObject>>();
+
+                    propertyValidators[validatableProperty].AddRange(validators);
+                }
+            }
+
+            return propertyValidators.ToDictionary(
+                pv => pv.Key,
+                pv => new ValidatablePropertyInfo<TObject>(pv.Key, _displayNamesSources[pv.Key], pv.Value));
         }
     }
 }
