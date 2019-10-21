@@ -21,5 +21,28 @@
         {
             return _message;
         }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((StaticStringSource) obj);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return (_message != null ? _message.GetHashCode() : 0);
+        }
+
+        /// <summary>
+        /// Check if two sources are equal.
+        /// </summary>
+        protected bool Equals(StaticStringSource other)
+        {
+            return string.Equals(_message, other._message);
+        }
     }
 }

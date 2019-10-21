@@ -135,7 +135,6 @@ namespace ReactiveValidation.Extensions
 
         public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> CollectionElementsAreValid<TObject, TCollection, TProp>(
             this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
-            Func<TProp, bool> validCondition,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TProp>

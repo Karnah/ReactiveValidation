@@ -23,5 +23,28 @@ namespace ReactiveValidation
         {
             return _displayNameAttribute.GetDisplayName();
         }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((DisplayNamePropertySource) obj);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            return (_displayNameAttribute != null ? _displayNameAttribute.GetHashCode() : 0);
+        }
+
+        /// <summary>
+        /// Check if two sources are equal.
+        /// </summary>
+        protected bool Equals(DisplayNamePropertySource other)
+        {
+            return Equals(_displayNameAttribute, other._displayNameAttribute);
+        }
     }
 }

@@ -40,13 +40,31 @@ namespace ReactiveValidation
         /// <summary>
         /// Validation message type.
         /// </summary>
-        public ValidationMessageType ValidationMessageType { get; protected set; }
+        public ValidationMessageType ValidationMessageType { get; }
 
 
         /// <inheritdoc />
         public override string ToString()
         {
             return Message;
+        }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((ValidationMessage) obj);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((_stringSource != null ? _stringSource.GetHashCode() : 0) * 397) ^ (int) ValidationMessageType;
+            }
         }
 
         /// <summary>
@@ -57,6 +75,14 @@ namespace ReactiveValidation
             Message = _stringSource.GetString();
             OnPropertyChanged(nameof(Message));
 
+        }
+
+        /// <summary>
+        /// Check if two validation messages are equal.
+        /// </summary>
+        protected bool Equals(ValidationMessage other)
+        {
+            return Equals(_stringSource, other._stringSource) && ValidationMessageType == other.ValidationMessageType;
         }
     }
 }

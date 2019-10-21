@@ -34,5 +34,31 @@
         {
             return ValidationOptions.LanguageManager.GetString(_key, _resource);
         }
+
+        /// <inheritdoc />
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((LanguageStringSource) obj);
+        }
+
+        /// <inheritdoc />
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((_key != null ? _key.GetHashCode() : 0) * 397) ^ (_resource != null ? _resource.GetHashCode() : 0);
+            }
+        }
+
+        /// <summary>
+        /// Check if two sources are equal.
+        /// </summary>
+        protected bool Equals(LanguageStringSource other)
+        {
+            return string.Equals(_key, other._key) && string.Equals(_resource, other._resource);
+        }
     }
 }

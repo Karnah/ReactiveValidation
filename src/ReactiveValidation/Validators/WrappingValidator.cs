@@ -7,14 +7,24 @@ using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
-    public class WrappingValidator<TObject, TProp> : IPropertyValidator<TObject, TProp>
+    /// <summary>
+    /// Wrap for validators which doesn't support <see cref="IPropertyValidatorSettings{TObject}" />.
+    /// </summary>
+    /// <typeparam name="TObject">Type of validatable object.</typeparam>
+    public class WrappingValidator<TObject> : IPropertyValidator<TObject>
         where TObject : IValidatableObject
     {
         private readonly Func<TObject, bool> _condition;
 
+        /// <summary>
+        /// Create new instance of wrapping validator.
+        /// </summary>
+        /// <param name="condition">Condition the using inner validator.</param>
+        /// <param name="innerValidator">Inner validator.</param>
+        /// <param name="relatedProperties">Related properties of condition.</param>
         public WrappingValidator(
             Func<TObject, bool> condition,
-            IPropertyValidator<TObject, TProp> innerValidator,
+            IPropertyValidator<TObject> innerValidator,
             params LambdaExpression[] relatedProperties)
         {
             _condition = condition;
@@ -24,39 +34,45 @@ namespace ReactiveValidation.Validators
         }
 
 
-        private void UnionRelatedProperties(LambdaExpression[] baseRelatedProperties)
+        /// <summary>
+        /// Wrapped validator.
+        /// </summary>
+        public IPropertyValidator<TObject> InnerValidator { get; }
+
+        /// <inheritdoc />
+        public IReadOnlyList<string> RelatedProperties { get; private set; }
+
+
+        /// <inheritdoc />
+        public IReadOnlyList<ValidationMessage> ValidateProperty(ValidationContextFactory<TObject> contextFactory)
         {
-            if (baseRelatedProperties?.Any() != true) {
-                RelatedProperties = InnerValidator.RelatedProperties;
-            }
-            else {
-                var relatedProperties = new HashSet<string>();
-                foreach (var expression in baseRelatedProperties) {
-                    var propertyName = ReactiveValidationHelper.GetPropertyName(typeof(TObject), expression);
-                    if (string.IsNullOrEmpty(propertyName) == false)
-                        relatedProperties.Add(propertyName);
-                }
-
-                foreach (var relatedProperty in InnerValidator.RelatedProperties) {
-                    relatedProperties.Add(relatedProperty);
-                }
-
-                RelatedProperties = relatedProperties;
-            }
-        }
-
-
-        public IPropertyValidator<TObject, TProp> InnerValidator { get; }
-
-        public IEnumerable<string> RelatedProperties { get; private set; }
-
-
-        public IEnumerable<ValidationMessage> ValidateProperty(ValidationContext<TObject, TProp> context)
-        {
-            if (_condition.Invoke(context.ValidatableObject) == false)
+            if (_condition.Invoke(contextFactory.ValidatableObject) == false)
                 return new ValidationMessage[0];
 
-            return InnerValidator.ValidateProperty(context);
+            return InnerValidator.ValidateProperty(contextFactory);
+        }
+
+        /// <summary>
+        /// Union related properties of inner validator and condition.
+        /// </summary>
+        /// <param name="conditionRelatedProperties">Related properties of condition.</param>
+        private void UnionRelatedProperties(LambdaExpression[] conditionRelatedProperties)
+        {
+            if (conditionRelatedProperties?.Any() != true)
+            {
+                RelatedProperties = InnerValidator.RelatedProperties;
+                return;
+            }
+
+            var relatedProperties = new HashSet<string>(InnerValidator.RelatedProperties);
+            foreach (var expression in conditionRelatedProperties)
+            {
+                var propertyName = ReactiveValidationHelper.GetPropertyName(typeof(TObject), expression);
+                if (!string.IsNullOrEmpty(propertyName))
+                    relatedProperties.Add(propertyName);
+            }
+
+            RelatedProperties = relatedProperties.ToList();
         }
     }
 }

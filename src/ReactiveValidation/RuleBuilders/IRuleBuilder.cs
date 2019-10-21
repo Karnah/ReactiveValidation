@@ -3,8 +3,33 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq.Expressions;
 
+using ReactiveValidation.Validators;
+
 namespace ReactiveValidation
 {
+    /// <summary>
+    /// Core interface of validation.
+    /// </summary>
+    /// <typeparam name="TObject">The type of validatable object.</typeparam>
+    internal interface IRuleBuilder<TObject>
+        where TObject : IValidatableObject
+    {
+        /// <summary>
+        /// List of properties names which validating by this rules.
+        /// </summary>
+        IReadOnlyList<string> ValidatableProperties { get; }
+
+        /// <summary>
+        /// Settings of validatable properties.
+        /// </summary>
+        ObservingPropertySettings ObservingPropertiesSettings { get; }
+
+        /// <summary>
+        /// Get all registered validators.
+        /// </summary>
+        IReadOnlyList<IPropertyValidator<TObject>> GetValidators();
+    }
+
     /// <summary>
     /// Core interface of validation.
     /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}"/> interface.

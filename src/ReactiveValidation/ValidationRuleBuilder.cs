@@ -16,12 +16,12 @@ namespace ReactiveValidation
     public abstract class ValidationRuleBuilder<TObject> : IObjectValidatorBuilderCreator
         where TObject : IValidatableObject
     {
-        private readonly List<AdapterBuilderWrapper<TObject>> _adapterBuilders;
+        private readonly List<IRuleBuilder<TObject>> _rulesBuilders;
 
         /// <inheritdoc />
         protected ValidationRuleBuilder()
         {
-            _adapterBuilders = new List<AdapterBuilderWrapper<TObject>>();
+            _rulesBuilders = new List<IRuleBuilder<TObject>>();
         }
 
 
@@ -41,9 +41,9 @@ namespace ReactiveValidation
         protected ISinglePropertyRuleBuilderInitial<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> property)
         {
             var propertyName = GetPropertyNameForValidator(property);
-            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, TProp>();
+            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, TProp>(propertyName);
 
-            _adapterBuilders.Add(new AdapterBuilderWrapper<TObject>(ruleBuilder, propertyName));
+            _rulesBuilders.Add(ruleBuilder);
 
             return ruleBuilder;
         }
@@ -55,8 +55,8 @@ namespace ReactiveValidation
         /// <returns>Single property validator for <see cref="object"/> type.</returns>
         protected ISinglePropertyRuleBuilderInitial<TObject, object> RuleFor(string propertyName)
         {
-            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object>();
-            _adapterBuilders.Add(new AdapterBuilderWrapper<TObject>(ruleBuilder, propertyName));
+            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object>(propertyName);
+            _rulesBuilders.Add(ruleBuilder);
 
             return ruleBuilder;
         }
@@ -81,8 +81,8 @@ namespace ReactiveValidation
         /// <returns>Properties collection validator.</returns>
         protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params string[] propertiesNames)
         {
-            var ruleBuilder = new PropertiesRuleBuilder<TObject>();
-            _adapterBuilders.Add(new AdapterBuilderWrapper<TObject>(ruleBuilder, propertiesNames));
+            var ruleBuilder = new PropertiesRuleBuilder<TObject>(propertiesNames);
+            _rulesBuilders.Add(ruleBuilder);
 
             return ruleBuilder;
         }
@@ -112,9 +112,9 @@ namespace ReactiveValidation
             where TCollection : IEnumerable<TProp>
         {
             var propertyName = GetPropertyNameForValidator(collection);
-            var ruleBuilder = new CollectionPropertyRuleBuilder<TObject, TCollection, TProp>();
+            var ruleBuilder = new CollectionPropertyRuleBuilder<TObject, TCollection, TProp>(propertyName);
 
-            _adapterBuilders.Add(new AdapterBuilderWrapper<TObject>(ruleBuilder, propertyName));
+            _rulesBuilders.Add(ruleBuilder);
 
             return ruleBuilder;
         }
@@ -125,7 +125,7 @@ namespace ReactiveValidation
         /// </summary>
         internal IObjectValidatorBuilder CreateBuilder()
         {
-            return new ObjectValidatorBuilder<TObject>(_adapterBuilders);
+            return new ObjectValidatorBuilder<TObject>(_rulesBuilders);
         }
 
         /// <summary>

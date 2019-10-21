@@ -11,8 +11,8 @@ namespace ReactiveValidation.Validators
         where TObject : IValidatableObject
         where TCollection : IEnumerable<TProp>
     {
-        private readonly ParameterInfo<TObject, int> _minCount;
-        private readonly ParameterInfo<TObject, int> _maxCount;
+        private readonly ValidatorParameter<TObject, int> _minCount;
+        private readonly ValidatorParameter<TObject, int> _maxCount;
 
         public CountValidator(
             Expression<Func<TObject, int>> minCountExpression,
@@ -29,10 +29,10 @@ namespace ReactiveValidation.Validators
             : base(stringSource, validationMessageType, minCountExpression, maxCountExpression)
         {
             if (minCountExpression != null)
-                _minCount = minCountExpression.GetParameterInfo();
+                _minCount = new ValidatorParameter<TObject, int>(minCountExpression);
 
             if (maxCountExpression != null)
-                _maxCount = maxCountExpression.GetParameterInfo();
+                _maxCount = new ValidatorParameter<TObject, int>(maxCountExpression);
         }
 
 

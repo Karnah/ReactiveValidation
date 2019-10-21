@@ -8,8 +8,8 @@ namespace ReactiveValidation.Validators
     public class LengthValidator <TObject> : PropertyValidator<TObject, string>
         where TObject : IValidatableObject
     {
-        private readonly ParameterInfo<TObject, int> _minLength;
-        private readonly ParameterInfo<TObject, int> _maxLength;
+        private readonly ValidatorParameter<TObject, int> _minLength;
+        private readonly ValidatorParameter<TObject, int> _maxLength;
 
         public LengthValidator(
             Expression<Func<TObject, int>> minLengthExpression,
@@ -26,10 +26,10 @@ namespace ReactiveValidation.Validators
             : base(stringSource, validationMessageType, minLengthExpression, maxLengthExpression)
         {
             if (minLengthExpression != null)
-                _minLength = minLengthExpression.GetParameterInfo();
+                _minLength = new ValidatorParameter<TObject, int>(maxLengthExpression);
 
             if (maxLengthExpression != null)
-                _maxLength = maxLengthExpression.GetParameterInfo();
+                _maxLength = new ValidatorParameter<TObject, int>(maxLengthExpression);
         }
 
 

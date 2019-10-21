@@ -10,7 +10,7 @@ namespace ReactiveValidation.Validators
         where TObject : IValidatableObject
     {
         private readonly IEqualityComparer _comparer;
-        private readonly ParameterInfo<TObject, TParam> _valueToCompare;
+        private readonly ValidatorParameter<TObject, TParam> _valueToCompare;
 
         public EqualValidator(
             Expression<Func<TObject, TParam>> valueToCompareExpression,
@@ -19,7 +19,7 @@ namespace ReactiveValidation.Validators
             : base(new LanguageStringSource(ValidatorsNames.EqualValidator), validationMessageType, valueToCompareExpression)
         {
             _comparer = comparer;
-            _valueToCompare = valueToCompareExpression.GetParameterInfo();
+            _valueToCompare = new ValidatorParameter<TObject, TParam>(valueToCompareExpression);
         }
 
         protected override bool IsValid(ValidationContext<TObject, TProp> context)

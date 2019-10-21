@@ -7,14 +7,14 @@ namespace ReactiveValidation.Internal
     internal class ObjectValidatorBuilder<TObject> : IObjectValidatorBuilder<TObject>, IObjectValidatorBuilder
         where TObject : IValidatableObject
     {
-        private readonly IReadOnlyList<AdapterBuilderWrapper<TObject>> _adaptersBuilders;
+        private readonly IReadOnlyList<IRuleBuilder<TObject>> _rulesBuilders;
 
         /// <summary>
         /// Create validation builder with specified adapters.
         /// </summary>
-        public ObjectValidatorBuilder(IReadOnlyList<AdapterBuilderWrapper<TObject>> adaptersBuilders)
+        public ObjectValidatorBuilder(IReadOnlyList<IRuleBuilder<TObject>> rulesBuilders)
         {
-            _adaptersBuilders = adaptersBuilders;
+            _rulesBuilders = rulesBuilders;
         }
 
         /// <inheritdoc />
@@ -23,14 +23,7 @@ namespace ReactiveValidation.Internal
         /// <inheritdoc />
         public IObjectValidator Build(TObject instance)
         {
-            var validator = new ObjectValidator<TObject>(instance);
-
-            foreach (var adaptersBuilder in _adaptersBuilders)
-            {
-                var adapter = adaptersBuilder.Builder.Build(validator, adaptersBuilder.TargetProperties);
-                validator.RegisterAdapter(adapter, adaptersBuilder.TargetProperties);
-            }
-
+            var validator = new ObjectValidator<TObject>(instance, _rulesBuilders);
             validator.Revalidate();
 
             return validator;

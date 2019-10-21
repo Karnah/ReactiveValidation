@@ -26,7 +26,7 @@ namespace ReactiveValidation.Wpf.Samples
                 .TrackCultureChanged()
 
                 // For sample 4.
-                .AddCollectionObserver(CanObserve, CreateReactiveCollectionItemChangedObserver)
+                //.AddCollectionObserver(CanObserve, CreateReactiveCollectionItemChangedObserver)
 
                 // For sample 5.
                 .RegisterForValidatorFactory(new ViewModelValidation())

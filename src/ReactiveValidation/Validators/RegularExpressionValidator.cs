@@ -9,7 +9,7 @@ namespace ReactiveValidation.Validators
     public class RegularExpressionValidator<TObject> : PropertyValidator<TObject, string>
         where TObject : IValidatableObject
     {
-        private readonly ParameterInfo<TObject, string> _regexPattern;
+        private readonly ValidatorParameter<TObject, string> _regexPattern;
         private readonly RegexOptions? _regexOptions;
 
         public RegularExpressionValidator(
@@ -17,7 +17,7 @@ namespace ReactiveValidation.Validators
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.RegularExpressionValidator), validationMessageType)
         {
-            _regexPattern = patternExpression.GetParameterInfo();
+            _regexPattern = new ValidatorParameter<TObject, string>(patternExpression);
         }
 
         public RegularExpressionValidator(
@@ -26,7 +26,7 @@ namespace ReactiveValidation.Validators
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.RegularExpressionValidator), validationMessageType)
         {
-            _regexPattern = patternExpression.GetParameterInfo();
+            _regexPattern = new ValidatorParameter<TObject, string>(patternExpression);
             _regexOptions = regexOptions;
         }
 

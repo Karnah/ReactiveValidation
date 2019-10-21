@@ -16,9 +16,9 @@ namespace ReactiveValidation.Validators
             : base(new LanguageStringSource(ValidatorsNames.LessThanOrEqualValidator), valueToCompareExpression, comparer, validationMessageType)
         { }
 
-        protected override bool IsValid(int comparationResult)
+        protected override bool IsValid(int comparisonResult)
         {
-            return comparationResult <= 0;
+            return comparisonResult <= 0;
         }
     }
 
