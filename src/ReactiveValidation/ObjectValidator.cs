@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-
+using ReactiveValidation.Exceptions;
 using ReactiveValidation.Internal;
 using ReactiveValidation.Validators;
 
@@ -16,7 +16,7 @@ namespace ReactiveValidation
         private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
 
         private readonly ObjectObserver<TObject> _observer;
-        private readonly IDictionary<string, ValidatablePropertyInfo<TObject>> _validatableProperties;
+        private readonly IDictionary<string, ValidatableProperty<TObject>> _validatableProperties;
 
         private readonly object _lock = new object();
 
@@ -42,11 +42,11 @@ namespace ReactiveValidation
         {
             Instance = instance;
 
-            _observer = new ObjectObserver<TObject>(Instance);
-            _observer.PropertyChanged += OnInstancePropertyChanged;
-
             _displayNamesSources = GetDisplayNames();
             _validatableProperties = GetValidatableProperties(ruleBuilders);
+
+            _observer = new ObjectObserver<TObject>(Instance, GetPropertySettings(ruleBuilders));
+            _observer.PropertyChanged += OnInstancePropertyChanged;
 
             if (ValidationOptions.LanguageManager.TrackCultureChanged)
             {
@@ -54,6 +54,7 @@ namespace ReactiveValidation
                 ValidationOptions.LanguageManager.CultureChanged += _cultureChangedEventHandler;
             }
         }
+
 
         /// <summary>
         /// Instance of validatable object.
@@ -227,8 +228,8 @@ namespace ReactiveValidation
         /// <summary>
         /// Get information of validatable properties.
         /// </summary>
-        /// <param name="ruleBuilders">Rule builder.</param>
-        private IDictionary<string, ValidatablePropertyInfo<TObject>> GetValidatableProperties(IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
+        /// <param name="ruleBuilders">Rule builders.</param>
+        private IDictionary<string, ValidatableProperty<TObject>> GetValidatableProperties(IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
         {
             var propertyValidators = new Dictionary<string, List<IPropertyValidator<TObject>>>();
             foreach (var ruleBuilder in ruleBuilders)
@@ -245,7 +246,47 @@ namespace ReactiveValidation
 
             return propertyValidators.ToDictionary(
                 pv => pv.Key,
-                pv => new ValidatablePropertyInfo<TObject>(pv.Key, _displayNamesSources[pv.Key], pv.Value));
+                pv => new ValidatableProperty<TObject>(pv.Key, _displayNamesSources[pv.Key], pv.Value));
+        }
+
+        /// <summary>
+        /// Get information of validatable properties settings.
+        /// </summary>
+        /// <param name="ruleBuilders">Rule builders.</param>
+        private static Dictionary<string, ObservingPropertySettings> GetPropertySettings(IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
+        {
+            var propertySettings = new Dictionary<string, ObservingPropertySettings>();
+            foreach (var ruleBuilder in ruleBuilders)
+            {
+                var settings = ruleBuilder.ObservingPropertiesSettings;
+                if (settings.IsDefaultSettings)
+                    continue;
+
+                foreach (var validatableProperty in ruleBuilder.ValidatableProperties)
+                {
+                    if (!propertySettings.TryGetValue(validatableProperty, out var previousSettings))
+                    {
+                        previousSettings = new ObservingPropertySettings();
+                        propertySettings[validatableProperty] = previousSettings;
+                    }
+
+                    if (settings.PropertyValueFactoryMethod != null && previousSettings.PropertyValueFactoryMethod != null)
+                        throw new MethodAlreadyCalledException($"Validator factory method used twice for {typeof(TObject)}.{validatableProperty}");
+
+                    if (settings.CollectionItemFactoryMethod != null && previousSettings.CollectionItemFactoryMethod != null)
+                        throw new MethodAlreadyCalledException($"Validator item factory method used twice for {typeof(TObject)}.{validatableProperty}");
+
+                    previousSettings.TrackValueChanged |= settings.TrackValueChanged;
+                    previousSettings.TrackValueErrorsChanged |= settings.TrackValueErrorsChanged;
+                    previousSettings.TrackCollectionChanged |= settings.TrackCollectionChanged;
+                    previousSettings.TrackCollectionItemChanged |= settings.TrackCollectionItemChanged;
+                    previousSettings.TrackCollectionItemErrorsChanged |= settings.TrackCollectionItemErrorsChanged;
+                    previousSettings.PropertyValueFactoryMethod = previousSettings.PropertyValueFactoryMethod ?? settings.PropertyValueFactoryMethod;
+                    previousSettings.CollectionItemFactoryMethod = previousSettings.CollectionItemFactoryMethod ?? settings.CollectionItemFactoryMethod;
+                }
+            }
+
+            return propertySettings;
         }
     }
 }

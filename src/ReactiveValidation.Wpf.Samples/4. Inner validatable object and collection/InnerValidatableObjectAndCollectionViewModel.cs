@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using ReactiveUI.Legacy;
 using ReactiveValidation.Extensions;
 
 namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collection
@@ -23,25 +21,14 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
         public InnerValidatableObjectAndCollectionViewModel()
         {
             InnerObjectValue = new InnerObject();
-            InnerObjectsCollection = new ReactiveList<InnerObject>() {
-                ChangeTrackingEnabled = true
-            };
+            InnerObjectsCollection = new ObservableCollection<InnerObject>();
 
             AddItemCommand = ReactiveCommand.Create(AddItem);
             DeleteItemCommand = ReactiveCommand.Create<InnerObject>(DeleteItem);
 
             Validator = GetValidator();
-
-            //_observer = new ObjectObserver<InnerValidatableObjectAndCollectionViewModel>(this);
-            //_observer.TrackPropertyValue(nameof(InnerObjectValue));
-            //_observer.TrackPropertyValue(nameof(InnerObjectsCollection));
-            //_observer.PropertyChanged += ObserverOnPropertyChanged;
         }
 
-        //private void ObserverOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    Console.WriteLine(e.PropertyName);
-        //}
 
         private IObjectValidator GetValidator()
         {
@@ -49,24 +36,26 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
 
 
             builder.RuleFor(vm => vm.InnerObjectValue)
+                .SetValueValidator(GetInnerObjectValidator)
                 .NotNull()
                 .ModelIsValid();
 
-            builder.RuleForCollection(vm => vm.InnerObjectsCollection)
+            builder.RuleForStrongTypedCollection<ObservableCollection<InnerObject>, InnerObject>(vm => vm.InnerObjectsCollection)
+                .TrackCollectionChanged()
+                .TrackCollectionItemChanged()
+                .SetCollectionItemValidator(GetInnerObjectValidator)
                 .NotNull()
                 .Count(3, 5)
                 .CollectionElementsAreValid();
 
-
             return builder.Build(this);
         }
-
 
         [Reactive]
         public InnerObject InnerObjectValue { get; set; }
 
         [Reactive]
-        public ReactiveList<InnerObject> InnerObjectsCollection { get; set; }
+        public ObservableCollection<InnerObject> InnerObjectsCollection { get; set; }
 
 
         public ICommand AddItemCommand { get; }
@@ -84,24 +73,21 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
             InnerObjectsCollection.Remove(item);
         }
 
+        private static IObjectValidator GetInnerObjectValidator(InnerObject io)
+        {
+            var builder = new ValidationBuilder<InnerObject>();
+
+            builder.RuleFor(vm => vm.Name)
+                .NotEmpty();
+
+            return builder.Build(io);
+        }
 
         public class InnerObject : ReactiveValidatableObject
         {
             public InnerObject()
             {
-                this.Validator = GetValidator();
             }
-
-            private IObjectValidator GetValidator()
-            {
-                var builder = new ValidationBuilder<InnerObject>();
-
-                builder.RuleFor(vm => vm.Name)
-                    .NotEmpty();
-
-                return builder.Build(this);
-            }
-
 
             [Reactive]
             public string Name { get; set; }

@@ -7,7 +7,7 @@ namespace ReactiveValidation
     /// <summary>
     /// Information about observing property.
     /// </summary>
-    internal class ObservingPropertyInfo
+    internal class ObservingProperty
     {
         /// <summary>
         /// Name of property.
@@ -20,12 +20,17 @@ namespace ReactiveValidation
         public object PreviousValue { get; set; }
 
         /// <summary>
-        /// Method for creating object validator for instance.
+        /// Observing property settings.
         /// </summary>
-        public Func<IValidatableObject, IObjectValidator> FactoryMethod { get; set; }
+        public ObservingPropertySettings Settings { get; set; }
 
         /// <summary>
         /// Action for tracking property or collection items.
+        /// </summary>
+        public PropertyChangedEventHandler ValueChangedAction { get; set; }
+
+        /// <summary>
+        /// Action for tracking property or collection items errors.
         /// </summary>
         public EventHandler<DataErrorsChangedEventArgs> ErrorsChangedAction { get; set; }
 

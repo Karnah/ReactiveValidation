@@ -8,7 +8,7 @@ namespace ReactiveValidation
     /// <summary>
     /// Info for validatable property.
     /// </summary>
-    public class ValidatablePropertyInfo<TObject>
+    public class ValidatableProperty<TObject>
         where TObject : IValidatableObject
     {
         /// <summary>
@@ -17,13 +17,14 @@ namespace ReactiveValidation
         /// <param name="propertyName">Name of property.</param>
         /// <param name="displayNameSource">Source of display name.</param>
         /// <param name="validators">List of all property validators.</param>
-        public ValidatablePropertyInfo(string propertyName, IStringSource displayNameSource, IReadOnlyList<IPropertyValidator<TObject>> validators)
+        public ValidatableProperty(string propertyName, IStringSource displayNameSource, IReadOnlyList<IPropertyValidator<TObject>> validators)
         {
             PropertyName = propertyName;
             DisplayNameSource = displayNameSource;
             Validators = validators;
             ValidatorsValidationMessages = Validators.ToDictionary(v => v, _ => (IReadOnlyList<ValidationMessage>) new ValidationMessage[0]);
         }
+
 
         /// <summary>
         /// Name of property.

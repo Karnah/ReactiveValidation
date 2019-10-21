@@ -20,6 +20,11 @@ namespace ReactiveValidation
         IReadOnlyList<string> ValidatableProperties { get; }
 
         /// <summary>
+        /// Settings of validatable properties.
+        /// </summary>
+        ObservingPropertySettings ObservingPropertiesSettings { get; }
+
+        /// <summary>
         /// Get all registered validators.
         /// </summary>
         IReadOnlyList<IPropertyValidator<TObject>> GetValidators();

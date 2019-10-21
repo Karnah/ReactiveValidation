@@ -837,7 +837,9 @@ namespace ReactiveValidation.Extensions
                 where TObject : IValidatableObject
                 where TProp : IValidatableObject
         {
-            return ruleBuilder.SetValidator(new ModelIsValidValidator<TObject, TProp>(validationMessageType));
+            return ruleBuilder
+                .TrackErrorsChanged()
+                .SetValidator(new ModelIsValidValidator<TObject, TProp>(validationMessageType));
         }
 
         /// <summary>

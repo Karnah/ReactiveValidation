@@ -14,14 +14,11 @@ namespace ReactiveValidation
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     /// <typeparam name="TProp">Type of validatable properties.</typeparam>
-    /// <typeparam name="TInitial">Type of initial rule builder.</typeparam>
     /// <typeparam name="TBuilder">Type of main rule builder.</typeparam>
-    internal abstract class BaseRuleBuilder<TObject, TProp, TInitial, TBuilder> :
+    internal abstract class BaseRuleBuilder<TObject, TProp, TBuilder> :
         IRuleBuilder<TObject>,
-        IRuleBuilderInitial<TObject, TProp, TBuilder>,
         IRuleBuilder<TObject, TProp, TBuilder>
             where TObject : IValidatableObject
-            where TInitial : IRuleBuilderInitial<TObject, TProp, TBuilder>
             where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
         private readonly List<IPropertyValidator<TObject>> _propertyValidators;
@@ -37,6 +34,7 @@ namespace ReactiveValidation
         protected BaseRuleBuilder(IReadOnlyList<string> validatableProperties)
         {
             ValidatableProperties = validatableProperties;
+            ObservingPropertiesSettings = new ObservingPropertySettings();
 
             _propertyValidators = new List<IPropertyValidator<TObject>>();
             _relatedProperties = new List<LambdaExpression>();
@@ -45,6 +43,9 @@ namespace ReactiveValidation
 
         /// <inheritdoc />
         public IReadOnlyList<string> ValidatableProperties { get; }
+
+        /// <inheritdoc />
+        public ObservingPropertySettings ObservingPropertiesSettings { get; }
 
         /// <inheritdoc />
         public IReadOnlyList<IPropertyValidator<TObject>> GetValidators()
@@ -332,8 +333,7 @@ namespace ReactiveValidation
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     /// <typeparam name="TProp">Type of validatable property.</typeparam>
     internal class SinglePropertyRuleBuilder<TObject, TProp> :
-        BaseRuleBuilder<TObject, TProp, ISinglePropertyRuleBuilderInitial<TObject, TProp>, ISinglePropertyRuleBuilder<TObject, TProp>>,
-        ISinglePropertyRuleBuilderInitial<TObject, TProp>,
+        BaseRuleBuilder<TObject, TProp, ISinglePropertyRuleBuilder<TObject, TProp>>,
         ISinglePropertyRuleBuilder<TObject, TProp>
             where TObject : IValidatableObject
     {
@@ -352,8 +352,7 @@ namespace ReactiveValidation
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     internal class PropertiesRuleBuilder<TObject> :
-        BaseRuleBuilder<TObject, object, IPropertiesRuleBuilderInitial<TObject>, IPropertiesRuleBuilder<TObject>>,
-        IPropertiesRuleBuilderInitial<TObject>,
+        BaseRuleBuilder<TObject, object, IPropertiesRuleBuilder<TObject>>,
         IPropertiesRuleBuilder<TObject>
             where TObject : IValidatableObject
     {
@@ -374,8 +373,7 @@ namespace ReactiveValidation
     /// <typeparam name="TCollection">Type of collection.</typeparam>
     /// <typeparam name="TProp">Type of collection item.</typeparam>
     internal class CollectionPropertyRuleBuilder<TObject, TCollection, TProp> :
-        BaseRuleBuilder<TObject, TCollection, ICollectionRuleBuilderInitial<TObject, TCollection, TProp>, ICollectionRuleBuilder<TObject, TCollection, TProp>>,
-        ICollectionRuleBuilderInitial<TObject, TCollection, TProp>,
+        BaseRuleBuilder<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TProp>>,
         ICollectionRuleBuilder<TObject, TCollection, TProp>
             where TObject : IValidatableObject
             where TCollection : IEnumerable<TProp>
