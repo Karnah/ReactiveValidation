@@ -24,6 +24,8 @@ namespace ReactiveValidation
         private bool _hasWarnings;
         private IReadOnlyList<ValidationMessage> _validationMessages;
 
+        private bool _isDisposed;
+
         /// <remarks>
         /// This is very important thing. <see cref="LanguageManager.CultureChanged" /> uses a weak reference to delegates.
         /// If there is no reference to delegate, target will be collected by GC.
@@ -46,7 +48,7 @@ namespace ReactiveValidation
             _validatableProperties = GetValidatableProperties(ruleBuilders);
 
             _observer = new ObjectObserver<TObject>(Instance, GetPropertySettings(ruleBuilders));
-            _observer.PropertyChanged += OnInstancePropertyChanged;
+            _observer.PropertyChanged += OnPropertyChanged;
 
             if (ValidationOptions.LanguageManager.TrackCultureChanged)
             {
@@ -106,12 +108,50 @@ namespace ReactiveValidation
             RevalidateInternal();
         }
 
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Dispose object validator.
+        /// </summary>
+        private void Dispose(bool isDisposing)
+        {
+            if (!isDisposing || _isDisposed)
+                return;
+
+            lock (_lock)
+            {
+                if (_isDisposed)
+                    return;
+
+                _observer.Dispose();
+
+                if (ValidationOptions.LanguageManager.TrackCultureChanged)
+                    ValidationOptions.LanguageManager.CultureChanged += _cultureChangedEventHandler;
+
+                ValidationMessages = null;
+                IsValid = true;
+                HasWarnings = false;
+
+                foreach (var validatableProperty in _validatableProperties.Keys)
+                {
+                    Instance.OnPropertyMessagesChanged(validatableProperty);
+                }
+
+                _isDisposed = true;
+            }
+        }
+
         #endregion
 
         /// <summary>
-        /// Handle instance <see cref="INotifyPropertyChanged.PropertyChanged" /> event.
+        /// Handle property changed event.
         /// </summary>
-        private void OnInstancePropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
             RevalidateInternal(args.PropertyName);
         }

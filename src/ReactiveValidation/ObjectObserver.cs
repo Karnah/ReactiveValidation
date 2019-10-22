@@ -12,7 +12,7 @@ namespace ReactiveValidation
     /// Class which track changing properties and raise events for <see cref="ObjectValidator{TObject}" />.
     /// </summary>
     /// <typeparam name="TObject">Type of observable object.</typeparam>
-    internal class ObjectObserver<TObject>
+    internal class ObjectObserver<TObject> : IDisposable
         where TObject : INotifyPropertyChanged
     {
         private readonly TObject _instance;
@@ -46,6 +46,13 @@ namespace ReactiveValidation
         /// </summary>
         public event EventHandler<PropertyChangedEventArgs> PropertyChanged;
 
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Subscribe on new value of property.
@@ -108,6 +115,9 @@ namespace ReactiveValidation
 
             if (settings.TrackCollectionItemErrorsChanged)
             {
+                if (observingProperty.ErrorsChangedAction == null)
+                    observingProperty.ErrorsChangedAction = (sender, args) => OnErrorsChanged(propertyName);
+
                 foreach (IValidatableObject item in (IEnumerable) propertyValue)
                 {
                     item.ErrorsChanged += observingProperty.ErrorsChangedAction;
@@ -129,22 +139,44 @@ namespace ReactiveValidation
         /// <param name="observingProperty">Info of observing property.</param>
         private static void UnsubscribePropertyValue(ObservingProperty observingProperty)
         {
-            switch (observingProperty.PreviousValue)
+            var propertyValue = observingProperty.PreviousValue;
+            if (propertyValue == null)
+                return;
+
+            var settings = observingProperty.Settings;
+            if (settings.TrackValueChanged)
             {
-                case IValidatableObject validatableObject:
+                var notifyPropertyChanged = (INotifyPropertyChanged) propertyValue;
+                notifyPropertyChanged.PropertyChanged -= observingProperty.ValueChangedAction;
+            }
+
+            if (settings.TrackValueErrorsChanged || settings.PropertyValueFactoryMethod != null)
+            {
+                var validatableObject = (IValidatableObject) propertyValue;
+                validatableObject.ErrorsChanged -= observingProperty.ErrorsChangedAction;
+                validatableObject.Validator?.Dispose();
+            }
+
+            if (settings.TrackCollectionChanged)
+            {
+                var notifyCollectionChanged = (INotifyCollectionChanged) propertyValue;
+                notifyCollectionChanged.CollectionChanged -= observingProperty.CollectionChangedAction;
+            }
+
+            if (settings.TrackCollectionItemChanged)
+            {
+                foreach (INotifyPropertyChanged item in (IEnumerable) propertyValue)
                 {
-                    validatableObject.ErrorsChanged -= observingProperty.ErrorsChangedAction;
-                    break;
+                    item.PropertyChanged -= observingProperty.ValueChangedAction;
                 }
+            }
 
-                case INotifyCollectionChanged notifyCollectionChanged:
+            if (settings.TrackCollectionItemErrorsChanged || settings.CollectionItemFactoryMethod != null)
+            {
+                foreach (IValidatableObject item in (IEnumerable) propertyValue)
                 {
-                    notifyCollectionChanged.CollectionChanged -= observingProperty.CollectionChangedAction;
-
-                    foreach (IValidatableObject item in (IEnumerable) observingProperty.PreviousValue)
-                        item.ErrorsChanged -= observingProperty.ErrorsChangedAction;
-
-                    break;
+                    item.ErrorsChanged -= observingProperty.ErrorsChangedAction;
+                    item.Validator?.Dispose();
                 }
             }
         }
@@ -235,6 +267,20 @@ namespace ReactiveValidation
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(observingProperty.PropertyName));
+        }
+
+        /// <summary>
+        /// Unsubscribe from all events.
+        /// </summary>
+        private void Dispose(bool disposing)
+        {
+            if (!disposing)
+                return;
+
+            foreach (var observingProperty in _observingProperties)
+            {
+                UnsubscribePropertyValue(observingProperty.Value);
+            }
         }
     }
 }
