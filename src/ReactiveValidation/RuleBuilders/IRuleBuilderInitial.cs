@@ -18,6 +18,10 @@ namespace ReactiveValidation
         where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
         where TObject : IValidatableObject
     {
+        /// <summary>
+        /// Set validator which will check property value.
+        /// </summary>
+        /// <param name="validator">Validator.</param>
         TBuilder SetValidator(IPropertyValidator<TObject> validator);
     }
 
@@ -61,10 +65,10 @@ namespace ReactiveValidation
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TCollection">The type of collection.</typeparam>
-    /// <typeparam name="TProp">The type of element of collection.</typeparam>
-    public interface ICollectionRuleBuilderInitial<TObject, TCollection, TProp> :
-        IRuleBuilderInitial<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TProp>>
+    /// <typeparam name="TItem">The type of element of collection.</typeparam>
+    public interface ICollectionRuleBuilderInitial<TObject, TCollection, TItem> :
+        IRuleBuilderInitial<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TItem>>
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>
+            where TCollection : IEnumerable<TItem>
     { }
 }

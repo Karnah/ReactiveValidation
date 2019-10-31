@@ -7,6 +7,12 @@ using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
+    /// <summary>
+    /// Validator which check that property value between specified values.
+    /// </summary>
+    /// <typeparam name="TObject">Type of validatable object.</typeparam>
+    /// <typeparam name="TProp">Type of validatable property.</typeparam>
+    /// <typeparam name="TParam">The type of comparison value.</typeparam>
     public class BetweenValidator<TObject, TProp, TParam> : PropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
@@ -14,6 +20,13 @@ namespace ReactiveValidation.Validators
         private readonly ValidatorParameter<TObject, TParam> _from;
         private readonly ValidatorParameter<TObject, TParam> _to;
 
+        /// <summary>
+        /// Initialize a new instance of <see cref="BetweenValidator{TObject,TProp,TParam}" /> class.
+        /// </summary>
+        /// <param name="fromExpression">Expression of the lowest allowed value.</param>
+        /// <param name="toExpression">Expression of the highest allowed value.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         public BetweenValidator(
             Expression<Func<TObject, TParam>> fromExpression,
             Expression<Func<TObject, TParam>> toExpression,
@@ -27,6 +40,7 @@ namespace ReactiveValidation.Validators
         }
 
 
+        /// <inheritdoc />
         protected override bool IsValid(ValidationContext<TObject, TProp> context)
         {
             var propertyValue = context.PropertyValue;
@@ -50,10 +64,22 @@ namespace ReactiveValidation.Validators
         }
     }
 
+    /// <summary>
+    /// Validator which check that property value between specified values.
+    /// </summary>
+    /// <typeparam name="TObject">Type of validatable object.</typeparam>
+    /// <typeparam name="TProp">Type of validatable property.</typeparam>
     public class BetweenValidator<TObject, TProp> : BetweenValidator<TObject, TProp, TProp>
         where TObject : IValidatableObject
         where TProp : IComparable<TProp>
     {
+        /// <summary>
+        /// Initialize a new instance of <see cref="BetweenValidator{TObject,TProp}" /> class.
+        /// </summary>
+        /// <param name="fromExpression">Expression of the lowest allowed value.</param>
+        /// <param name="toExpression">Expression of the highest allowed value.</param>
+        /// <param name="comparer">The comparer.</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         public BetweenValidator(
             Expression<Func<TObject, TProp>> fromExpression,
             Expression<Func<TObject, TProp>> toExpression,

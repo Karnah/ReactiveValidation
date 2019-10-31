@@ -2,8 +2,14 @@
 
 namespace ReactiveValidation.Languages
 {
+    /// <summary>
+    /// English language.
+    /// </summary>
     internal sealed class EnglishLanguage : StaticLanguage
     {
+        /// <summary>
+        /// Create new English language resource.
+        /// </summary>
         public EnglishLanguage() : base("en")
         {
             AddTranslations(ValidatorsNames.BetweenValidator, "{PropertyName} must be between {From} and {To}");

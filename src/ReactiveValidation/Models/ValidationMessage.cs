@@ -2,6 +2,9 @@
 
 namespace ReactiveValidation
 {
+    /// <summary>
+    /// Message of validation result.
+    /// </summary>
     public class ValidationMessage : BaseNotifyPropertyChanged
     {
         /// <summary>
@@ -22,7 +25,7 @@ namespace ReactiveValidation
         { }
 
         /// <summary>
-        /// Create new validation message with dynamic messages.
+        /// Create new validation message with localized message.
         /// </summary>
         public ValidationMessage(IStringSource stringSource, ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
@@ -74,7 +77,6 @@ namespace ReactiveValidation
         {
             Message = _stringSource.GetString();
             OnPropertyChanged(nameof(Message));
-
         }
 
         /// <summary>

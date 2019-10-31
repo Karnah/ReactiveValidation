@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace ReactiveValidation.Helpers
 {
+    /// <summary>
+    /// Helper methods for reflection.
+    /// </summary>
     public static class ReactiveValidationHelper
     {
         /// <summary>
@@ -77,7 +80,6 @@ namespace ReactiveValidation.Helpers
         internal static Type GetPropertyType(Type type, string propertyName)
         {
             var propertyInfo = GetPropertyInfo(type, propertyName);
-
             return propertyInfo?.PropertyType;
         }
 
@@ -91,7 +93,6 @@ namespace ReactiveValidation.Helpers
         internal static TProp GetPropertyValue<TProp>(object instance, string propertyName)
         {
             var propertyInfo = GetPropertyInfo(instance.GetType(), propertyName);
-
             return (TProp)propertyInfo.GetValue(instance);
         }
 

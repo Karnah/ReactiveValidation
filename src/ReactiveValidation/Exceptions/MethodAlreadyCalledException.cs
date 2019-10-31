@@ -7,7 +7,9 @@ namespace ReactiveValidation.Exceptions
     /// </summary>
     public class MethodAlreadyCalledException : Exception
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Initialize a new instance of <see cref="MethodAlreadyCalledException" /> class.
+        /// </summary>
         public MethodAlreadyCalledException(string message) : base(message)
         { }
     }

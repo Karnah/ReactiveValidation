@@ -37,7 +37,7 @@ namespace ReactiveValidation
         /// </summary>
         /// <typeparam name="TProp">The type of property.</typeparam>
         /// <param name="property">Validatable property.</param>
-        /// <returns>Single property validator for <see cref="TProp"/> type.</returns>
+        /// <returns>Single property validator for <typeparamref name="TProp" /> type.</returns>
         protected ISinglePropertyRuleBuilderInitial<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> property)
         {
             var propertyName = GetPropertyNameForValidator(property);
@@ -89,30 +89,18 @@ namespace ReactiveValidation
 
 
         /// <summary>
-        /// Create validator for property with collection type, i.e. <see cref="IEnumerable{T}"/> interface.
-        /// </summary>
-        /// <typeparam name="TProp">The type of element of collection.</typeparam>
-        /// <param name="collection">Property with collection type.</param>
-        /// <returns>Validator for property with <see cref="IEnumerable{T}"/> type.</returns>
-        protected ICollectionRuleBuilderInitial<TObject, IEnumerable<TProp>, TProp> RuleForCollection<TProp>(
-            Expression<Func<TObject, IEnumerable<TProp>>> collection)
-        {
-            return RuleForStrongTypedCollection<IEnumerable<TProp>, TProp>(collection);
-        }
-
-        /// <summary>
         /// Created validator for strongly typed collection.
         /// </summary>
         /// <typeparam name="TCollection">The type of collection.</typeparam>
-        /// <typeparam name="TProp">The type of element of collection.</typeparam>
+        /// <typeparam name="TItem">The type of item of collection.</typeparam>
         /// <param name="collection">Property with collection type.</param>
-        /// <returns>Validator for property with <see cref="TCollection"/> type.</returns>
-        protected ICollectionRuleBuilderInitial<TObject, TCollection, TProp> RuleForStrongTypedCollection<TCollection, TProp>(
+        /// <returns>Validator for property with <typeparamref name="TCollection" /> type.</returns>
+        protected ICollectionRuleBuilderInitial<TObject, TCollection, TItem> RuleForCollection<TCollection, TItem>(
             Expression<Func<TObject, TCollection>> collection)
-            where TCollection : IEnumerable<TProp>
+            where TCollection : IEnumerable<TItem>
         {
             var propertyName = GetPropertyNameForValidator(collection);
-            var ruleBuilder = new CollectionPropertyRuleBuilder<TObject, TCollection, TProp>(propertyName);
+            var ruleBuilder = new CollectionPropertyRuleBuilder<TObject, TCollection, TItem>(propertyName);
 
             _rulesBuilders.Add(ruleBuilder);
 

@@ -32,7 +32,7 @@ namespace ReactiveValidation
 
     /// <summary>
     /// Core interface of validation.
-    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}"/> interface.
+    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}" /> interface.
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TProp">The type of validatable property.</typeparam>
@@ -103,7 +103,7 @@ namespace ReactiveValidation
     /// <summary>
     /// Core interface of validation single property per validator.
     /// Allows use some specific validation methods (for example, validate by regex or comparison operators).
-    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}"/> interface.
+    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}" /> interface.
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TProp">The type of validatable property.</typeparam>
@@ -117,7 +117,7 @@ namespace ReactiveValidation
     /// <summary>
     /// Core interface of validation collection properties per validator.
     /// Allows use only the simplest methods (for example, required).
-    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}"/> interface.
+    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}" /> interface.
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     public interface IPropertiesRuleBuilder<TObject> :
@@ -130,16 +130,16 @@ namespace ReactiveValidation
     /// <summary>
     /// Core interface of validation of collection type property.
     /// Allows use some specific validation methods for each item.
-    /// Has additional logic for collection collection types(for examle,  <see cref="INotifyCollectionChanged"/>).
-    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}"/> interface.
+    /// Has additional logic for collection collection types(for example,  <see cref="INotifyCollectionChanged" />).
+    /// Allows use all of accessible validation methods and move to <see cref="IRuleBuilderOption{TObject,TProp}" /> interface.
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TCollection">The type of collection.</typeparam>
-    /// <typeparam name="TProp">The type of element of collection.</typeparam>
-    public interface ICollectionRuleBuilder<TObject, TCollection, TProp> :
-        IRuleBuilder<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TProp>>,
-        ICollectionRuleBuilderInitial<TObject, TCollection, TProp>
+    /// <typeparam name="TItem">The type of element of collection.</typeparam>
+    public interface ICollectionRuleBuilder<TObject, TCollection, TItem> :
+        IRuleBuilder<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TItem>>,
+        ICollectionRuleBuilderInitial<TObject, TCollection, TItem>
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>
+            where TCollection : IEnumerable<TItem>
     { }
 }

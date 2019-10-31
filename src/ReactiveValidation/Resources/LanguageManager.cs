@@ -82,7 +82,7 @@ namespace ReactiveValidation
         public IStringProvider StringProvider { get; internal set; }
 
         /// <summary>
-        /// If <see langword="true"/> all validation messages will change its message on <see cref="CultureChanged" /> event.
+        /// If <see langword="true" /> all validation messages will change its message on <see cref="CultureChanged" /> event.
         /// </summary>
         public bool TrackCultureChanged { get; internal set; }
 

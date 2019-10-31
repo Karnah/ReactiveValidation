@@ -8,7 +8,9 @@ namespace ReactiveValidation.Exceptions
     /// </summary>
     public class ObjectValidatorBuilderAlreadyRegistered : Exception
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Initialize a new instance of <see cref="ObjectValidatorBuilderAlreadyRegistered" /> class.
+        /// </summary>
         public ObjectValidatorBuilderAlreadyRegistered(Type type) : base($"Object validator builder already registered for type {type}")
         {
         }

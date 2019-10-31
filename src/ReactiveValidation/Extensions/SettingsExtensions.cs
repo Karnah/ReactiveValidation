@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -81,12 +80,12 @@ namespace ReactiveValidation.Extensions
         /// </summary>
         /// <typeparam name="TObject">The type of validatable object.</typeparam>
         /// <typeparam name="TCollection">The type of collection.</typeparam>
-        /// <typeparam name="TProp">The type of collection item.</typeparam>
+        /// <typeparam name="TItem">The type of collection item.</typeparam>
         /// <param name="ruleBuilder">The rule builder.</param>
-        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> TrackCollectionChanged<TObject, TCollection, TProp>(
-            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder)
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TItem> TrackCollectionChanged<TObject, TCollection, TItem>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TItem> ruleBuilder)
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>, INotifyCollectionChanged
+            where TCollection : IEnumerable<TItem>, INotifyCollectionChanged
         {
             var rb = (IRuleBuilder<TObject>) ruleBuilder;
             rb.ObservingPropertiesSettings.TrackCollectionChanged = true;
@@ -100,18 +99,21 @@ namespace ReactiveValidation.Extensions
         /// </summary>
         /// <typeparam name="TObject">The type of validatable object.</typeparam>
         /// <typeparam name="TCollection">The type of collection.</typeparam>
-        /// <typeparam name="TProp">The type of collection item.</typeparam>
+        /// <typeparam name="TItem">The type of collection item.</typeparam>
         /// <param name="ruleBuilder">The rule builder.</param>
-        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> TrackCollectionItemChanged<TObject, TCollection, TProp>(
-            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder)
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TItem> TrackCollectionItemChanged<TObject, TCollection, TItem>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TItem> ruleBuilder)
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>, IEnumerable, INotifyCollectionChanged
-            where TProp : INotifyPropertyChanged
+            where TCollection : IEnumerable<TItem>
+            where TItem : INotifyPropertyChanged
         {
             var rb = (IRuleBuilder<TObject>) ruleBuilder;
             rb.ObservingPropertiesSettings.TrackCollectionItemChanged = true;
 
-            return ruleBuilder.TrackCollectionChanged();
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TCollection)))
+                rb.ObservingPropertiesSettings.TrackCollectionChanged = true;
+
+            return ruleBuilder;
         }
 
         /// <summary>
@@ -120,18 +122,21 @@ namespace ReactiveValidation.Extensions
         /// </summary>
         /// <typeparam name="TObject">The type of validatable object.</typeparam>
         /// <typeparam name="TCollection">The type of collection.</typeparam>
-        /// <typeparam name="TProp">The type of collection item.</typeparam>
+        /// <typeparam name="TItem">The type of collection item.</typeparam>
         /// <param name="ruleBuilder">The rule builder.</param>
-        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> TrackCollectionItemErrorsChanged<TObject, TCollection, TProp>(
-            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder)
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TItem> TrackCollectionItemErrorsChanged<TObject, TCollection, TItem>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TItem> ruleBuilder)
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>, IEnumerable, INotifyCollectionChanged
-            where TProp : INotifyPropertyChanged
+            where TCollection : IEnumerable<TItem>
+            where TItem : INotifyPropertyChanged
         {
             var rb = (IRuleBuilder<TObject>) ruleBuilder;
             rb.ObservingPropertiesSettings.TrackCollectionItemErrorsChanged = true;
 
-            return ruleBuilder.TrackCollectionChanged();
+            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TCollection)))
+                rb.ObservingPropertiesSettings.TrackCollectionChanged = true;
+
+            return ruleBuilder;
         }
 
         /// <summary>
@@ -139,23 +144,23 @@ namespace ReactiveValidation.Extensions
         /// </summary>
         /// <typeparam name="TObject">The type of validatable object.</typeparam>
         /// <typeparam name="TCollection">The type of collection.</typeparam>
-        /// <typeparam name="TProp">The type of collection item.</typeparam>
+        /// <typeparam name="TItem">The type of collection item.</typeparam>
         /// <param name="ruleBuilder">The rule builder.</param>
-        /// <param name="validatorFactoryMethod"></param>
-        public static ICollectionRuleBuilderInitial<TObject, TCollection, TProp> SetCollectionItemValidator<TObject, TCollection, TProp>(
-            this ICollectionRuleBuilderInitial<TObject, TCollection, TProp> ruleBuilder,
-            Func<TProp, IObjectValidator> validatorFactoryMethod = null)
+        /// <param name="validatorFactoryMethod">Method which allows create object validator for items.</param>
+        public static ICollectionRuleBuilderInitial<TObject, TCollection, TItem> SetCollectionItemValidator<TObject, TCollection, TItem>(
+            this ICollectionRuleBuilderInitial<TObject, TCollection, TItem> ruleBuilder,
+            Func<TItem, IObjectValidator> validatorFactoryMethod = null)
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>, IEnumerable, INotifyCollectionChanged
-            where TProp : IValidatableObject
+            where TCollection : IEnumerable<TItem>
+            where TItem : IValidatableObject
         {
             var rb = (IRuleBuilder<TObject>) ruleBuilder;
             if (validatorFactoryMethod == null)
                 rb.ObservingPropertiesSettings.CollectionItemFactoryMethod = ValidationOptions.ValidatorFactory.GetValidator;
             else
-                rb.ObservingPropertiesSettings.CollectionItemFactoryMethod = o => validatorFactoryMethod((TProp)o);
+                rb.ObservingPropertiesSettings.CollectionItemFactoryMethod = o => validatorFactoryMethod((TItem)o);
 
-            return ruleBuilder.TrackCollectionChanged();
+            return ruleBuilder;
         }
     }
 }

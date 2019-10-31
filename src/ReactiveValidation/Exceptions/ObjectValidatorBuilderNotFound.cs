@@ -8,7 +8,9 @@ namespace ReactiveValidation.Exceptions
     /// </summary>
     public class ObjectValidatorBuilderNotFound : Exception
     {
-        /// <inheritdoc />
+        /// <summary>
+        /// Initialize a new instance of <see cref="ObjectValidatorBuilderNotFound" /> class.
+        /// </summary>
         public ObjectValidatorBuilderNotFound(Type type) : base($"Object validator builder for type {type} not found")
         {
         }

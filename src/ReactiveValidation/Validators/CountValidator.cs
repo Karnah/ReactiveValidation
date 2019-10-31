@@ -7,13 +7,25 @@ using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
-    public class CountValidator<TObject, TCollection, TProp> : PropertyValidator<TObject, TCollection>
+    /// <summary>
+    /// Validator which check items count of collection.
+    /// </summary>
+    /// <typeparam name="TObject">The type of validatable object.</typeparam>
+    /// <typeparam name="TCollection">The type of collection.</typeparam>
+    /// <typeparam name="TItem">The type of element of collection.</typeparam>
+    public class CountValidator<TObject, TCollection, TItem> : PropertyValidator<TObject, TCollection>
         where TObject : IValidatableObject
-        where TCollection : IEnumerable<TProp>
+        where TCollection : IEnumerable<TItem>
     {
         private readonly ValidatorParameter<TObject, int> _minCount;
         private readonly ValidatorParameter<TObject, int> _maxCount;
 
+        /// <summary>
+        /// Initialize a new instance of <see cref="CountValidator{TObject,TProp,TParam}" /> class.
+        /// </summary>
+        /// <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+        /// <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         public CountValidator(
             Expression<Func<TObject, int>> minCountExpression,
             Expression<Func<TObject, int>> maxCountExpression,
@@ -21,6 +33,13 @@ namespace ReactiveValidation.Validators
             : this(new LanguageStringSource(ValidatorsNames.CountValidator), minCountExpression, maxCountExpression, validationMessageType)
         { }
 
+        /// <summary>
+        /// Initialize a new instance of <see cref="CountValidator{TObject,TProp,TParam}" /> class.
+        /// </summary>
+        /// <param name="stringSource">The string source of validatable message.</param>
+        /// <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+        /// <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         protected CountValidator(
             IStringSource stringSource,
             Expression<Func<TObject, int>> minCountExpression,
@@ -36,6 +55,7 @@ namespace ReactiveValidation.Validators
         }
 
 
+        /// <inheritdoc />
         protected override bool IsValid(ValidationContext<TObject, TCollection> context)
         {
             int min = 0,
@@ -59,11 +79,21 @@ namespace ReactiveValidation.Validators
         }
     }
 
-
-    public class MinCountValidator<TObject, TCollection, TProp> : CountValidator<TObject, TCollection, TProp>
+    /// <summary>
+    /// Validator which check that count of items in collection not less than minimum.
+    /// </summary>
+    /// <typeparam name="TObject">The type of validatable object.</typeparam>
+    /// <typeparam name="TCollection">The type of collection.</typeparam>
+    /// <typeparam name="TItem">The type of element of collection.</typeparam>
+    public class MinCountValidator<TObject, TCollection, TItem> : CountValidator<TObject, TCollection, TItem>
         where TObject : IValidatableObject
-        where TCollection : IEnumerable<TProp>
+        where TCollection : IEnumerable<TItem>
     {
+        /// <summary>
+        /// Initialize a new instance of <see cref="MinCountValidator{TObject,TProp,TParam}" /> class.
+        /// </summary>
+        /// <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         public MinCountValidator(
             Expression<Func<TObject, int>> minCountExpression,
             ValidationMessageType validationMessageType)
@@ -72,10 +102,21 @@ namespace ReactiveValidation.Validators
     }
 
 
-    public class MaxCountValidator<TObject, TCollection, TProp> : CountValidator<TObject, TCollection, TProp>
+    /// <summary>
+    /// Validator which check that count of items in collection not greater than maximum.
+    /// </summary>
+    /// <typeparam name="TObject">The type of validatable object.</typeparam>
+    /// <typeparam name="TCollection">The type of collection.</typeparam>
+    /// <typeparam name="TItem">The type of element of collection.</typeparam>
+    public class MaxCountValidator<TObject, TCollection, TItem> : CountValidator<TObject, TCollection, TItem>
         where TObject : IValidatableObject
-        where TCollection : IEnumerable<TProp>
+        where TCollection : IEnumerable<TItem>
     {
+        /// <summary>
+        /// Initialize a new instance of <see cref="MaxCountValidator{TObject,TProp,TParam}" /> class.
+        /// </summary>
+        /// <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         public MaxCountValidator(
             Expression<Func<TObject, int>> maxCountExpression,
             ValidationMessageType validationMessageType)
@@ -84,10 +125,21 @@ namespace ReactiveValidation.Validators
     }
 
 
-    public class ExactCountValidator<TObject, TCollection, TProp> : CountValidator<TObject, TCollection, TProp>
+    /// <summary>
+    /// Validator which check that count of items in collection equal to specified value.
+    /// </summary>
+    /// <typeparam name="TObject">The type of validatable object.</typeparam>
+    /// <typeparam name="TCollection">The type of collection.</typeparam>
+    /// <typeparam name="TItem">The type of element of collection.</typeparam>
+    public class ExactCountValidator<TObject, TCollection, TItem> : CountValidator<TObject, TCollection, TItem>
         where TObject : IValidatableObject
-        where TCollection : IEnumerable<TProp>
+        where TCollection : IEnumerable<TItem>
     {
+        /// <summary>
+        /// Initialize a new instance of <see cref="ExactCountValidator{TObject,TProp,TParam}" /> class.
+        /// </summary>
+        /// <param name="countExpression">Count of items in collection.</param>
+        /// <param name="validationMessageType">The type of validatable message.</param>
         public ExactCountValidator(
             Expression<Func<TObject, int>> countExpression,
             ValidationMessageType validationMessageType)

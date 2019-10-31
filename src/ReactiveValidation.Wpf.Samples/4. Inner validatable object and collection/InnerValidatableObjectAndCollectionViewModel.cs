@@ -16,8 +16,6 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
     /// </summary>
     public class InnerValidatableObjectAndCollectionViewModel : ReactiveValidatableObject
     {
-        //private readonly ObjectObserver<InnerValidatableObjectAndCollectionViewModel> _observer;
-
         public InnerValidatableObjectAndCollectionViewModel()
         {
             InnerObjectValue = new InnerObject();
@@ -40,9 +38,7 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
                 .NotNull()
                 .ModelIsValid();
 
-            builder.RuleForStrongTypedCollection<ObservableCollection<InnerObject>, InnerObject>(vm => vm.InnerObjectsCollection)
-                .TrackCollectionChanged()
-                .TrackCollectionItemChanged()
+            builder.RuleForCollection(vm => vm.InnerObjectsCollection)
                 .SetCollectionItemValidator(GetInnerObjectValidator)
                 .NotNull()
                 .Count(3, 5)

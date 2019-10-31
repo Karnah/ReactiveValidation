@@ -8,21 +8,23 @@ using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Extensions
 {
+    /// <summary>
+    /// Extensions for creating common validators for properties.
+    /// </summary>
     public static class CommonValidatorsExtensions
     {
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="from">The lowest allowed value</param>
-        /// <param name="to">The highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="from">The lowest allowed value.</param>
+        /// <param name="to">The highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp from,
@@ -41,17 +43,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
         /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="from">The lowest allowed value</param>
-        /// <param name="to">The highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="from">The lowest allowed value.</param>
+        /// <param name="to">The highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp from,
@@ -70,17 +71,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
-        /// <param name="to">The highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value.</param>
+        /// <param name="to">The highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> fromExpression,
@@ -96,17 +96,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
-        /// <param name="to">The highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value.</param>
+        /// <param name="to">The highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> fromExpression,
@@ -122,17 +121,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
         /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="from">The lowest allowed value</param>
-        /// <param name="toExpression">The expression from which will be calculated highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <param name="from">The lowest allowed value.</param>
+        /// <param name="toExpression">The expression from which will be calculated highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp from,
@@ -148,17 +146,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="from">The lowest allowed value</param>
-        /// <param name="toExpression">The expression from which will be calculated highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="from">The lowest allowed value.</param>
+        /// <param name="toExpression">The expression from which will be calculated highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp from,
@@ -174,17 +171,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
-        /// <param name="toExpression">The expression from which will be calculated highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value.</param>
+        /// <param name="toExpression">The expression from which will be calculated highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> fromExpression,
@@ -200,17 +196,16 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
-        /// Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the value of the property is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
-        /// <param name="toExpression">The expression from which will be calculated highest allowed value</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="fromExpression">The expression from which will be calculated lowest allowed value.</param>
+        /// <param name="toExpression">The expression from which will be calculated highest allowed value.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Between<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> fromExpression,
@@ -228,14 +223,13 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'equals' validator on the current rule builder.
         /// Validation will fail if the specified value is not equal to the value of the property.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value to compare</param>
-        /// <param name="comparer">Equality Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value to compare.</param>
+        /// <param name="comparer">Equality Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Equal<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -251,14 +245,13 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'equals' validator on the current rule builder.
         /// Validation will fail if the specified value is not equal to the value of the property.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value to compare</param>
-        /// <param name="comparer">Equality Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value to compare.</param>
+        /// <param name="comparer">Equality Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Equal<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -275,14 +268,13 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'equals' validator on the current rule builder.
         /// Validation will fail if the specified value is not equal to the value of the property.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompareExpression">The expression from which will be calculated value to compare</param>
-        /// <param name="comparer">Equality Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompareExpression">The expression from which will be calculated value to compare.</param>
+        /// <param name="comparer">Equality Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Equal<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
@@ -295,18 +287,17 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'greater than or equal' validator on the current rule builder. 
+        /// Defines a 'greater than or equal' validator on the current rule builder.
         /// The validation will succeed if the property value is greater than or equal the specified value.
         /// The validation will fail if the property value is less than the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext GreaterThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -320,18 +311,17 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'greater than or equal' validator on the current rule builder. 
+        /// Defines a 'greater than or equal' validator on the current rule builder.
         /// The validation will succeed if the property value is greater than or equal the specified value.
         /// The validation will fail if the property value is less than the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext GreaterThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -345,18 +335,17 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'greater than or equal' validator on the current rule builder. 
+        /// Defines a 'greater than or equal' validator on the current rule builder.
         /// The validation will succeed if the property value is greater than or equal the specified value.
         /// The validation will fail if the property value is less than the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext GreaterThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
@@ -370,18 +359,17 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'greater than' validator on the current rule builder. 
+        /// Defines a 'greater than' validator on the current rule builder.
         /// The validation will succeed if the property value is greater than the specified value.
         /// The validation will fail if the property value is less than or equal the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext GreaterThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -395,18 +383,17 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'greater than' validator on the current rule builder. 
+        /// Defines a 'greater than' validator on the current rule builder.
         /// The validation will succeed if the property value is greater than the specified value.
         /// The validation will fail if the property value is less than or equal the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext GreaterThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -420,18 +407,17 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'greater than or equal' validator on the current rule builder. 
+        /// Defines a 'greater than or equal' validator on the current rule builder.
         /// The validation will succeed if the property value is greater than the specified value.
         /// The validation will fail if the property value is less than or equal the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext GreaterThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
@@ -446,15 +432,14 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines a length validator on the current rule builder, but only for string properties.
-        /// Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="minLength">The minimal length of string</param>
-        /// <param name="maxLength">The maximum length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="minLength">The minimal length of string.</param>
+        /// <param name="maxLength">The maximum length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Length<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             int minLength,
@@ -475,15 +460,14 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines a length validator on the current rule builder, but only for string properties.
-        /// Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="minLengthExpression">The expression from which will be calculated minimal length of string</param>
-        /// <param name="maxLength">The maximum length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="minLengthExpression">The expression from which will be calculated minimal length of string.</param>
+        /// <param name="maxLength">The maximum length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Length<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, int>> minLengthExpression,
@@ -500,15 +484,14 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines a length validator on the current rule builder, but only for string properties.
-        /// Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="minLength">The minimal length of string</param>
-        /// <param name="maxLengthExpression">The expression from which will be calculated maximum length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="minLength">The minimal length of string.</param>
+        /// <param name="maxLengthExpression">The expression from which will be calculated maximum length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Length<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             int minLength,
@@ -525,15 +508,14 @@ namespace ReactiveValidation.Extensions
 
         /// <summary>
         /// Defines a length validator on the current rule builder, but only for string properties.
-        /// Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+        /// Validation will fail if the length of the string is outside of the specified range. The range is inclusive.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="minLengthExpression">The expression from which will be calculated minimal length of string</param>
-        /// <param name="maxLengthExpression">The expression from which will be calculated maximum length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="minLengthExpression">The expression from which will be calculated minimal length of string.</param>
+        /// <param name="maxLengthExpression">The expression from which will be calculated maximum length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Length<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, int>> minLengthExpression,
@@ -549,12 +531,11 @@ namespace ReactiveValidation.Extensions
         /// Defines a length validator on the current rule builder, but only for string properties.
         /// Validation will fail if the length of the string is less than the length specified.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="minLength">The minimal length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="minLength">The minimal length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext MinLength<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             int minLength,
@@ -572,12 +553,11 @@ namespace ReactiveValidation.Extensions
         /// Defines a length validator on the current rule builder, but only for string properties.
         /// Validation will fail if the length of the string is less than the length specified.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="minLengthExpression">The expression from which will be calculated minimal length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="minLengthExpression">The expression from which will be calculated minimal length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext MinLength<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, int>> minLengthExpression,
@@ -592,12 +572,11 @@ namespace ReactiveValidation.Extensions
         /// Defines a length validator on the current rule builder, but only for string properties.
         /// Validation will fail if the length of the string is larger than the length specified.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="maxLength">The maximum length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="maxLength">The maximum length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext MaxLength<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             int maxLength,
@@ -615,12 +594,11 @@ namespace ReactiveValidation.Extensions
         /// Defines a length validator on the current rule builder, but only for string properties.
         /// Validation will fail if the length of the string is larger than the length specified.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="maxLengthExpression">The expression from which will be calculated maximum length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="maxLengthExpression">The expression from which will be calculated maximum length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext MaxLength<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, int>> maxLengthExpression,
@@ -635,12 +613,11 @@ namespace ReactiveValidation.Extensions
         /// Defines a length validator on the current rule builder, but only for string properties.
         /// Validation will fail if the length of the string is not equal to the length specified.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="length">The exact length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="length">The exact length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Length<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             int length,
@@ -658,12 +635,11 @@ namespace ReactiveValidation.Extensions
         /// Defines a length validator on the current rule builder, but only for string properties.
         /// Validation will fail if the length of the string is not equal to the length specified.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="lengthExpression">The expression from which will be calculated exact length of string</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="lengthExpression">The expression from which will be calculated exact length of string.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Length<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, int>> lengthExpression,
@@ -679,14 +655,13 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is less than or equal to the specified value.
         /// The validation will fail if the property value is greater than the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext LessThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -704,14 +679,13 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is less than or equal to the specified value.
         /// The validation will fail if the property value is greater than the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext LessThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -729,14 +703,13 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is less than or equal to the specified value.
         /// The validation will fail if the property value is greater than the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext LessThanOrEqualTo<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
@@ -754,13 +727,13 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is less than the specified value.
         /// The validation will fail if the property value is greater than or equal to the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext LessThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -778,13 +751,13 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is less than the specified value.
         /// The validation will fail if the property value is greater than or equal to the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext LessThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -802,13 +775,13 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is less than the specified value.
         /// The validation will fail if the property value is greater than or equal to the specified value.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
-        /// <param name="comparer">Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompareExpression">The expression from which will be calculated value being compared.</param>
+        /// <param name="comparer">Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext LessThan<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
@@ -822,14 +795,14 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'model is valid' validator on the current rule builder. Only for IValidatableObject properties
+        /// Defines a 'model is valid' validator on the current rule builder. Only for IValidatableObject properties.
         /// The validation will fail if the property value is invalid.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext ModelIsValid<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
@@ -843,14 +816,13 @@ namespace ReactiveValidation.Extensions
         }
 
         /// <summary>
-        /// Defines a 'not empty' validator on the current rule builder, but only for strings
-        /// Validation will fail if the string is null or empty
+        /// Defines a 'not empty' validator on the current rule builder, but only for strings.
+        /// Validation will fail if the string is null or empty.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext NotEmpty<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
@@ -864,14 +836,13 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'not equal' validator on the current rule builder.
         /// Validation will fail if the specified value is equal to the value of the property.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value to compare</param>
-        /// <param name="comparer">Equality Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value to compare.</param>
+        /// <param name="comparer">Equality Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext NotEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -887,14 +858,13 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'not equal' validator on the current rule builder.
         /// Validation will fail if the specified value is equal to the value of the property.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompare">The value to compare</param>
-        /// <param name="comparer">Equality Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompare">The value to compare.</param>
+        /// <param name="comparer">Equality Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext NotEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp?, TNext> ruleBuilder,
             TProp valueToCompare,
@@ -911,14 +881,13 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'not equal' validator on the current rule builder.
         /// Validation will fail if the specified value is equal to the value of the property.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="valueToCompareExpression">The expression from which will be calculated value to compare</param>
-        /// <param name="comparer">Equality Comparer to use</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="valueToCompareExpression">The expression from which will be calculated value to compare.</param>
+        /// <param name="comparer">Equality Comparer to use.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext NotEqual<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             Expression<Func<TObject, TProp>> valueToCompareExpression,
@@ -934,12 +903,11 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'not null' validator on the current rule builder.
         /// Validation will fail if the specified value is not null.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext NotNull<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
@@ -953,12 +921,11 @@ namespace ReactiveValidation.Extensions
         /// Defines an 'null' validator on the current rule builder.
         /// Validation will fail if the specified value is null.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Null<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
             ValidationMessageType validationMessageType = ValidationMessageType.SimpleError)
@@ -973,12 +940,11 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is null or empty.
         /// Validation will fail if the value returned by the lambda does not match the regular expression.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
         /// <param name="regexPattern">The regular expression to check the value against.</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
-        /// <returns></returns>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Matches<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             string regexPattern,
@@ -997,12 +963,12 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is null or empty.
         /// Validation will fail if the value returned by the lambda does not match the regular expression.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
         /// <param name="regexPattern">The regular expression to check the value against.</param>
-        /// <param name="regexOptions">Regex options</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <param name="regexOptions">Regex options.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Matches<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             string regexPattern,
@@ -1022,11 +988,11 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is null or empty or calculated pattern is null or empty.
         /// Validation will fail if the value returned by the lambda does not match the regular expression.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
         /// <param name="regexPatternExpression">The expression from which will be calculated regular expression to check the value against.</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Matches<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, string>> regexPatternExpression,
@@ -1042,12 +1008,12 @@ namespace ReactiveValidation.Extensions
         /// The validation will succeed if the property value is null or empty or calculated pattern is null or empty.
         /// Validation will fail if the value returned by the lambda does not match the regular expression.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
         /// <param name="regexPatternExpression">The expression from which will be calculated regular expression to check the value against.</param>
-        /// <param name="regexOptions">Regex options</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <param name="regexOptions">Regex options.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         public static TNext Matches<TNext, TObject>(
             this IRuleBuilderInitial<TObject, string, TNext> ruleBuilder,
             Expression<Func<TObject, string>> regexPatternExpression,
@@ -1062,14 +1028,14 @@ namespace ReactiveValidation.Extensions
         /// <summary>
         /// Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
         /// Validation will fail if the specified lambda returns false.
-        /// Validation will succeed if the specifed lambda returns true.
+        /// Validation will succeed if the specified lambda returns true.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="predicate">A lambda expression specifying the predicate</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         /// <returns></returns>
         public static TNext Must<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
@@ -1086,14 +1052,14 @@ namespace ReactiveValidation.Extensions
         /// <summary>
         /// Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
         /// Validation will fail if the specified lambda returns false.
-        /// Validation will succeed if the specifed lambda returns true.
+        /// Validation will succeed if the specified lambda returns true.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="predicate">A lambda expression specifying the predicate</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         /// <returns></returns>
         public static TNext Must<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
@@ -1110,14 +1076,14 @@ namespace ReactiveValidation.Extensions
         /// <summary>
         /// Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
         /// Validation will fail if the specified lambda returns false.
-        /// Validation will succeed if the specifed lambda returns true.
+        /// Validation will succeed if the specified lambda returns true.
         /// </summary>
-        /// <typeparam name="TNext">The type of the next rule builder</typeparam>
-        /// <typeparam name="TObject">The type of validatable object</typeparam>
-        /// <typeparam name="TProp">The type of validatable property</typeparam>
-        /// <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
-        /// <param name="predicate">A lambda expression specifying the predicate</param>
-        /// <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
         /// <returns></returns>
         public static TNext Must<TNext, TObject, TProp>(
             this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,

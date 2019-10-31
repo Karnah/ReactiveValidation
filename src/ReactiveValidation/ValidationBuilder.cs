@@ -34,18 +34,11 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
-        public new ICollectionRuleBuilderInitial<TObject, IEnumerable<TProp>, TProp> RuleForCollection<TProp>(
-            Expression<Func<TObject, IEnumerable<TProp>>> collection)
-        {
-            return base.RuleForCollection(collection);
-        }
-
-        /// <inheritdoc />
-        public new ICollectionRuleBuilderInitial<TObject, TCollection, TProp> RuleForStrongTypedCollection<TCollection, TProp>(
+        public new ICollectionRuleBuilderInitial<TObject, TCollection, TProp> RuleForCollection<TCollection, TProp>(
             Expression<Func<TObject, TCollection>> collection)
             where TCollection : IEnumerable<TProp>
         {
-            return base.RuleForStrongTypedCollection<TCollection, TProp>(collection);
+            return base.RuleForCollection<TCollection, TProp>(collection);
         }
 
         /// <inheritdoc />

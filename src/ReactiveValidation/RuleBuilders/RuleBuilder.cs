@@ -371,12 +371,12 @@ namespace ReactiveValidation
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     /// <typeparam name="TCollection">Type of collection.</typeparam>
-    /// <typeparam name="TProp">Type of collection item.</typeparam>
-    internal class CollectionPropertyRuleBuilder<TObject, TCollection, TProp> :
-        BaseRuleBuilder<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TProp>>,
-        ICollectionRuleBuilder<TObject, TCollection, TProp>
+    /// <typeparam name="TItem">Type of collection item.</typeparam>
+    internal class CollectionPropertyRuleBuilder<TObject, TCollection, TItem> :
+        BaseRuleBuilder<TObject, TCollection, ICollectionRuleBuilder<TObject, TCollection, TItem>>,
+        ICollectionRuleBuilder<TObject, TCollection, TItem>
             where TObject : IValidatableObject
-            where TCollection : IEnumerable<TProp>
+            where TCollection : IEnumerable<TItem>
     {
         /// <inheritdoc />
         public CollectionPropertyRuleBuilder(string validatablePropertyName) : base(new[] { validatablePropertyName })
@@ -384,6 +384,6 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
-        protected override ICollectionRuleBuilder<TObject, TCollection, TProp> This => this;
+        protected override ICollectionRuleBuilder<TObject, TCollection, TItem> This => this;
     }
 }
