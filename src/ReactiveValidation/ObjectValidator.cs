@@ -131,7 +131,7 @@ namespace ReactiveValidation
                 _observer.Dispose();
 
                 if (ValidationOptions.LanguageManager.TrackCultureChanged)
-                    ValidationOptions.LanguageManager.CultureChanged += _cultureChangedEventHandler;
+                    ValidationOptions.LanguageManager.CultureChanged -= _cultureChangedEventHandler;
 
                 ValidationMessages = null;
                 IsValid = true;

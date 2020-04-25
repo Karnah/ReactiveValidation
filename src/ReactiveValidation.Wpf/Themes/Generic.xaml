@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:rv="clr-namespace:ReactiveValidation"
+                    xmlns:rv="clr-namespace:ReactiveValidation;assembly=ReactiveValidation"
                     xmlns:converters="clr-namespace:ReactiveValidation.WPF.Converters"
                     xmlns:controls="clr-namespace:ReactiveValidation.WPF.Controls">
 
@@ -21,7 +21,7 @@
                         <Polygon.Fill>
                             <MultiBinding Converter="{StaticResource ErrorsToMarkColorConverter}">
                                 <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
-                                <!-- If binding only to Validation.Errors then binding doesn't call converter -->
+                                <!-- If binding only to Validation.Errors then binding doesn't call converter. -->
                                 <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
                             </MultiBinding>
                         </Polygon.Fill>
@@ -45,7 +45,7 @@
                         <ItemsControl.ItemsSource>
                             <MultiBinding Converter="{StaticResource ErrorsToValidationMessagesConverter}">
                                 <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
-                                <!-- If binding only to Validation.Errors then binding doesn't call converter -->
+                                <!-- If binding only to Validation.Errors then binding doesn't call converter. -->
                                 <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
                             </MultiBinding>
                         </ItemsControl.ItemsSource>

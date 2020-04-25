@@ -43,7 +43,7 @@ namespace ReactiveValidation.Validators
             : base(stringSource, validationMessageType, minLengthExpression, maxLengthExpression)
         {
             if (minLengthExpression != null)
-                _minLength = new ValidatorParameter<TObject, int>(maxLengthExpression);
+                _minLength = new ValidatorParameter<TObject, int>(minLengthExpression);
 
             if (maxLengthExpression != null)
                 _maxLength = new ValidatorParameter<TObject, int>(maxLengthExpression);
@@ -61,7 +61,8 @@ namespace ReactiveValidation.Validators
                 max = context.GetParamValue(_maxLength);
 
             var totalLength = context.PropertyValue?.Length ?? 0;
-            if (totalLength < min || max < totalLength) {
+            if (totalLength < min || max < totalLength)
+            {
                 context.RegisterMessageArgument("MinLength", _minLength, min);
                 context.RegisterMessageArgument("MaxLength", _maxLength, max);
                 context.RegisterMessageArgument("TotalLength", null, totalLength);

@@ -77,8 +77,8 @@ namespace ReactiveValidation.Tests.Validators
                 where TProp : IComparable<TProp>
         {
             var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
-            var context = new ValidationContext<TestValidatableObject, TProp>(null, nameof(TestValidatableObject.Number), null, value);
-            var validationMessage = betweenValidator.ValidateProperty(context).FirstOrDefault();
+            var factory = new ValidationContextFactory<TestValidatableObject>(null, nameof(TestValidatableObject.Number), null, value);
+            var validationMessage = betweenValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;
         }

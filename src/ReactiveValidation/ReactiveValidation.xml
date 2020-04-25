@@ -1,0 +1,3136 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ReactiveValidation</name>
+    </assembly>
+    <members>
+        <member name="T:ReactiveValidation.Attributes.DisplayNameAttribute">
+            <summary>
+            Attribute which allow set display name of property.
+            Display name will be used in validation messages.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.Attributes.DisplayNameAttribute.DisplayName">
+            <summary>
+            Display name for property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.Attributes.DisplayNameAttribute.DisplayNameKey">
+            <summary>
+            Key of display name for <see cref="T:ReactiveValidation.IStringProvider" /> in <see cref="P:ReactiveValidation.ValidationOptions.LanguageManager" />.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.Attributes.DisplayNameAttribute.DisplayNameResource">
+            <summary>
+            Name of resource for <see cref="T:ReactiveValidation.IStringProvider" /> in <see cref="P:ReactiveValidation.ValidationOptions.LanguageManager" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Attributes.DisplayNameAttribute.GetDisplayName">
+            <summary>
+            Get display name of property.
+            </summary>
+            <returns>Localized display name.</returns>
+        </member>
+        <member name="T:ReactiveValidation.ValidationMessageType">
+            <summary>
+            The type of validation message.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.ValidationMessageType.Error">
+            <summary>
+            Used when property has invalid value.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.ValidationMessageType.SimpleError">
+            <summary>
+            A simple error (for example, an empty field), which should be shown only when mouse over the control.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.ValidationMessageType.Warning">
+            <summary>
+            Allows show message, but don't broke validation.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.ValidationMessageType.SimpleWarning">
+            <summary>
+            Allows show message only if mouse over the control and don't broke validation.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Exceptions.MethodAlreadyCalledException">
+            <summary>
+            Exception thrown when one method calls more then once, when it don't allow.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Exceptions.MethodAlreadyCalledException.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Exceptions.ObjectValidatorBuilderAlreadyRegistered">
+            <summary>
+            Exception thrown when builder already registered in <see cref="T:ReactiveValidation.Factory.IValidatorFactory" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Exceptions.ObjectValidatorBuilderAlreadyRegistered.#ctor(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Exceptions.ObjectValidatorBuilderNotFound">
+            <summary>
+            Exception thrown when <see cref="T:ReactiveValidation.Factory.IValidatorFactory" /> cannot find builder for specified type.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Exceptions.ObjectValidatorBuilderNotFound.#ctor(System.Type)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Extensions.CollectionValidatorsExtensions">
+            <summary>
+            Extensions for creating validators for collections.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.Count``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Int32,System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be inclusive between <paramref name="minCount" /> and <paramref name="maxCount" /> values.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="minCount">Minimum count of items in collection (inclusive).</param>
+            <param name="maxCount">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.Count``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Int32,System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be inclusive between <paramref name="minCount" /> and <paramref name="maxCountExpression" /> values.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="minCount">Minimum count of items in collection (inclusive).</param>
+            <param name="maxCountExpression">Maximum of count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.Count``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be inclusive between <paramref name="minCountExpression" /> and <paramref name="maxCount" /> values.
+            </summary>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+            <param name="maxCount">Maximum count of items in collection (inclusive).</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.Count``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be inclusive between <paramref name="minCountExpression" /> and <paramref name="maxCountExpression" /> values.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+            <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.MinCount``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be not less than <paramref name="minCount" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="minCount">Minimum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.MinCount``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be not less than <paramref name="minCountExpression" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.MaxCount``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be not greater than <paramref name="maxCount" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="maxCount">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.MaxCount``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be not greater than <paramref name="maxCountExpression" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.Count``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be exactly <paramref name="count" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="count">Count of items in collection.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.Count``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Linq.Expressions.Expression{System.Func{``0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Count of items in collection should be exactly <paramref name="countExpression" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="countExpression">Count of items in collection.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.EachElement``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Func{``2,System.Boolean},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Condition should be <see langwrod="true" /> for each element.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="validCondition">Condition of validity.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.CollectionElementsAreValid``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            All items in collections should be valid.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CollectionValidatorsExtensions.NotEmpty``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Collection should have at least one item.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        </member>
+        <member name="T:ReactiveValidation.Extensions.CommonValidatorsExtensions">
+            <summary>
+            Extensions for creating common validators for properties.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="from">The lowest allowed value</param>
+            <param name="to">The highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="from">The lowest allowed value</param>
+            <param name="to">The highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
+            <param name="to">The highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
+            <param name="to">The highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="from">The lowest allowed value</param>
+            <param name="toExpression">The expression from which will be calculated highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="from">The lowest allowed value</param>
+            <param name="toExpression">The expression from which will be calculated highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
+            <param name="toExpression">The expression from which will be calculated highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Between``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'inclusive between' on the current rule builder, but only for properties of types that implement IComparable.
+            Validation will fail if the value of the property is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="fromExpression">The expression from which will be calculated lowest allowed value</param>
+            <param name="toExpression">The expression from which will be calculated highest allowed value</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Equal``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'equals' validator on the current rule builder.
+            Validation will fail if the specified value is not equal to the value of the property.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value to compare</param>
+            <param name="comparer">Equality Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Equal``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'equals' validator on the current rule builder.
+            Validation will fail if the specified value is not equal to the value of the property.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value to compare</param>
+            <param name="comparer">Equality Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Equal``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'equals' validator on the current rule builder.
+            Validation will fail if the specified value is not equal to the value of the property.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompareExpression">The expression from which will be calculated value to compare</param>
+            <param name="comparer">Equality Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.GreaterThanOrEqualTo``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'greater than or equal' validator on the current rule builder. 
+            The validation will succeed if the property value is greater than or equal the specified value.
+            The validation will fail if the property value is less than the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.GreaterThanOrEqualTo``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'greater than or equal' validator on the current rule builder. 
+            The validation will succeed if the property value is greater than or equal the specified value.
+            The validation will fail if the property value is less than the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.GreaterThanOrEqualTo``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'greater than or equal' validator on the current rule builder. 
+            The validation will succeed if the property value is greater than or equal the specified value.
+            The validation will fail if the property value is less than the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.GreaterThan``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'greater than' validator on the current rule builder. 
+            The validation will succeed if the property value is greater than the specified value.
+            The validation will fail if the property value is less than or equal the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.GreaterThan``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'greater than' validator on the current rule builder. 
+            The validation will succeed if the property value is greater than the specified value.
+            The validation will fail if the property value is less than or equal the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.GreaterThan``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'greater than or equal' validator on the current rule builder. 
+            The validation will succeed if the property value is greater than the specified value.
+            The validation will fail if the property value is less than or equal the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Length``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Int32,System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="minLength">The minimal length of string</param>
+            <param name="maxLength">The maximum length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Length``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="minLengthExpression">The expression from which will be calculated minimal length of string</param>
+            <param name="maxLength">The maximum length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Length``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Int32,System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="minLength">The minimal length of string</param>
+            <param name="maxLengthExpression">The expression from which will be calculated maximum length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Length``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is outside of the specifed range. The range is inclusive.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="minLengthExpression">The expression from which will be calculated minimal length of string</param>
+            <param name="maxLengthExpression">The expression from which will be calculated maximum length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.MinLength``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is less than the length specified.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="minLength">The minimal length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.MinLength``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is less than the length specified.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="minLengthExpression">The expression from which will be calculated minimal length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.MaxLength``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is larger than the length specified.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="maxLength">The maximum length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.MaxLength``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is larger than the length specified.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="maxLengthExpression">The expression from which will be calculated maximum length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Length``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Int32,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is not equal to the length specified.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="length">The exact length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Length``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a length validator on the current rule builder, but only for string properties.
+            Validation will fail if the length of the string is not equal to the length specified.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="lengthExpression">The expression from which will be calculated exact length of string</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.LessThanOrEqualTo``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'less than or equal' validator on the current rule builder.
+            The validation will succeed if the property value is less than or equal to the specified value.
+            The validation will fail if the property value is greater than the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.LessThanOrEqualTo``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'less than or equal' validator on the current rule builder.
+            The validation will succeed if the property value is less than or equal to the specified value.
+            The validation will fail if the property value is greater than the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.LessThanOrEqualTo``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'less than or equal' validator on the current rule builder.
+            The validation will succeed if the property value is less than or equal to the specified value.
+            The validation will fail if the property value is greater than the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.LessThan``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'less than' validator on the current rule builder.
+            The validation will succeed if the property value is less than the specified value.
+            The validation will fail if the property value is greater than or equal to the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.LessThan``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'less than' validator on the current rule builder.
+            The validation will succeed if the property value is less than the specified value.
+            The validation will fail if the property value is greater than or equal to the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.LessThan``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'less than' validator on the current rule builder.
+            The validation will succeed if the property value is less than the specified value.
+            The validation will fail if the property value is greater than or equal to the specified value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompareExpression">The expression from which will be calculated value being compared</param>
+            <param name="comparer">Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.ModelIsValid``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'model is valid' validator on the current rule builder. Only for IValidatableObject properties
+            The validation will fail if the property value is invalid.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.NotEmpty``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a 'not empty' validator on the current rule builder, but only for strings
+            Validation will fail if the string is null or empty
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.NotEqual``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},``2,System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'not equal' validator on the current rule builder.
+            Validation will fail if the specified value is equal to the value of the property.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value to compare</param>
+            <param name="comparer">Equality Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.NotEqual``3(ReactiveValidation.IRuleBuilderInitial{``1,System.Nullable{``2},``0},``2,System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'not equal' validator on the current rule builder.
+            Validation will fail if the specified value is equal to the value of the property.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompare">The value to compare</param>
+            <param name="comparer">Equality Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.NotEqual``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Linq.Expressions.Expression{System.Func{``1,``2}},System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'not equal' validator on the current rule builder.
+            Validation will fail if the specified value is equal to the value of the property.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="valueToCompareExpression">The expression from which will be calculated value to compare</param>
+            <param name="comparer">Equality Comparer to use</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.NotNull``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'not null' validator on the current rule builder.
+            Validation will fail if the specified value is not null.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Null``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines an 'null' validator on the current rule builder.
+            Validation will fail if the specified value is null.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Matches``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.String,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a regular expression validator on the current rule builder, but only for string properties.
+            The validation will succeed if the property value is null or empty.
+            Validation will fail if the value returned by the lambda does not match the regular expression.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="regexPattern">The regular expression to check the value against.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Matches``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.String,System.Text.RegularExpressions.RegexOptions,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a regular expression validator on the current rule builder, but only for string properties.
+            The validation will succeed if the property value is null or empty.
+            Validation will fail if the value returned by the lambda does not match the regular expression.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="regexPattern">The regular expression to check the value against.</param>
+            <param name="regexOptions">Regex options</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Matches``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.String}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a regular expression validator on the current rule builder, but only for string properties.
+            The validation will succeed if the property value is null or empty or calculated pattern is null or empty.
+            Validation will fail if the value returned by the lambda does not match the regular expression.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="regexPatternExpression">The expression from which will be calculated regular expression to check the value against.</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Matches``2(ReactiveValidation.IRuleBuilderInitial{``1,System.String,``0},System.Linq.Expressions.Expression{System.Func{``1,System.String}},System.Text.RegularExpressions.RegexOptions,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a regular expression validator on the current rule builder, but only for string properties.
+            The validation will succeed if the property value is null or empty or calculated pattern is null or empty.
+            Validation will fail if the value returned by the lambda does not match the regular expression.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="regexPatternExpression">The expression from which will be calculated regular expression to check the value against.</param>
+            <param name="regexOptions">Regex options</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Must``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Func{``2,System.Boolean},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
+            Validation will fail if the specified lambda returns false.
+            Validation will succeed if the specifed lambda returns true.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="predicate">A lambda expression specifying the predicate</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Must``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Func{System.String,``2,System.Boolean},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
+            Validation will fail if the specified lambda returns false.
+            Validation will succeed if the specifed lambda returns true.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="predicate">A lambda expression specifying the predicate</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.CommonValidatorsExtensions.Must``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Func{ReactiveValidation.ValidationContext{``1,``2},System.Boolean},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Defines a predicate validator on the current rule builder using a lambda expression to specify the predicate.
+            Validation will fail if the specified lambda returns false.
+            Validation will succeed if the specifed lambda returns true.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder</typeparam>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <param name="ruleBuilder">The rule builder on which the validator should be defined</param>
+            <param name="predicate">A lambda expression specifying the predicate</param>
+            <param name="validationMessageType">The message type that will be shown if validation failed</param>
+            <returns></returns>
+        </member>
+        <member name="T:ReactiveValidation.Extensions.GuardExtensions">
+            <summary>
+            Allows check conditions and throws exceptions.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.GuardExtensions.GuardNotCallTwice(System.Object,System.String)">
+            <summary>
+            Check and throw exception if value already been assign.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Extensions.SettingsExtensions">
+            <summary>
+            Allow set settings for validatable properties.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.TrackValueChanged``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0})">
+            <summary>
+            Every time when property value will raise <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" /> event
+            all rules which depend from this property will be revalidated.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder.</typeparam>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+            <param name="ruleBuilder">The rule builder which property(-ies) should be tracking.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.TrackErrorsChanged``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0})">
+            <summary>
+            Every time when property value will raise <see cref="E:System.ComponentModel.INotifyDataErrorInfo.ErrorsChanged" /> event
+            all rules which depend from this property will be revalidated.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder.</typeparam>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+            <param name="ruleBuilder">The rule builder which property(-ies) should be tracking.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.SetValueValidator``3(ReactiveValidation.IRuleBuilderInitial{``1,``2,``0},System.Func{``2,ReactiveValidation.IObjectValidator})">
+            <summary>
+            Automatically create and set validator for property value.
+            </summary>
+            <typeparam name="TNext">The type of the next rule builder.</typeparam>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+            <param name="ruleBuilder">The rule builder.</param>
+            <param name="validatorFactoryMethod">Method which allows create object validator.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.TrackCollectionChanged``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2})">
+            <summary>
+            Every time when collection will raise <see cref="E:System.Collections.Specialized.INotifyCollectionChanged.CollectionChanged" /> event
+            all rules which depend from this property will be revalidated.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of collection item.</typeparam>
+            <param name="ruleBuilder">The rule builder.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.TrackCollectionItemChanged``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2})">
+            <summary>
+            Every time when collection item will raise <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" /> event
+            all rules which depend from this property will be revalidated.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of collection item.</typeparam>
+            <param name="ruleBuilder">The rule builder.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.TrackCollectionItemErrorsChanged``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2})">
+            <summary>
+            Every time when collection item will raise <see cref="E:System.ComponentModel.INotifyDataErrorInfo.ErrorsChanged" /> event
+            all rules which depend from this property will be revalidated.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of collection item.</typeparam>
+            <param name="ruleBuilder">The rule builder.</param>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.SettingsExtensions.SetCollectionItemValidator``3(ReactiveValidation.ICollectionRuleBuilderInitial{``0,``1,``2},System.Func{``2,ReactiveValidation.IObjectValidator})">
+            <summary>
+            Automatically create and set validator for collection item.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of collection item.</typeparam>
+            <param name="ruleBuilder">The rule builder.</param>
+            <param name="validatorFactoryMethod"></param>
+        </member>
+        <member name="T:ReactiveValidation.Extensions.ValidationBuilderExtensions">
+            <summary>
+            Extensions for <see cref="T:ReactiveValidation.IValidationBuilder`1" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.ValidationBuilderExtensions.RuleForCollection``2(ReactiveValidation.IValidationBuilder{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.Generic.IEnumerable{``1}}})">
+            <summary>
+            Create validator for property with collection type, i.e. <see cref="T:System.Collections.Generic.IEnumerable`1" /> interface.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of element of collection.</typeparam>
+            <param name="validationBuilder">The validation builder.</param>
+            <param name="collection">Property with collection type.</param>
+            <returns>Validator for property with <see cref="T:System.Collections.Generic.IEnumerable`1" /> type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.Extensions.ValidationBuilderExtensions.RuleForCollection``2(ReactiveValidation.IValidationBuilder{``0},System.Linq.Expressions.Expression{System.Func{``0,System.Collections.ObjectModel.ObservableCollection{``1}}})">
+            <summary>
+            Create validator for property with <see cref="T:System.Collections.ObjectModel.ObservableCollection`1" /> type.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of element of collection.</typeparam>
+            <param name="collection">Property with collection type.</param>
+            <param name="validationBuilder">The validation builder.</param>
+            <returns>Validator for property with <see cref="T:System.Collections.Generic.IEnumerable`1" /> type.</returns>
+        </member>
+        <member name="T:ReactiveValidation.Factory.IValidatorFactory">
+            <summary>
+            Factory which allow create <see cref="T:ReactiveValidation.IObjectValidator" /> for specified object.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Factory.IValidatorFactory.GetValidator(ReactiveValidation.IValidatableObject)">
+            <summary>
+            Create validator for object.
+            </summary>
+            <param name="instance">Instance of validatable object.</param>
+            <returns>Specified object validator.</returns>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="instance" /> is <see langword="null" />.</exception>
+            <exception cref="T:ReactiveValidation.Exceptions.ObjectValidatorBuilderNotFound">If not found validation rule builder for <paramref name="instance"/> or it base classes.</exception>
+        </member>
+        <member name="M:ReactiveValidation.Factory.IValidatorFactory.TryGetValidator``1(ReactiveValidation.IValidatableObject,ReactiveValidation.IObjectValidator@)">
+            <summary>
+            Try create validator for object.
+            </summary>
+            <param name="instance">Instance of validatable object.</param>
+            <param name="objectValidator">Specified object validator.</param>
+            <returns>
+            <see langword="true" /> if exists validation rules for instance.
+            <see langword="false" /> otherwise.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">If <paramref name="instance"/> is <see langword="null" />.</exception>
+        </member>
+        <member name="T:ReactiveValidation.Factory.ValidatorFactory">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Factory.ValidatorFactory.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Factory.ValidatorFactory.Register(ReactiveValidation.IObjectValidatorBuilderCreator)">
+            <summary>
+            Registration of new object validator builder using its creator.
+            </summary>
+            <param name="creator">Creator of object validator builder.</param>
+        </member>
+        <member name="M:ReactiveValidation.Factory.ValidatorFactory.Register(System.Reflection.Assembly,System.Func{System.Type,ReactiveValidation.IObjectValidatorBuilderCreator})">
+            <summary>
+            Registration of new object validator builders using its creators which searching in specified assembly.
+            </summary>
+            <param name="assembly">Assembly, which contains creators.</param>
+            <param name="factoryMethod">
+            Method, which allows get creator by its type.
+            This can be DI method.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.Factory.ValidatorFactory.GetValidator(ReactiveValidation.IValidatableObject)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Factory.ValidatorFactory.TryGetValidator``1(ReactiveValidation.IValidatableObject,ReactiveValidation.IObjectValidator@)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Factory.ValidatorFactory.TryGetValidatorBuilder(System.Type,ReactiveValidation.Internal.IObjectValidatorBuilder@)">
+            <summary>
+            Try get validator builder for specified type.
+            If cannot find - try find validator builder for base classes.
+            </summary>
+            <param name="validatableObjectType">Type of validatable object.</param>
+            <param name="builder">Found builder.</param>
+            <returns>
+            <see langword="true" /> if builder founded for type or base types.
+            <see langword="false" /> otherwise.
+            </returns>
+        </member>
+        <member name="T:ReactiveValidation.Helpers.ReactiveValidationHelper">
+            <summary>
+            Helper methods for reflection.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.ReactiveValidationHelper.GetPropertyInfo(System.Type,System.String)">
+            <summary>
+            Get property info by property name.
+            </summary>
+            <param name="type">Type which contain property.</param>
+            <param name="propertyName">Property name.</param>
+            <returns>Property info or exception if property not exist.</returns>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.ReactiveValidationHelper.GetPropertyInfo(System.Type,System.Linq.Expressions.LambdaExpression)">
+            <summary>
+            Get property info from lambda expression.
+            </summary>
+            <param name="type">Type which contain property.</param>
+            <param name="expression">Lambda expression.</param>
+            <returns>Property info or exception if expression is not a property.</returns>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.ReactiveValidationHelper.GetPropertyName(System.Type,System.Linq.Expressions.LambdaExpression)">
+            <summary>
+            Get property name from lambda expression.
+            </summary>
+            <param name="type">Type which contain property.</param>
+            <param name="expression">Lambda expression.</param>
+            <returns>Property name or null if expression is not a property.</returns>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.ReactiveValidationHelper.GetPropertyType(System.Type,System.String)">
+            <summary>
+            Get property type by property name.
+            </summary>
+            <param name="type">Type which contain property.</param>
+            <param name="propertyName">Property name.</param>
+            <returns>Property type or exception if property not exist.</returns>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.ReactiveValidationHelper.GetPropertyValue``1(System.Object,System.String)">
+            <summary>
+            Get property value from instance by property name.
+            </summary>
+            <typeparam name="TProp">Property type.</typeparam>
+            <param name="instance">Instance.</param>
+            <param name="propertyName">Property name.</param>
+            <returns>Property type or exception if property not exist or cannot cast to type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.ReactiveValidationHelper.GetParameterInfo``2(System.Linq.Expressions.Expression{System.Func{``0,``1}})">
+            <summary>
+            Get additional information about parameter for property validators.
+            </summary>
+            <typeparam name="TObject">Type of instance.</typeparam>
+            <typeparam name="TParam">Type of parameter.</typeparam>
+            <param name="paramExpression">Expression which contain parameter.</param>
+            <returns>Property name (if parameter is property), display name source (if exists) and compiled function.</returns>
+        </member>
+        <member name="T:ReactiveValidation.Helpers.WeakCollection`1">
+            <summary>
+            A collection of weak references to objects.
+            </summary>
+            <typeparam name="T">The type of object to hold weak references to.</typeparam>
+            <remarks>
+            Class was taken from https://github.com/StephenCleary/Mvvm.Core.
+            </remarks>
+        </member>
+        <member name="F:ReactiveValidation.Helpers.WeakCollection`1._list">
+            <summary>
+            The actual collection of strongly-typed weak references.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.WeakCollection`1.GetLiveItems">
+            <summary>
+            Gets a list of live objects from this collection, causing a purge.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.WeakCollection`1.Add(`0)">
+            <summary>
+            Adds a weak reference to an object to the collection. Does not cause a purge.
+            </summary>
+            <param name="item">The object to add a weak reference to.</param>
+        </member>
+        <member name="M:ReactiveValidation.Helpers.WeakCollection`1.Remove(`0)">
+            <summary>
+            Removes a weak reference to an object from the collection. Does not cause a purge.
+            </summary>
+            <param name="item">The object to remove a weak reference to.</param>
+            <returns>True if the object was found and removed; false if the object was not found.</returns>
+        </member>
+        <member name="T:ReactiveValidation.IDisplayNameResolver">
+            <summary>
+            Class for resolving display name of properties by its metadata.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IDisplayNameResolver.GetPropertyNameSource(System.Type,System.Reflection.PropertyInfo,System.Linq.Expressions.LambdaExpression)">
+            <summary>
+            Get string source for property display name.
+            Property can by passed by its metadata (<paramref name="propertyInfo" /> is not null),
+            Or by its expression (<paramref name="expression" /> is not null).
+            </summary>
+            <param name="type">Type of object, which contains property.</param>
+            <param name="propertyInfo">Property metadata.</param>
+            <param name="expression">Expression which call property.</param>
+            <returns>
+            <see langword="null"/> if cannot create display name for current property.
+            Otherwise, string source which contains property display name.
+            </returns>
+        </member>
+        <member name="T:ReactiveValidation.Internal.BaseNotifyPropertyChanged">
+            <summary>
+            Base class for realization of <see cref="T:System.ComponentModel.INotifyPropertyChanged" />.
+            </summary>
+        </member>
+        <member name="E:ReactiveValidation.Internal.BaseNotifyPropertyChanged.PropertyChanged">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Internal.BaseNotifyPropertyChanged.OnPropertyChanged(System.String)">
+            <summary>
+            Raise <see cref="E:ReactiveValidation.Internal.BaseNotifyPropertyChanged.PropertyChanged" /> event.
+            </summary>
+            <param name="propertyName">Name of property.</param>
+        </member>
+        <member name="M:ReactiveValidation.Internal.BaseNotifyPropertyChanged.SetAndRaiseIfChanged``1(``0@,``0,System.String)">
+            <summary>
+            If new value not equal old, set new value and raise <see cref="E:ReactiveValidation.Internal.BaseNotifyPropertyChanged.PropertyChanged" /> event.
+            </summary>
+            <typeparam name="TProp">Type of property.</typeparam>
+            <param name="field">Field of property.</param>
+            <param name="value">New value.</param>
+            <param name="propertyName">Name of property.</param>
+        </member>
+        <member name="T:ReactiveValidation.Internal.DefaultDisplayNameResolver">
+            <summary>
+            Display name resolver, which uses <see cref="T:ReactiveValidation.Attributes.DisplayNameAttribute" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Internal.DefaultDisplayNameResolver.GetPropertyNameSource(System.Type,System.Reflection.PropertyInfo,System.Linq.Expressions.LambdaExpression)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Internal.IObjectValidatorBuilder">
+            <summary>
+            Builder which allow create validator for object.
+            </summary>
+            <remarks>
+            All builders can create validators only for one type.
+            This interface uses only just because of problems with generic class.
+            </remarks>
+        </member>
+        <member name="P:ReactiveValidation.Internal.IObjectValidatorBuilder.SupportedType">
+            <summary>
+            Type of instance for which can create validator.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Internal.IObjectValidatorBuilder.Build(ReactiveValidation.IValidatableObject)">
+            <summary>
+            Create validator for specified instance.
+            </summary>
+            <param name="instance">Validatable instance.</param>
+            <returns>Validator of specified instance.</returns>
+        </member>
+        <member name="T:ReactiveValidation.Internal.ObjectValidatorBuilder`1">
+            <inheritdoc cref="T:ReactiveValidation.Internal.IObjectValidatorBuilder" />
+        </member>
+        <member name="M:ReactiveValidation.Internal.ObjectValidatorBuilder`1.#ctor(System.Collections.Generic.IReadOnlyList{ReactiveValidation.IRuleBuilder{`0}})">
+            <summary>
+            Create validation builder with specified adapters.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.Internal.ObjectValidatorBuilder`1.SupportedType">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Internal.ObjectValidatorBuilder`1.Build(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Internal.ObjectValidatorBuilder`1.Build(ReactiveValidation.IValidatableObject)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.IObjectValidator">
+            <summary>
+            Class which store all validation information about object.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.IObjectValidator.IsValid">
+            <summary>
+            <see lngword="true" /> if doesn't exists any message with <see cref="F:ReactiveValidation.ValidationMessageType.Error" /> or <see cref="F:ReactiveValidation.ValidationMessageType.SimpleError" /> type.
+            <see langword="false" /> otherwise.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.IObjectValidator.HasWarnings">
+            <summary>
+            <see lngword="true" /> if exists any message with <see cref="F:ReactiveValidation.ValidationMessageType.Warning" /> or <see cref="F:ReactiveValidation.ValidationMessageType.SimpleWarning" /> type.
+            <see lngword="false" /> otherwise.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.IObjectValidator.ValidationMessages">
+            <summary>
+            List of all validation messages;
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IObjectValidator.GetMessages(System.String)">
+            <summary>
+            Get all validation messages for property.
+            </summary>
+            <param name="propertyName">Name of property.</param>
+        </member>
+        <member name="M:ReactiveValidation.IObjectValidator.Revalidate">
+            <summary>
+            Revalidate all properties.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.IObjectValidatorBuilder`1">
+            <summary>
+            Builder which allow create validator for object.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.IObjectValidatorBuilder`1.Build(`0)">
+            <summary>
+            Create validator for specified instance.
+            </summary>
+            <param name="instance">Validatable instance.</param>
+            <returns>Validator of specified instance.</returns>
+        </member>
+        <member name="T:ReactiveValidation.IObjectValidatorBuilderCreator">
+            <summary>
+            Allows get prepared builder for object validation creating.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IObjectValidatorBuilderCreator.Create">
+            <summary>
+            Create prepared builder.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.IValidatableObject">
+            <summary>
+            Represents base interface for validatable object.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.IValidatableObject.Validator">
+            <summary>
+            Validator of current object.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IValidatableObject.OnPropertyMessagesChanged(System.String)">
+            <summary>
+            Raise event <see cref="E:System.ComponentModel.INotifyDataErrorInfo.ErrorsChanged" />.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.IValidationBuilder`1">
+            <summary>
+            Builder which allow create validation rules for properties.
+            </summary>
+            <typeparam name="TObject">Validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.IValidationBuilder`1.RuleFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Create validator for single strongly typed property.
+            </summary>
+            <typeparam name="TProp">The type of property.</typeparam>
+            <param name="property">Validatable property.</param>
+            <returns>Single property validator for <typeparamref name="TProp" /> type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.IValidationBuilder`1.RuleFor(System.String)">
+            <summary>
+            Create validator for single property with object type by its name.
+            </summary>
+            <param name="propertyName">Name of validatable property.</param>
+            <returns>Single property validator for <see cref="T:System.Object"/> type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.IValidationBuilder`1.RuleFor(System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Create validator for collection of properties.
+            </summary>
+            <param name="properties">Validatable properties.</param>
+            <returns>Properties collection validator.</returns>
+        </member>
+        <member name="M:ReactiveValidation.IValidationBuilder`1.RuleFor(System.String[])">
+            <summary>
+            Create validator for collection of properties names.
+            </summary>
+            <param name="propertiesNames">Names of validatable properties.</param>
+            <returns>Properties collection validator.</returns>
+        </member>
+        <member name="M:ReactiveValidation.IValidationBuilder`1.RuleForCollection``2(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Created validator for strongly typed collection.
+            </summary>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TProp">The type of element of collection.</typeparam>
+            <param name="collection">Property with collection type.</param>
+            <returns>Validator for property with <typeparamref name="TCollection"/> type.</returns>
+        </member>
+        <member name="T:ReactiveValidation.CultureChangedEventArgs">
+            <summary>
+            Arguments of culture changed event.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.CultureChangedEventArgs.#ctor(System.Globalization.CultureInfo)">
+            <summary>
+            Create culture changed event arguments.
+            </summary>
+            <param name="cultureInfo">New culture of validation.</param>
+        </member>
+        <member name="P:ReactiveValidation.CultureChangedEventArgs.CultureInfo">
+            <summary>
+            New culture of validation.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ValidationContext`2">
+            <summary>
+            Validation context.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.ValidationContext`2.#ctor(`0,System.String,ReactiveValidation.IStringSource,`1)">
+            <summary>
+            Create new instance of validation context.
+            </summary>
+            <param name="validatableObject">Instance of validatable object.</param>
+            <param name="propertyName">Name of validatable property.</param>
+            <param name="displayPropertySource">Source of display name of validatable property.</param>
+            <param name="propertyValue">Value of validatable property.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationContext`2.#ctor(ReactiveValidation.ValidationContext{`0,`1})">
+            <summary>
+            Create new instance of validation context.
+            </summary>
+            <param name="parentContext">Parent validation context.</param>
+        </member>
+        <member name="P:ReactiveValidation.ValidationContext`2.ValidatableObject">
+            <summary>
+            Instance of validatable object.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationContext`2.PropertyName">
+            <summary>
+            Name of validatable property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationContext`2.DisplayPropertySource">
+            <summary>
+            Source of display name of validatable property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationContext`2.PropertyValue">
+            <summary>
+            Value of validatable property.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationContext`2.GetParamValue``1(ReactiveValidation.ValidatorParameter{`0,``0})">
+            <summary>
+            Get value of validator parameter.
+            </summary>
+            <typeparam name="TParam">Type of parameter.</typeparam>
+            <param name="validatorParameter">Validator parameter.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationContext`2.RegisterMessageArgument``1(System.String,ReactiveValidation.ValidatorParameter{`0,``0},``0)">
+            <summary>
+            Register parameter with placeholder.
+            </summary>
+            <typeparam name="TParam">Type of parameter.</typeparam>
+            <param name="placeholder">Placeholder in base source.</param>
+            <param name="validatorParameter">Validator parameter.</param>
+            <param name="paramValue">Validator value.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationContext`2.GetMessageSource(ReactiveValidation.IStringSource)">
+            <summary>
+            Get source with arguments.
+            </summary>
+            <param name="stringSource">Base message source.</param>
+        </member>
+        <member name="T:ReactiveValidation.ValidationMessage">
+            <summary>
+            Message of validation result.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.ValidationMessage.Empty">
+            <summary>
+            Empty validation message which doesn't display or affect on <see cref="P:ReactiveValidation.IObjectValidator.IsValid" /> property.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.ValidationMessage._stringSource">
+            <summary>
+            Source which allow dynamic get messages.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.#ctor(System.String,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Create new validation message with static message.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.#ctor(ReactiveValidation.IStringSource,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Create new validation message with localized message.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationMessage.Message">
+            <summary>
+            Message.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationMessage.ValidationMessageType">
+            <summary>
+            Validation message type.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.UpdateMessage">
+            <summary>
+            Update message.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessage.Equals(ReactiveValidation.ValidationMessage)">
+            <summary>
+            Check if two validation messages are equal.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ValidatorParameter`2">
+            <summary>
+            Cached information about validator parameter.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TParam">Type of parameter.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.ValidatorParameter`2.#ctor(System.String,ReactiveValidation.IStringSource,System.Func{`0,`1})">
+            <summary>
+            Create new instance of validator parameter.
+            </summary>
+            <param name="name">Name of parameter.</param>
+            <param name="displayNameSource">Source of display name of parameter.</param>
+            <param name="funcValue">Function for getting value.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidatorParameter`2.#ctor(System.Linq.Expressions.Expression{System.Func{`0,`1}})">
+            <summary>
+            Create new instance of validator parameter.
+            </summary>
+            <param name="paramExpression">Parameter expression.</param>
+        </member>
+        <member name="P:ReactiveValidation.ValidatorParameter`2.Name">
+            <summary>
+            Name of parameter.
+            <see langword="null" /> if parameter is constant value.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidatorParameter`2.DisplayNameSource">
+            <summary>
+            Source of display name of parameter.
+            <see langword="null" /> if parameter is constant value.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidatorParameter`2.FuncValue">
+            <summary>
+            Function for getting value.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ObjectObserver`1">
+            <summary>
+            Class which track changing properties and raise events for <see cref="T:ReactiveValidation.ObjectValidator`1" />.
+            </summary>
+            <typeparam name="TObject">Type of observable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.#ctor(`0,System.Collections.Generic.Dictionary{System.String,ReactiveValidation.ObservingPropertySettings})">
+            <summary>
+            Create new object observer.
+            </summary>
+            <param name="instance">Instance of observing object.</param>
+            <param name="settings">Settings of properties.</param>
+        </member>
+        <member name="E:ReactiveValidation.ObjectObserver`1.PropertyChanged">
+            <summary>
+            Event of changing property of observable object.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.SubscribePropertyValue(ReactiveValidation.ObservingProperty)">
+            <summary>
+            Subscribe on new value of property.
+            </summary>
+            <param name="observingProperty">Info of observing property.</param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.UnsubscribePropertyValue(ReactiveValidation.ObservingProperty)">
+            <summary>
+            Unsubscribe from previous value of property.
+            </summary>
+            <param name="observingProperty">Info of observing property.</param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.InstanceOnPropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            Handle instance <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" /> event.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.OnPropertyChanged(System.String)">
+            <summary>
+            Handle <see cref="T:System.ComponentModel.INotifyPropertyChanged" /> of item.
+            </summary>
+            <param name="propertyName">Name of property value or collection.</param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.OnErrorsChanged(System.String)">
+            <summary>
+            Handle changed errors of value.
+            </summary>
+            <param name="propertyName">Name of property value or collection.</param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.OnCollectionChanged(System.String,System.Collections.Specialized.NotifyCollectionChangedEventArgs)">
+            <summary>
+            Handle event of changing collection items.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectObserver`1.Dispose(System.Boolean)">
+            <summary>
+            Unsubscribe from all events.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ObjectValidator`1">
+            <inheritdoc cref="T:ReactiveValidation.IObjectValidator" />
+        </member>
+        <member name="F:ReactiveValidation.ObjectValidator`1._cultureChangedEventHandler">
+            <remarks>
+            This is very important thing. <see cref="E:ReactiveValidation.LanguageManager.CultureChanged" /> uses a weak reference to delegates.
+            If there is no reference to delegate, target will be collected by GC.
+            ObjectValidator keep this reference until it will be collected.
+            After this WeakReference will be collected too.
+            </remarks>
+            ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.#ctor(`0,System.Collections.Generic.IReadOnlyList{ReactiveValidation.IRuleBuilder{`0}})">
+            <summary>
+            Create new instance of object validator.
+            </summary>
+            <param name="instance">Instance of validatable object.</param>
+            <param name="ruleBuilders">List of rules builders.</param>
+        </member>
+        <member name="P:ReactiveValidation.ObjectValidator`1.Instance">
+            <summary>
+            Instance of validatable object.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObjectValidator`1.IsValid">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.ObjectValidator`1.HasWarnings">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.ObjectValidator`1.ValidationMessages">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.GetMessages(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.Revalidate">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.Dispose(System.Boolean)">
+            <summary>
+            Dispose object validator.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.OnPropertyChanged(System.Object,System.ComponentModel.PropertyChangedEventArgs)">
+            <summary>
+            Handle property changed event.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.RevalidateInternal(System.String)">
+            <summary>
+            Revalidate properties.
+            </summary>
+            <param name="propertyName">
+            Name of changed property.
+            <see langword="null" /> if all properties should be revalidated.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.ValidateProperty(ReactiveValidation.Validators.IPropertyValidator{`0},ReactiveValidation.Validators.ValidationContextFactory{`0})">
+            <summary>
+            Validate property by specified validator.
+            </summary>
+            <param name="propertyValidator">Property validator.</param>
+            <param name="contextFactory">Context factory.</param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.OnCultureChanged(System.Object,ReactiveValidation.CultureChangedEventArgs)">
+            <summary>
+            Handle application culture changed event.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.GetDisplayNames">
+            <summary>
+            Create list of display name for all properties of instance.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.GetValidatableProperties(System.Collections.Generic.IReadOnlyList{ReactiveValidation.IRuleBuilder{`0}})">
+            <summary>
+            Get information of validatable properties.
+            </summary>
+            <param name="ruleBuilders">Rule builders.</param>
+        </member>
+        <member name="M:ReactiveValidation.ObjectValidator`1.GetPropertySettings(System.Collections.Generic.IReadOnlyList{ReactiveValidation.IRuleBuilder{`0}})">
+            <summary>
+            Get information of validatable properties settings.
+            </summary>
+            <param name="ruleBuilders">Rule builders.</param>
+        </member>
+        <member name="T:ReactiveValidation.ObservingProperty">
+            <summary>
+            Information about observing property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingProperty.PropertyName">
+            <summary>
+            Name of property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingProperty.PreviousValue">
+            <summary>
+            Previous value of property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingProperty.Settings">
+            <summary>
+            Observing property settings.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingProperty.ValueChangedAction">
+            <summary>
+            Action for tracking property or collection items.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingProperty.ErrorsChangedAction">
+            <summary>
+            Action for tracking property or collection items errors.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingProperty.CollectionChangedAction">
+            <summary>
+            Action for tracking collection.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ObservingPropertySettings">
+            <summary>
+            Settings of observing property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.TrackValueChanged">
+            <summary>
+            <see langword="true" />, if property inherit <see cref="T:System.ComponentModel.INotifyPropertyChanged" /> and should be revalidated on <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" /> event.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.TrackValueErrorsChanged">
+            <summary>
+            <see langword="true" />, if property inherit <see cref="T:ReactiveValidation.IValidatableObject" /> and should be revalidated on <see cref="E:System.ComponentModel.INotifyDataErrorInfo.ErrorsChanged" /> event.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.TrackCollectionChanged">
+            <summary>
+            <see langword="true" />, if property inherit <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" /> and should be revalidated on <see cref="E:System.Collections.Specialized.INotifyCollectionChanged.CollectionChanged" /> event.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.TrackCollectionItemChanged">
+            <summary>
+            <see langword="true" />, if property inherit <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" />, its items inherit <see cref="T:System.ComponentModel.INotifyPropertyChanged" />
+            and property should be revalidated on item's <see cref="E:System.ComponentModel.INotifyPropertyChanged.PropertyChanged" /> event.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.TrackCollectionItemErrorsChanged">
+            <summary>
+            <see langword="true" />, if property inherit <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" />, its items inherit <see cref="T:ReactiveValidation.IValidatableObject" />
+            and property should be revalidated on item's <see cref="E:System.ComponentModel.INotifyDataErrorInfo.ErrorsChanged" /> event.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.PropertyValueFactoryMethod">
+            <summary>
+            If property inherit <see cref="T:ReactiveValidation.IValidatableObject" /> - this method allows create <see cref="T:ReactiveValidation.IObjectValidator" /> for property value.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.CollectionItemFactoryMethod">
+            <summary>
+            If property is collection and its items inherit <see cref="T:ReactiveValidation.IValidatableObject" /> - this method allows create <see cref="T:ReactiveValidation.IObjectValidator" /> for collection items.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ObservingPropertySettings.IsDefaultSettings">
+            <summary>
+            <see langword="false" /> if no settings are used.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ValidationOptions">
+            <summary>
+            Options for validation.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationOptions.LanguageManager">
+            <summary>
+            Manager, which allows use different localization for validation messages.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationOptions.DisplayNameResolver">
+            <summary>
+            Class for resolving display name of properties by its metadata.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationOptions.ValidatorFactory">
+            <summary>
+            Factory for creating validator for object.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationOptions.PropertyObservers">
+            <summary>
+            Specials objects for creating observers for properties.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidationOptions.CollectionObservers">
+            <summary>
+            Specials objects for creating observers for collections.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptions.Setup">
+            <summary>
+            Setup validation options.
+            </summary>
+            <exception cref="T:ReactiveValidation.Exceptions.MethodAlreadyCalledException">Throws if options already was configured.</exception>
+        </member>
+        <member name="T:ReactiveValidation.ValidationOptionsBuilder">
+            <summary>
+            Class which allows setup validation options.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.UseStringProvider(ReactiveValidation.IStringProvider)">
+            <summary>
+            Set string provider for text and localized strings.
+            It will use by <see cref="T:ReactiveValidation.Attributes.DisplayNameAttribute" /> and <see cref="T:ReactiveValidation.LanguageStringSource" />.
+            </summary>
+            <param name="stringProvider">String provider.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.TrackCultureChanged">
+            <summary>
+            Allows update all messages immediately when the culture changed.
+            Warning! Call to only if you need to change culture runtime.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.UseCustomDisplayNameResolver(ReactiveValidation.IDisplayNameResolver)">
+            <summary>
+            Use custom class for resolving display name of properties.
+            </summary>
+            <param name="displayNameResolver">Custom display name resolver.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.UseCustomValidatorFactory(ReactiveValidation.Factory.IValidatorFactory)">
+            <summary>
+            Use custom factory for creating object validators.
+            </summary>
+            <param name="validatorFactory">Custom validator factory.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.RegisterForValidatorFactory(ReactiveValidation.IObjectValidatorBuilderCreator)">
+            <summary>
+            Registration of new object validator builder using its creator.
+            </summary>
+            <param name="creator">Creator of object validator builder.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.RegisterForValidatorFactory(System.Collections.Generic.IEnumerable{ReactiveValidation.IObjectValidatorBuilderCreator})">
+            <summary>
+            Registration of new object validator builders using its creators.
+            </summary>
+            <param name="creators">Creators of object validator builders.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.RegisterForValidatorFactory(System.Reflection.Assembly,System.Func{System.Type,ReactiveValidation.IObjectValidatorBuilderCreator})">
+            <summary>
+            Registration of new object validator builders using its creators which searching in specified assembly.
+            </summary>
+            <param name="assembly">Assembly, which contains creators.</param>
+            <param name="factoryMethod">
+            Method, which allows get creator by its type.
+            This can be DI method.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.RegisterForValidatorFactory(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Func{System.Type,ReactiveValidation.IObjectValidatorBuilderCreator})">
+            <summary>
+            Registration of new object validator builders using its creators which searching in specified assembly.
+            </summary>
+            <param name="assemblies">Assemblies, which contains creators.</param>
+            <param name="factoryMethod">
+            Method, which allows get creator by its type.
+            This can be DI method.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.AddPropertyObserver(System.Func{System.Type,System.Type,System.Boolean},System.Func{System.Object,System.Object,System.Action,System.IDisposable})">
+            <summary>
+            Add auto creation observers which can allows revalidate property by event.
+            </summary>
+            <param name="canObserve">
+            Function which allows check if can create observer for property.
+            First parameter - type of validatable object.
+            Second parameter - type of property.
+            Returns <see langword="true" /> if observer can be created.
+            </param>
+            <param name="createObserver">
+            Function which allow create observer for property value.
+            First parameter - value of validatable object.
+            Second parameter - value of property.
+            Third parameter - action which should be executed when event fired.
+            Returns object which allows unsubscribe.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.AddCollectionObserver(System.Func{System.Type,System.Type,System.Boolean},System.Func{System.Object,System.Object,System.Action,System.IDisposable})">
+            <summary>
+            Add auto creation observers which can allows revalidate collection by event.
+            </summary>
+            <param name="canObserve">
+            Function which allows check if can create observer for collection.
+            First parameter - type of validatable object.
+            Second parameter - type of collection.
+            Returns <see langword="true" /> if observer can be created.
+            </param>
+            <param name="createObserver">
+            Function which allow create observer for collection.
+            First parameter - value of validatable object.
+            Second parameter - value of collection.
+            Third parameter - action which should be executed when event fired.
+            Returns object which allows unsubscribe.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationOptionsBuilder.GetDefaultValidatorFactory">
+            <summary>
+            Get or create default validator factory.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.DisplayNamePropertySource">
+            <summary>
+            String source which returns display name of property.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.DisplayNamePropertySource.#ctor(ReactiveValidation.Attributes.DisplayNameAttribute)">
+            <summary>
+            Create new instance of display name property source.
+            </summary>
+            <param name="displayNameAttribute">Attribute for display name.</param>
+        </member>
+        <member name="M:ReactiveValidation.DisplayNamePropertySource.GetString">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.DisplayNamePropertySource.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.DisplayNamePropertySource.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.DisplayNamePropertySource.Equals(ReactiveValidation.DisplayNamePropertySource)">
+            <summary>
+            Check if two sources are equal.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ExceptionSource">
+            <summary>
+            String source which return message of exception.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ExceptionSource.#ctor(System.Exception)">
+            <summary>
+            Create new instance of exception source.
+            </summary>
+            <param name="exception">Exception.</param>
+        </member>
+        <member name="M:ReactiveValidation.ExceptionSource.GetString">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ExceptionSource.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ExceptionSource.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ExceptionSource.Equals(ReactiveValidation.ExceptionSource)">
+            <summary>
+            Check if two sources are equal.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ILanguage.Name">
+            <summary>
+            Name of language.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ILanguage.GetTranslation(System.String)">
+            <summary>
+            Get localized string of by its key.
+            </summary>
+            <param name="key">The key of message.</param>
+            <returns>
+            Localized string if resource contains key.
+            <see langword="null" /> otherwise.
+            </returns>
+        </member>
+        <member name="T:ReactiveValidation.IStringProvider">
+            <summary>
+            Provider of messages, localization strings and other.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IStringProvider.GetString(System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Get string by its key and culture.
+            </summary>
+            <param name="key">Key of string.</param>
+            <param name="culture">Culture for string.</param>
+            <returns>Found string.</returns>
+        </member>
+        <member name="M:ReactiveValidation.IStringProvider.GetString(System.String,System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Get string by its resource, key and culture.
+            </summary>
+            <param name="resource">Name of resource.</param>
+            <param name="key">Key of string.</param>
+            <param name="culture">Culture for string.</param>
+            <returns>Found string.</returns>
+        </member>
+        <member name="T:ReactiveValidation.IStringSource">
+            <summary>
+            Special class which allows get string for a specific case.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IStringSource.GetString">
+            <summary>
+            Get string.
+            </summary>
+            <returns>String for current case.</returns>
+        </member>
+        <member name="T:ReactiveValidation.LanguageManager">
+            <summary>
+            Manager, which allows use different localization for validation messages.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.LanguageManager.DEFAULT_CULTURE_CODE">
+            <summary>
+            Culture code which using when message in current culture not found.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.LanguageManager._defaultCulture">
+            <summary>
+            Default culture.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.LanguageManager._languages">
+            <summary>
+            List of supported languages by default.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.LanguageManager._cultureChangedCollection">
+            <summary>
+            Weak collection of <see cref="E:ReactiveValidation.LanguageManager.CultureChanged" /> event subscribers.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.LanguageManager._cultureEventLock">
+            <summary>
+            Object for <see cref="F:ReactiveValidation.LanguageManager._cultureChangedCollection" /> synchronization.
+            </summary>
+        </member>
+        <member name="F:ReactiveValidation.LanguageManager._culture">
+            <summary>
+            Current culture.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.LanguageManager.#ctor">
+            <summary>
+            Create new LanguageManager.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.LanguageManager.Culture">
+            <summary>
+            Current culture for validation messages.
+            If not set - using <see cref="P:System.Globalization.CultureInfo.CurrentUICulture" /> by default.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.LanguageManager.StringProvider">
+            <summary>
+            String provider, which keeping strings (including for localization).
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.LanguageManager.TrackCultureChanged">
+            <summary>
+            If <see langword="true"/> all validation messages will change its message on <see cref="E:ReactiveValidation.LanguageManager.CultureChanged" /> event.
+            </summary>
+        </member>
+        <member name="E:ReactiveValidation.LanguageManager.CultureChanged">
+            <summary>
+            Event, which fires when culture changed in application.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.LanguageManager.GetString(System.String,System.String)">
+            <summary>
+            Get localized string by its key.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.LanguageManager.GetLocalizedString(System.String,System.String,System.String,System.Globalization.CultureInfo)">
+            <summary>
+            Get localized string from resource manager.
+            </summary>
+            <param name="resource">Name of resource.</param>
+            <param name="key">Key of string.</param>
+            <param name="languageCode">Code of language for static resources.</param>
+            <param name="culture">Culture for resource manager.</param>
+        </member>
+        <member name="M:ReactiveValidation.LanguageManager.OnCultureChanged">
+            <summary>
+            Raise <see cref="E:ReactiveValidation.LanguageManager.CultureChanged" /> event.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.LanguageStringSource">
+            <summary>
+            Source which return localized message by its key and resource.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.LanguageStringSource.#ctor(System.String)">
+            <summary>
+            Create new language source by its key.
+            </summary>
+            <param name="key">Key of string.</param>
+        </member>
+        <member name="M:ReactiveValidation.LanguageStringSource.#ctor(System.String,System.String)">
+            <summary>
+            Create new language source by its resource and key.
+            </summary>
+            <param name="resource">Name of resource.</param>
+            <param name="key">Key of string.</param>
+        </member>
+        <member name="M:ReactiveValidation.LanguageStringSource.GetString">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.LanguageStringSource.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.LanguageStringSource.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.LanguageStringSource.Equals(ReactiveValidation.LanguageStringSource)">
+            <summary>
+            Check if two sources are equal.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Languages.EnglishLanguage">
+            <summary>
+            English language.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Languages.EnglishLanguage.#ctor">
+            <summary>
+            Create new English language resource.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Languages.GermanLanguage">
+            <summary>
+            German language.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Languages.GermanLanguage.#ctor">
+            <summary>
+            Create new German language resource.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Languages.RussianLanguage">
+            <summary>
+            Russian language.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Languages.RussianLanguage.#ctor">
+            <summary>
+            Create new Russian language resource.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ResourceStringProvider">
+            <summary>
+            String provider which get strings from <see cref="T:System.Resources.ResourceManager" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ResourceStringProvider.#ctor(System.Resources.ResourceManager)">
+            <summary>
+            Create new instance of resource string provider with one main resource manager.
+            </summary>
+            <param name="mainResourceManager">Main resource manager.</param>
+        </member>
+        <member name="M:ReactiveValidation.ResourceStringProvider.#ctor(System.Resources.ResourceManager,System.Collections.Generic.IDictionary{System.String,System.Resources.ResourceManager})">
+            <summary>
+            Create new instance of resource string provider with one main resource manager and many secondaries managers.
+            </summary>
+            <param name="mainResourceManager">Main resource manager.</param>
+            <param name="secondaryResourceManagers">
+            Secondary resource managers.
+            Key is name of resource manager.
+            Value is resource manager.
+            </param>
+        </member>
+        <member name="M:ReactiveValidation.ResourceStringProvider.GetString(System.String,System.Globalization.CultureInfo)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ResourceStringProvider.GetString(System.String,System.String,System.Globalization.CultureInfo)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.StaticLanguage">
+            <summary>
+            Resource which store localized strings for language.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.StaticLanguage.#ctor(System.String)">
+            <summary>
+            Create new static resource of language.
+            </summary>
+            <param name="name">The name of language.</param>
+        </member>
+        <member name="P:ReactiveValidation.StaticLanguage.Name">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.StaticLanguage.GetTranslation(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.StaticLanguage.AddTranslations(System.String,System.String)">
+            <summary>
+            Add localized string by its key.
+            </summary>
+            <param name="key">Key of message.</param>
+            <param name="message">Localized message.</param>
+        </member>
+        <member name="T:ReactiveValidation.StaticStringSource">
+            <summary>
+            String source which always return one string.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.StaticStringSource.#ctor(System.String)">
+            <summary>
+            Create new instance of static string source.
+            </summary>
+            <param name="message">Message.</param>
+        </member>
+        <member name="M:ReactiveValidation.StaticStringSource.GetString">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.StaticStringSource.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.StaticStringSource.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.StaticStringSource.Equals(ReactiveValidation.StaticStringSource)">
+            <summary>
+            Check if two sources are equal.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ValidationMessageStringSource">
+            <summary>
+            String source for validation message.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessageStringSource.#ctor(ReactiveValidation.IStringSource,System.Collections.Generic.Dictionary{System.String,ReactiveValidation.IStringSource})">
+            <summary>
+            Create new instance of validation message source.
+            </summary>
+            <param name="patternStringSource">Source of message patter.</param>
+            <param name="arguments">Sources of message arguments.</param>
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessageStringSource.GetString">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessageStringSource.Equals(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessageStringSource.GetHashCode">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationMessageStringSource.Equals(ReactiveValidation.ValidationMessageStringSource)">
+            <summary>
+            Check if two sources are equal.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.IRuleBuilder`1">
+            <summary>
+            Core interface of validation.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+        </member>
+        <member name="P:ReactiveValidation.IRuleBuilder`1.ValidatableProperties">
+            <summary>
+            List of properties names which validating by this rules.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.IRuleBuilder`1.ObservingPropertiesSettings">
+            <summary>
+            Settings of validatable properties.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`1.GetValidators">
+            <summary>
+            Get all registered validators.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.IRuleBuilder`3">
+            <summary>
+            Core interface of validation.
+            Allows use all of accessible validation methods and move to <see cref="T:ReactiveValidation.IRuleBuilderOption`2"/> interface.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+            <typeparam name="TBuilder">Rule builder type.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.When(System.Func{System.Boolean})">
+            <summary>
+            Last validator will check only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.When(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            Last validator will check only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.When``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{``0,System.Boolean})">
+            <summary>
+            Last validator will check only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.When``2(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Func{``0,``1,System.Boolean})">
+            <summary>
+            Last validator will check only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.When``3(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{`0,``2}},System.Func{``0,``1,``2,System.Boolean})">
+            <summary>
+            Last validator will check only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.WithMessage(System.String)">
+            <summary>
+            Allow replace default last validator's message with static text.
+            </summary>
+            <param name="message">Validation message text</param>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.WithLocalizedMessage(System.String)">
+            <summary>
+            Allow replace default last validator's message with localized text.
+            </summary>
+            <param name="messageKey">Message key in default resource.</param>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilder`3.WithLocalizedMessage(System.String,System.String)">
+            <summary>
+            Allow replace default last validator's message with localized text.
+            </summary>
+            <param name="resource">Name of resource.</param>
+            <param name="messageKey">Message key in resource</param>
+        </member>
+        <member name="T:ReactiveValidation.ISinglePropertyRuleBuilder`2">
+            <summary>
+            Core interface of validation single property per validator.
+            Allows use some specific validation methods (for example, validate by regex or comparison operators).
+            Allows use all of accessible validation methods and move to <see cref="T:ReactiveValidation.IRuleBuilderOption`2"/> interface.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.IPropertiesRuleBuilder`1">
+            <summary>
+            Core interface of validation collection properties per validator.
+            Allows use only the simplest methods (for example, required).
+            Allows use all of accessible validation methods and move to <see cref="T:ReactiveValidation.IRuleBuilderOption`2"/> interface.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.ICollectionRuleBuilder`3">
+            <summary>
+            Core interface of validation of collection type property.
+            Allows use some specific validation methods for each item.
+            Has additional logic for collection collection types(for examle,  <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" />).
+            Allows use all of accessible validation methods and move to <see cref="T:ReactiveValidation.IRuleBuilderOption`2" /> interface.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.IRuleBuilderInitial`3">
+            <summary>
+            Base interface for the first step of validation.
+            It is necessary for it to be impossible to immediately call methods
+            from <see cref="T:ReactiveValidation.IRuleBuilder`3" /> or <see cref="T:ReactiveValidation.IRuleBuilderOption`2" />
+            interfaces.
+            </summary>
+            <typeparam name="TObject">The type of validatable object</typeparam>
+            <typeparam name="TProp">The type of validatable property</typeparam>
+            <typeparam name="TBuilder">The next type from which can move to condition or message step.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilderInitial`3.SetValidator(ReactiveValidation.Validators.IPropertyValidator{`0})">
+            <summary>
+            Set validator which will check property value.
+            </summary>
+            <param name="validator">Validator.</param>
+        </member>
+        <member name="T:ReactiveValidation.ISinglePropertyRuleBuilderInitial`2">
+            <summary>
+            Interface for the first step of validation single property per validator.
+            Allows use some specific validation methods (for example, validate by regex or comparison operators)
+            Interface for first step is necessary for it to be impossible to immediately call methods
+            from <see cref="T:ReactiveValidation.IRuleBuilder`3" /> or <see cref="T:ReactiveValidation.IRuleBuilderOption`2" />
+            interfaces.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.IPropertiesRuleBuilderInitial`1">
+            <summary>
+            Interface for the first step of validation collection properties per validator.
+            Allows use only the simplest methods (for example, required).
+            Interface for first step is necessary for it to be impossible to immediately call methods
+            from <see cref="T:ReactiveValidation.IRuleBuilder`3" /> or <see cref="T:ReactiveValidation.IRuleBuilderOption`2" />
+            interfaces.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.ICollectionRuleBuilderInitial`3">
+            <summary>
+            Interface for the first step of validation of collection type property.
+            Allows use some specific validation methods (for example, NotEmpty or check condition for each element).
+            Has additional logic for collection collection types(for example,  <see cref="T:System.Collections.Specialized.INotifyCollectionChanged" />)
+            Interface for first step is necessary for it to be impossible to immediately call methods
+            from <see cref="T:ReactiveValidation.IRuleBuilder`3" /> or <see cref="T:ReactiveValidation.IRuleBuilderOption`2" />
+            interfaces.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.IRuleBuilderOption`2">
+            <summary>
+            Interface for options of validation builder.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilderOption`2.AllWhen(System.Func{System.Boolean})">
+            <summary>
+            The validation of the rule will occur only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilderOption`2.AllWhen(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <summary>
+            The validation of the rule will occur only if the property value is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilderOption`2.AllWhen``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{``0,System.Boolean})">
+            <summary>
+            The validation of the rule will occur only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilderOption`2.AllWhen``2(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Func{``0,``1,System.Boolean})">
+            <summary>
+            The validation of the rule will occur only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.IRuleBuilderOption`2.AllWhen``3(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{`0,``2}},System.Func{``0,``1,``2,System.Boolean})">
+            <summary>
+            The validation of the rule will occur only if the condition is <see langword="true" />.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.BaseRuleBuilder`3">
+            <summary>
+            Base class for creating validation rules for properties.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable properties.</typeparam>
+            <typeparam name="TBuilder">Type of main rule builder.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.#ctor(System.Collections.Generic.IReadOnlyList{System.String})">
+            <summary>
+            Create new base rule builder instance.
+            </summary>
+            <param name="validatableProperties">List of properties names which validating by this rules.</param>
+        </member>
+        <member name="P:ReactiveValidation.BaseRuleBuilder`3.ValidatableProperties">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.BaseRuleBuilder`3.ObservingPropertiesSettings">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.GetValidators">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.SetValidator(ReactiveValidation.Validators.IPropertyValidator{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.When(System.Func{System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.When(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.When``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{``0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.When``2(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Func{``0,``1,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.When``3(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{`0,``2}},System.Func{``0,``1,``2,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.WithMessage(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.WithLocalizedMessage(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.WithLocalizedMessage(System.String,System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.AllWhen(System.Func{System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.AllWhen(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.AllWhen``1(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Func{``0,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.AllWhen``2(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Func{``0,``1,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.AllWhen``3(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{`0,``2}},System.Func{``0,``1,``2,System.Boolean})">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.BaseRuleBuilder`3.This">
+            <summary>
+            Reference to strong-typed current object.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.BaseRuleBuilder`3.ReplaceValidator(ReactiveValidation.Validators.IPropertyValidator{`0},ReactiveValidation.Validators.IPropertyValidator{`0})">
+            <summary>
+            Replace one validator by another.
+            </summary>
+            <param name="oldValidator">Old validator.</param>
+            <param name="newValidator">New validator.</param>
+        </member>
+        <member name="T:ReactiveValidation.SinglePropertyRuleBuilder`2">
+            <summary>
+            Rule builder for single property.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.SinglePropertyRuleBuilder`2.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.SinglePropertyRuleBuilder`2.This">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.PropertiesRuleBuilder`1">
+            <summary>
+            Rule builder for several properties.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.PropertiesRuleBuilder`1.#ctor(System.Collections.Generic.IReadOnlyList{System.String})">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.PropertiesRuleBuilder`1.This">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.CollectionPropertyRuleBuilder`3">
+            <summary>
+            Rule builder for property of collection type.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TCollection">Type of collection.</typeparam>
+            <typeparam name="TItem">Type of collection item.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.CollectionPropertyRuleBuilder`3.#ctor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.CollectionPropertyRuleBuilder`3.This">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.ValidatableObject">
+            <inheritdoc cref="T:ReactiveValidation.IValidatableObject" />
+        </member>
+        <member name="M:ReactiveValidation.ValidatableObject.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.ValidatableObject.Validator">
+            <inheritdoc />
+        </member>
+        <member name="E:ReactiveValidation.ValidatableObject.ErrorsChanged">
+            <inheritdoc />
+        </member>
+        <member name="P:ReactiveValidation.ValidatableObject.System#ComponentModel#INotifyDataErrorInfo#HasErrors">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidatableObject.OnPropertyMessagesChanged(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidatableObject.System#ComponentModel#INotifyDataErrorInfo#GetErrors(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.ValidatableProperty`1">
+            <summary>
+            Info for validatable property.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidatableProperty`1.#ctor(System.String,ReactiveValidation.IStringSource,System.Collections.Generic.IReadOnlyList{ReactiveValidation.Validators.IPropertyValidator{`0}})">
+            <summary>
+            Create new class of info for validatable property.
+            </summary>
+            <param name="propertyName">Name of property.</param>
+            <param name="displayNameSource">Source of display name.</param>
+            <param name="validators">List of all property validators.</param>
+        </member>
+        <member name="P:ReactiveValidation.ValidatableProperty`1.PropertyName">
+            <summary>
+            Name of property.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidatableProperty`1.DisplayNameSource">
+            <summary>
+            Source of display name.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidatableProperty`1.Validators">
+            <summary>
+            List of all property validators.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidatableProperty`1.ValidatorsValidationMessages">
+            <summary>
+            List of property validators and its current validation messages.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.ValidatableProperty`1.ValidationMessages">
+            <summary>
+            Validation messages of property.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.ValidationBuilder`1">
+            <inheritdoc cref="T:ReactiveValidation.IValidationBuilder`1" />
+            <inheritdoc cref="T:ReactiveValidation.IObjectValidatorBuilder`1" />
+        </member>
+        <member name="M:ReactiveValidation.ValidationBuilder`1.RuleFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationBuilder`1.RuleFor(System.String)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationBuilder`1.RuleFor(System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationBuilder`1.RuleFor(System.String[])">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationBuilder`1.RuleForCollection``2(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationBuilder`1.Build(`0)">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.ValidationRuleBuilder`1">
+            <summary>
+            Defines a validation rules for an object.
+            Derive from this class to create validation rules for object.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.#ctor">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.ReactiveValidation#IObjectValidatorBuilderCreator#Create">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.RuleFor``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Create validator for single strongly typed property.
+            </summary>
+            <typeparam name="TProp">The type of property.</typeparam>
+            <param name="property">Validatable property.</param>
+            <returns>Single property validator for <typeparamref name="TProp" /> type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.RuleFor(System.String)">
+            <summary>
+            Create validator for single property with object type by its name.
+            </summary>
+            <param name="propertyName">Name of validatable property.</param>
+            <returns>Single property validator for <see cref="T:System.Object"/> type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.RuleFor(System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Create validator for collection of properties.
+            </summary>
+            <param name="properties">Validatable properties.</param>
+            <returns>Properties collection validator.</returns>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.RuleFor(System.String[])">
+            <summary>
+            Create validator for collection of properties names.
+            </summary>
+            <param name="propertiesNames">Names of validatable properties.</param>
+            <returns>Properties collection validator.</returns>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.RuleForCollection``2(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Created validator for strongly typed collection.
+            </summary>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of item of collection.</typeparam>
+            <param name="collection">Property with collection type.</param>
+            <returns>Validator for property with <typeparamref name="TCollection" /> type.</returns>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.CreateBuilder">
+            <summary>
+            Create prepared builder.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.ValidationRuleBuilder`1.GetPropertyNameForValidator``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            Get property name by expression for validator. Throws ArgumentException, if couldn't validate this property.
+            </summary>
+            <typeparam name="TProp">The type of element of collection.</typeparam>
+            <param name="property">Expression which contains property.</param>
+            <returns>Property name.</returns>
+        </member>
+        <member name="T:ReactiveValidation.Validators.AbstractComparisonValidator`3">
+            <summary>
+            Base validator which compare property value with specified value.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+            <typeparam name="TParam">The type of comparison value.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.AbstractComparisonValidator`3.#ctor(ReactiveValidation.IStringSource,System.Linq.Expressions.Expression{System.Func{`0,`2}},System.Collections.IComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.AbstractComparisonValidator`3" /> class.
+            </summary>
+            <param name="stringSource">The source for validation message.</param>
+            <param name="valueToCompareExpression">Expression of value to compare.</param>
+            <param name="comparer">The values comparer.</param>
+            <param name="validationMessageType">Type of validation message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.AbstractComparisonValidator`3.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.AbstractComparisonValidator`3.IsValid(System.Int32)">
+            <summary>
+            Check is valid by comparison result.
+            </summary>
+            <param name="comparisonResult">Comparison result.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.AggregatedValidationContext`1">
+            <summary>
+            Context for revalidation operation.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.AggregatedValidationContext`1.#ctor(`0,System.Collections.Generic.IReadOnlyDictionary{System.String,ReactiveValidation.IStringSource})">
+            <summary>
+            Create new aggregated validation context.
+            </summary>
+            <param name="validatableObject">Object which being validating.</param>
+            <param name="displayNamesSources">Sources of display names.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.AggregatedValidationContext`1.CreateContextFactory(System.String)">
+            <summary>
+            Create validation context factory for specified property.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Validators.AggregatedValidationContext`1.GetPropertyValue(System.String)">
+            <summary>
+            Get current value of property.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Validators.ComplexValidator`1">
+            <summary>
+            Validator which check condition and call validate for inner validators.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ComplexValidator`1.#ctor(System.Func{`0,System.Boolean},System.Collections.Generic.IReadOnlyList{ReactiveValidation.Validators.IPropertyValidator{`0}},System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Create new instance of complex validator.
+            </summary>
+            <param name="condition">Condition the using inner validators.</param>
+            <param name="innerValidators">Inner validators.</param>
+            <param name="relatedProperties">Related properties of condition.</param>
+        </member>
+        <member name="P:ReactiveValidation.Validators.ComplexValidator`1.InnerValidators">
+            <summary>
+            Inner validators.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.Validators.ComplexValidator`1.RelatedProperties">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.ComplexValidator`1.IsAlwaysValid(`0)">
+            <summary>
+            Check if don't need call inner validators.
+            </summary>
+            <param name="validatableObject">Object which being validated.</param>
+            <returns>
+            <see langword="true" />, if all inner validators are valid.
+            <see langword="false" />, if necessary to check inner validators.
+            </returns>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ComplexValidator`1.ValidateProperty(ReactiveValidation.Validators.ValidationContextFactory{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.ComplexValidator`1.UnionRelatedProperties(System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Union related properties of inner validator and condition.
+            </summary>
+            <param name="conditionRelatedProperties">Related properties of condition.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.CountValidator`3">
+            <summary>
+            Validator which check items count of collection.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.CountValidator`3.#ctor(System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.CountValidator`3" /> class.
+            </summary>
+            <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+            <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The type of validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.CountValidator`3.#ctor(ReactiveValidation.IStringSource,System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.CountValidator`3" /> class.
+            </summary>
+            <param name="stringSource">The string source of validatable message.</param>
+            <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+            <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The type of validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.CountValidator`3.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.MinCountValidator`3">
+            <summary>
+            Validator which check that count of items in collection not less than minimum.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.MinCountValidator`3.#ctor(System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.MinCountValidator`3" /> class.
+            </summary>
+            <param name="minCountExpression">Minimum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The type of validatable message.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.MaxCountValidator`3">
+            <summary>
+            Validator which check that count of items in collection not greater than maximum.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.MaxCountValidator`3.#ctor(System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.MaxCountValidator`3" /> class.
+            </summary>
+            <param name="maxCountExpression">Maximum count of items in collection (inclusive).</param>
+            <param name="validationMessageType">The type of validatable message.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.ExactCountValidator`3">
+            <summary>
+            Validator which check that count of items in collection equal to specified value.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ExactCountValidator`3.#ctor(System.Linq.Expressions.Expression{System.Func{`0,System.Int32}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.ExactCountValidator`3" /> class.
+            </summary>
+            <param name="countExpression">Count of items in collection.</param>
+            <param name="validationMessageType">The type of validatable message.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.IPropertyValidator`1">
+            <summary>
+            Validator which check property value.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="P:ReactiveValidation.Validators.IPropertyValidator`1.RelatedProperties">
+            <remarks>
+            Properties which can affect on state of validatable property.
+            </remarks>
+        </member>
+        <member name="M:ReactiveValidation.Validators.IPropertyValidator`1.ValidateProperty(ReactiveValidation.Validators.ValidationContextFactory{`0})">
+            <summary>
+            Get validation messages of property.
+            </summary>
+            <param name="contextFactory">Factory which allows create validation context for property.</param>
+            <returns>List of validation messages.</returns>
+        </member>
+        <member name="T:ReactiveValidation.Validators.IPropertyValidatorSettings`1">
+            <summary>
+            Additional settings for property validator.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.IPropertyValidatorSettings`1.SetStringSource(ReactiveValidation.IStringSource)">
+            <summary>
+            Change the string source for validatable messages.
+            </summary>
+            <param name="stringSource">New string source.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.IPropertyValidatorSettings`1.ValidateWhen(System.Func{`0,System.Boolean},System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Validate property only if <paramref name="condition" /> is <see langword="true" />.
+            Property always valid if condition is <see langword="false" />.
+            </summary>
+            <param name="condition">Condition.</param>
+            <param name="relatedProperties">Properties which uses in condition.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.ModelIsValidValidator`2">
+            <summary>
+            Validator which check that property value is inner valid.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ModelIsValidValidator`2.#ctor(ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.ModelIsValidValidator`2" /> class.
+            </summary>
+            <param name="validationMessageType">Type of validation message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ModelIsValidValidator`2.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.NotEmptyCollectionValidator`3">
+            <summary>
+            Validator which check that collection contains at least one item.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TCollection">The type of collection.</typeparam>
+            <typeparam name="TItem">The type of element of collection.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEmptyCollectionValidator`3.#ctor(ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.NotEmptyCollectionValidator`3" /> class.
+            </summary>
+            <param name="validationMessageType">Type of validation message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEmptyCollectionValidator`3.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.NotEmptyStringValidator`1">
+            <summary>
+            Validator which check property value is not null or empty string.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEmptyStringValidator`1.#ctor(ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.NotEmptyStringValidator`1" /> class.
+            </summary>
+            <param name="validationMessageType">Type of validation message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEmptyStringValidator`1.IsValid(ReactiveValidation.ValidationContext{`0,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.NotEqualValidator`3">
+            <summary>
+            Validator which check property value not equal specified value.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+            <typeparam name="TParam">The type of comparison value.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEqualValidator`3.#ctor(System.Linq.Expressions.Expression{System.Func{`0,`2}},System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.NotEqualValidator`3" /> class.
+            </summary>
+            <param name="valueToCompareExpression">Expression of value to compare.</param>
+            <param name="comparer">The values comparer.</param>
+            <param name="validationMessageType">Type of validation message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEqualValidator`3.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.NotEqualValidator`2">
+            <summary>
+            Validator which check property value not equal specified value.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotEqualValidator`2.#ctor(System.Linq.Expressions.Expression{System.Func{`0,`1}},System.Collections.IEqualityComparer,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.NotEqualValidator`2" /> class.
+            </summary>
+            <param name="valueToCompareExpression">Expression of value to compare.</param>
+            <param name="comparer">The values comparer.</param>
+            <param name="validationMessageType">Type of validation message.</param>
+        </member>
+        <member name="T:ReactiveValidation.Validators.NotNullValidator`2">
+            <summary>
+            Validator which check property value is not <see langword="null" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotNullValidator`2.#ctor(ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.NotNullValidator`2" /> class.
+            </summary>
+            <param name="validationMessageType">The type validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NotNullValidator`2.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.NullValidator`2">
+            <summary>
+            Validator which check property value is <see langword="null" />.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NullValidator`2.#ctor(ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.NullValidator`2" /> class.
+            </summary>
+            <param name="validationMessageType">The type validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.NullValidator`2.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.PredicateValidator`2">
+            <summary>
+            Validator which check property value by predicate.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+            <typeparam name="TProp">The type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.PredicateValidator`2.#ctor(System.Func{ReactiveValidation.ValidationContext{`0,`1},System.Boolean},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.PredicateValidator`2" /> class.
+            </summary>
+            <param name="predicate">Predicate which check property value.</param>
+            <param name="validationMessageType">The type validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.PredicateValidator`2.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.PropertyValidator`2">
+            <summary>
+            Base class of validators for property value.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.PropertyValidator`2.#ctor(ReactiveValidation.IStringSource,ReactiveValidation.ValidationMessageType,System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Create new validator for property value.
+            </summary>
+            <param name="stringSource">Source for validation message.</param>
+            <param name="validationMessageType">Type of validation message.</param>
+            <param name="relatedProperties">Properties which can affect on state of validatable property.</param>
+        </member>
+        <member name="P:ReactiveValidation.Validators.PropertyValidator`2.RelatedProperties">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.PropertyValidator`2.SetStringSource(ReactiveValidation.IStringSource)">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.PropertyValidator`2.ValidateWhen(System.Func{`0,System.Boolean},System.Linq.Expressions.LambdaExpression[])">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.PropertyValidator`2.ValidateProperty(ReactiveValidation.Validators.ValidationContextFactory{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.PropertyValidator`2.IsValid(ReactiveValidation.ValidationContext{`0,`1})">
+            <summary>
+            Check if property is valid.
+            </summary>
+            <param name="context">Validation context.</param>
+            <returns>
+            <see langword="true" />, if property are valid.
+            <see langword="false" /> otherwise.
+            </returns>
+        </member>
+        <member name="M:ReactiveValidation.Validators.PropertyValidator`2.GetRelatedProperties(System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Get names of related properties.
+            </summary>
+        </member>
+        <member name="T:ReactiveValidation.Validators.RegularExpressionValidator`1">
+            <summary>
+            Validator which checks property with regular expression.
+            </summary>
+            <typeparam name="TObject">The type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.RegularExpressionValidator`1.#ctor(System.Linq.Expressions.Expression{System.Func{`0,System.String}},ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.RegularExpressionValidator`1" /> class.
+            </summary>
+            <param name="patternExpression">Expression of pattern.</param>
+            <param name="validationMessageType">The type validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.RegularExpressionValidator`1.#ctor(System.Linq.Expressions.Expression{System.Func{`0,System.String}},System.Text.RegularExpressions.RegexOptions,ReactiveValidation.ValidationMessageType)">
+            <summary>
+            Initialize a new instance of <see cref="T:ReactiveValidation.Validators.RegularExpressionValidator`1" /> class with regex options.
+            </summary>
+            <param name="patternExpression">Expression of pattern.</param>
+            <param name="regexOptions">Regex options.</param>
+            <param name="validationMessageType">The type validatable message.</param>
+        </member>
+        <member name="M:ReactiveValidation.Validators.RegularExpressionValidator`1.IsValid(ReactiveValidation.ValidationContext{`0,System.String})">
+            <inheritdoc />
+        </member>
+        <member name="T:ReactiveValidation.Validators.ValidationContextFactory`1">
+            <summary>
+            Factory for creating validation context.
+            </summary>
+            <typeparam name="TObject">Type of validatable property.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ValidationContextFactory`1.#ctor(`0,System.String,ReactiveValidation.IStringSource,System.Object)">
+            <summary>
+            Create new validation context factory.
+            </summary>
+            <param name="validatableObject">Object which being validating.</param>
+            <param name="propertyName">Name of property which being validating.</param>
+            <param name="displayNameSource">Display name of validatable property.</param>
+            <param name="propertyValue">Value of property  which being validating.</param>
+        </member>
+        <member name="P:ReactiveValidation.Validators.ValidationContextFactory`1.ValidatableObject">
+            <summary>
+            Object which being validating.
+            </summary>
+        </member>
+        <member name="M:ReactiveValidation.Validators.ValidationContextFactory`1.CreateContext``1">
+            <summary>
+            Create context for validating property.
+            </summary>
+            <typeparam name="TProp">Type of validatable property.</typeparam>
+        </member>
+        <member name="T:ReactiveValidation.Validators.WrappingValidator`1">
+            <summary>
+            Wrap for validators which doesn't support <see cref="T:ReactiveValidation.Validators.IPropertyValidatorSettings`1" />.
+            </summary>
+            <typeparam name="TObject">Type of validatable object.</typeparam>
+        </member>
+        <member name="M:ReactiveValidation.Validators.WrappingValidator`1.#ctor(System.Func{`0,System.Boolean},ReactiveValidation.Validators.IPropertyValidator{`0},System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Create new instance of wrapping validator.
+            </summary>
+            <param name="condition">Condition the using inner validator.</param>
+            <param name="innerValidator">Inner validator.</param>
+            <param name="relatedProperties">Related properties of condition.</param>
+        </member>
+        <member name="P:ReactiveValidation.Validators.WrappingValidator`1.InnerValidator">
+            <summary>
+            Wrapped validator.
+            </summary>
+        </member>
+        <member name="P:ReactiveValidation.Validators.WrappingValidator`1.RelatedProperties">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.WrappingValidator`1.ValidateProperty(ReactiveValidation.Validators.ValidationContextFactory{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:ReactiveValidation.Validators.WrappingValidator`1.UnionRelatedProperties(System.Linq.Expressions.LambdaExpression[])">
+            <summary>
+            Union related properties of inner validator and condition.
+            </summary>
+            <param name="conditionRelatedProperties">Related properties of condition.</param>
+        </member>
+    </members>
+</doc>

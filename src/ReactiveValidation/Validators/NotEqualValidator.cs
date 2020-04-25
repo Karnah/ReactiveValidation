@@ -37,16 +37,14 @@ namespace ReactiveValidation.Validators
         protected override bool IsValid(ValidationContext<TObject, TProp> context)
         {
             var propertyValue = context.PropertyValue;
-            if (propertyValue == null) return true;
-
             var paramValue = context.GetParamValue(_valueToCompare);
-            var isEquals = _comparer?.Equals(propertyValue, paramValue) ?? Equals(context.PropertyValue, paramValue);
-            if (isEquals == true)
+            var isEquals = _comparer?.Equals(propertyValue, paramValue) ?? Equals(propertyValue, paramValue);
+            if (isEquals)
             {
                 context.RegisterMessageArgument("ValueToCompare", _valueToCompare, paramValue);
             }
 
-            return isEquals == false;
+            return !isEquals;
         }
     }
 

@@ -36,20 +36,5 @@ namespace ReactiveValidation.Wpf.Samples
 
             base.OnStartup(e);
         }
-
-#pragma warning disable 618
-        private static bool CanObserve(Type objectType, Type propertyType)
-        {
-            return typeof(IReactiveNotifyCollectionItemChanged<object>).IsAssignableFrom(propertyType);
-        }
-
-        private static IDisposable CreateReactiveCollectionItemChangedObserver(object o, object propertyValue, Action action)
-        {
-            if (propertyValue is IReactiveNotifyCollectionItemChanged<object> collection)
-                return collection.ItemChanged.Subscribe(args => action());
-
-            return null;
-        }
-#pragma warning restore 618
     }
 }

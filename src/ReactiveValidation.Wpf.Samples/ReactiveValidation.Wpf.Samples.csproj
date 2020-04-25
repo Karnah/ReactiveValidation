@@ -180,10 +180,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveUI.Fody">
-      <Version>9.20.1</Version>
+      <Version>11.3.8</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>9.20.1</Version>
+      <Version>11.3.8</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

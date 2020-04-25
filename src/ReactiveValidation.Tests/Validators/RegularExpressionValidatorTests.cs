@@ -16,8 +16,8 @@ namespace ReactiveValidation.Tests.Validators
         public void RegularExpressionValidator_ValidTheory(string s, string pattern)
         {
             var lessThanOrEqualToValidator = new RegularExpressionValidator<TestValidatableObject>(_ => pattern, ValidationMessageType.Error);
-            var context = new ValidationContext<TestValidatableObject, string>(null, nameof(TestValidatableObject.Number), null, s);
-            var validationMessage = lessThanOrEqualToValidator.ValidateProperty(context).FirstOrDefault();
+            var factory = new ValidationContextFactory<TestValidatableObject>(null, nameof(TestValidatableObject.Number), null, s);
+            var validationMessage = lessThanOrEqualToValidator.ValidateProperty(factory).FirstOrDefault();
 
             AssertValidationMessage.EmptyMessage(validationMessage);
         }
@@ -28,8 +28,8 @@ namespace ReactiveValidation.Tests.Validators
         public void RegularExpressionValidator_NotValidTheory(string s, string pattern)
         {
             var lessThanOrEqualToValidator = new RegularExpressionValidator<TestValidatableObject>(_ => pattern, ValidationMessageType.Error);
-            var context = new ValidationContext<TestValidatableObject, string>(null, nameof(TestValidatableObject.Number), null, s);
-            var validationMessage = lessThanOrEqualToValidator.ValidateProperty(context).FirstOrDefault();
+            var factory = new ValidationContextFactory<TestValidatableObject>(null, nameof(TestValidatableObject.Number), null, s);
+            var validationMessage = lessThanOrEqualToValidator.ValidateProperty(factory).FirstOrDefault();
 
             AssertValidationMessage.NotEmptyMessage(validationMessage);
         }
