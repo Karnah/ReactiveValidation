@@ -42,7 +42,9 @@ namespace ReactiveValidation.Adapters
             }
 
             _lastValue = newValue;
-            _propertyObservers = ObserverBuilders.Select(ob => ob.Invoke(Instance, newValue, Revalidate)).ToList();
+            _propertyObservers = newValue == null
+                ? null
+                : ObserverBuilders.Select(ob => ob.Invoke(Instance, newValue, Revalidate)).ToList();
         }
 
 
