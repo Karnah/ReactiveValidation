@@ -32,10 +32,10 @@ namespace ReactiveValidation.Adapters
             if (ObserverBuilders?.Any() != true)
                 return;
 
-            if (Equals(_lastValue, newValue) == true)
+            if (Equals(_lastValue, newValue))
                 return;
 
-            if (_propertyObservers?.Any() == false) {
+            if (_propertyObservers?.Any() == true) {
                 foreach (var propertyObserver in _propertyObservers) {
                     propertyObserver?.Dispose();
                 }
