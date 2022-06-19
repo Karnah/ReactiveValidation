@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-
+using System.Threading;
+using System.Threading.Tasks;
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation.Extensions
@@ -1093,6 +1094,124 @@ namespace ReactiveValidation.Extensions
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(new PredicateValidator<TObject, TProp>(predicate, validationMessageType));
+        }
+        
+        /// <summary>
+        /// Defines an async predicate validator on the current rule builder using a lambda expression to specify the predicate.
+        /// Validation will fail if the specified lambda returns false.
+        /// Validation will succeed if the specified lambda returns true.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        /// <returns></returns>
+        public static TNext Must<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            Func<TProp, Task<bool>> predicate,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(
+                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyValue),
+                                                       validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an async predicate validator on the current rule builder using a lambda expression to specify the predicate.
+        /// Validation will fail if the specified lambda returns false.
+        /// Validation will succeed if the specified lambda returns true.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        /// <returns></returns>
+        public static TNext Must<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            Func<TProp, CancellationToken, Task<bool>> predicate,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+            where TNext : IRuleBuilder<TObject, TProp, TNext>
+            where TObject : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(
+                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyValue, token),
+                    validationMessageType));
+        }
+        
+        /// <summary>
+        /// Defines an async predicate validator on the current rule builder using a lambda expression to specify the predicate.
+        /// Validation will fail if the specified lambda returns false.
+        /// Validation will succeed if the specified lambda returns true.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        /// <returns></returns>
+        public static TNext Must<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            Func<string, TProp, Task<bool>> predicate,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(
+                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyName, context.PropertyValue),
+                                                       validationMessageType));
+        }
+
+        /// <summary>
+        /// Defines an async predicate validator on the current rule builder using a lambda expression to specify the predicate.
+        /// Validation will fail if the specified lambda returns false.
+        /// Validation will succeed if the specified lambda returns true.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        /// <returns></returns>
+        public static TNext Must<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            Func<string, TProp, CancellationToken, Task<bool>> predicate,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+            where TNext : IRuleBuilder<TObject, TProp, TNext>
+            where TObject : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(
+                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyName, context.PropertyValue, token),
+                    validationMessageType));
+        }
+        
+        /// <summary>
+        /// Defines an async predicate validator on the current rule builder using a lambda expression to specify the predicate.
+        /// Validation will fail if the specified lambda returns false.
+        /// Validation will succeed if the specified lambda returns true.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder on which the validator should be defined.</param>
+        /// <param name="predicate">A lambda expression specifying the predicate.</param>
+        /// <param name="validationMessageType">The message type that will be shown if validation failed.</param>
+        /// <returns></returns>
+        public static TNext Must<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            Func<ValidationContext<TObject, TProp>, CancellationToken, Task<bool>> predicate,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+        {
+            return ruleBuilder.SetValidator(new AsyncPredicateValidator<TObject, TProp>(predicate, validationMessageType));
         }
     }
 }

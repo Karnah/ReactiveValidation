@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
+using System.Threading;
+using System.Threading.Tasks;
 using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
@@ -14,23 +15,21 @@ namespace ReactiveValidation.Validators
     public class WrappingValidator<TObject> : IPropertyValidator<TObject>
         where TObject : IValidatableObject
     {
-        private readonly Func<TObject, bool> _condition;
+        private readonly ValidationCondition<TObject> _condition;
 
         /// <summary>
         /// Create new instance of wrapping validator.
         /// </summary>
         /// <param name="condition">Condition the using inner validator.</param>
         /// <param name="innerValidator">Inner validator.</param>
-        /// <param name="relatedProperties">Related properties of condition.</param>
         public WrappingValidator(
-            Func<TObject, bool> condition,
-            IPropertyValidator<TObject> innerValidator,
-            params LambdaExpression[] relatedProperties)
+            ValidationCondition<TObject> condition,
+            IPropertyValidator<TObject> innerValidator)
         {
             _condition = condition;
             InnerValidator = innerValidator;
 
-            UnionRelatedProperties(relatedProperties);
+            UnionRelatedProperties(condition.RelatedProperties);
         }
 
 
@@ -40,23 +39,41 @@ namespace ReactiveValidation.Validators
         public IPropertyValidator<TObject> InnerValidator { get; }
 
         /// <inheritdoc />
+        public bool IsAsync => InnerValidator.IsAsync;
+
+        /// <inheritdoc />
         public IReadOnlyList<string> RelatedProperties { get; private set; }
 
 
         /// <inheritdoc />
         public IReadOnlyList<ValidationMessage> ValidateProperty(ValidationContextFactory<TObject> contextFactory)
         {
-            if (_condition.Invoke(contextFactory.ValidatableObject) == false)
-                return new ValidationMessage[0];
+            if (IsAsync)
+                throw new NotSupportedException();
+            
+            if (_condition.ShouldIgnoreValidation(contextFactory.ValidationCache))
+                return Array.Empty<ValidationMessage>();
 
             return InnerValidator.ValidateProperty(contextFactory);
+        }
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyList<ValidationMessage>> ValidatePropertyAsync(ValidationContextFactory<TObject> contextFactory, CancellationToken cancellationToken)
+        {
+            if (!IsAsync)
+                throw new NotSupportedException();
+            
+            if (_condition.ShouldIgnoreValidation(contextFactory.ValidationCache))
+                return Array.Empty<ValidationMessage>();
+
+            return await InnerValidator.ValidatePropertyAsync(contextFactory, cancellationToken);
         }
 
         /// <summary>
         /// Union related properties of inner validator and condition.
         /// </summary>
         /// <param name="conditionRelatedProperties">Related properties of condition.</param>
-        private void UnionRelatedProperties(LambdaExpression[] conditionRelatedProperties)
+        private void UnionRelatedProperties(IReadOnlyList<LambdaExpression> conditionRelatedProperties)
         {
             if (conditionRelatedProperties?.Any() != true)
             {

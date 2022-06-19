@@ -9,8 +9,9 @@
         xmlns:l="clr-namespace:ReactiveValidation.Wpf.Samples._3._Localization"
         xmlns:ivoac="clr-namespace:ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collection"
         xmlns:vbf="clr-namespace:ReactiveValidation.Wpf.Samples._5._Validation_builder_factory"
+        xmlns:av="clr-namespace:ReactiveValidation.Wpf.Samples._6._Async_validation"
         mc:Ignorable="d"
-        Title="ReactiveValidation samples" Height="500" Width="900">
+        Title="ReactiveValidation samples" Height="500" Width="1000">
     <Grid>
         <TabControl TabStripPlacement="Left">
             <TabItem Padding="3" Header="1. Base samples">
@@ -31,6 +32,10 @@
 
             <TabItem Padding="3" Header="5. Validation builder factory">
                 <vbf:ValidationBuilderFactoryView />
+            </TabItem>
+            
+            <TabItem Padding="3" Header="6. Async validation">
+                <av:AsyncValidationView />
             </TabItem>
         </TabControl>
     </Grid>

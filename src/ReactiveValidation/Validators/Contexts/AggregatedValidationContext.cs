@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
@@ -12,7 +11,7 @@ namespace ReactiveValidation.Validators
     {
         private readonly TObject _validatableObject;
         private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
-        private readonly IDictionary<string, object> _propertiesValuesCache;
+        private readonly ValidationCache<TObject> _validationCache;
 
         /// <summary>
         /// Create new aggregated validation context.
@@ -23,7 +22,7 @@ namespace ReactiveValidation.Validators
         {
             _validatableObject = validatableObject;
             _displayNamesSources = displayNamesSources;
-            _propertiesValuesCache = new Dictionary<string, object>();
+            _validationCache = new ValidationCache<TObject>(validatableObject);
         }
 
         /// <summary>
@@ -31,21 +30,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         public ValidationContextFactory<TObject> CreateContextFactory(string propertyName)
         {
-            return new ValidationContextFactory<TObject>(_validatableObject, propertyName, _displayNamesSources[propertyName], GetPropertyValue(propertyName));
-        }
-
-        /// <summary>
-        /// Get current value of property.
-        /// </summary>
-        private object GetPropertyValue(string propertyName)
-        {
-            if (!_propertiesValuesCache.ContainsKey(propertyName))
-            {
-                var propertyValue = ReactiveValidationHelper.GetPropertyValue<object>(_validatableObject, propertyName);
-                _propertiesValuesCache[propertyName] = propertyValue;
-            }
-
-            return _propertiesValuesCache[propertyName];
+            return new ValidationContextFactory<TObject>(_validatableObject, _validationCache, propertyName, _displayNamesSources[propertyName], _validationCache.GetPropertyValue(propertyName));
         }
     }
 }

@@ -6,7 +6,7 @@ namespace ReactiveValidation.Validators
     /// Validator which check property value is not null or empty string.
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
-    public class NotEmptyStringValidator<TObject> : PropertyValidator<TObject, string>
+    public class NotEmptyStringValidator<TObject> : BaseSyncPropertyValidator<TObject, string>
         where TObject : IValidatableObject
     {
         /// <summary>

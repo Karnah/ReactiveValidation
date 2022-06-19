@@ -11,7 +11,7 @@ namespace ReactiveValidation.Validators
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     /// <typeparam name="TProp">Type of validatable property.</typeparam>
     /// <typeparam name="TParam">The type of comparison value.</typeparam>
-    public abstract class AbstractComparisonValidator<TObject, TProp, TParam> : PropertyValidator<TObject, TProp>
+    public abstract class AbstractComparisonValidator<TObject, TProp, TParam> : BaseSyncPropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
         private readonly IComparer _comparer;

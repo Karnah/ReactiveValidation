@@ -75,6 +75,10 @@
       <DependentUpon>ValidationBuilderFactoryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="5. Validation builder factory\ViewModelValidation.cs" />
+    <Compile Include="6. Async validation\AsyncValidationView.xaml.cs">
+      <DependentUpon>AsyncValidationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="6. Async validation\AsyncValidationViewModel.cs" />
     <Compile Include="ReactiveValidatableObject.cs" />
     <Compile Include="Resources\Additional.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -106,6 +110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="5. Validation builder factory\ValidationBuilderFactoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="6. Async validation\AsyncValidationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -49,7 +49,7 @@ namespace ReactiveValidation.Tests.Validators
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             var equalValidator = new EqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, nameof(TestValidatableObject.Number), null, value);
+            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationCache<TestValidatableObject>(null), nameof(TestValidatableObject.Number), null, value);
             var validationMessage = equalValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;

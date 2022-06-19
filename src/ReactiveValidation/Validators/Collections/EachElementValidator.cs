@@ -12,7 +12,7 @@ namespace ReactiveValidation.Validators
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TCollection">The type of collection.</typeparam>
     /// <typeparam name="TItem">The type of element of collection.</typeparam>
-    public class EachElementValidator<TObject, TCollection, TItem> : PropertyValidator<TObject, TCollection>
+    public class EachElementValidator<TObject, TCollection, TItem> : BaseSyncPropertyValidator<TObject, TCollection>
         where TObject : IValidatableObject
         where TCollection : IEnumerable<TItem>
     {

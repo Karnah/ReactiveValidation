@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ReactiveValidation
+namespace ReactiveValidation.Validators
 {
     /// <summary>
     /// Validation context.
@@ -16,12 +16,14 @@ namespace ReactiveValidation
         /// Create new instance of validation context.
         /// </summary>
         /// <param name="validatableObject">Instance of validatable object.</param>
+        /// <param name="validationCache">Cache which store property values, result of functions and etc.</param>
         /// <param name="propertyName">Name of validatable property.</param>
         /// <param name="displayPropertySource">Source of display name of validatable property.</param>
         /// <param name="propertyValue">Value of validatable property.</param>
-        public ValidationContext(TObject validatableObject, string propertyName, IStringSource displayPropertySource, TProp propertyValue)
+        public ValidationContext(TObject validatableObject, ValidationCache<TObject> validationCache, string propertyName, IStringSource displayPropertySource, TProp propertyValue)
         {
             ValidatableObject = validatableObject;
+            ValidationCache = validationCache;
             PropertyName = propertyName;
             DisplayPropertySource = displayPropertySource;
             PropertyValue = propertyValue;
@@ -37,7 +39,7 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="parentContext">Parent validation context.</param>
         public ValidationContext(ValidationContext<TObject, TProp> parentContext)
-            : this(parentContext.ValidatableObject, parentContext.PropertyName, parentContext.DisplayPropertySource, parentContext.PropertyValue)
+            : this(parentContext.ValidatableObject, parentContext.ValidationCache, parentContext.PropertyName, parentContext.DisplayPropertySource, parentContext.PropertyValue)
         {
         }
 
@@ -46,6 +48,11 @@ namespace ReactiveValidation
         /// Instance of validatable object.
         /// </summary>
         public TObject ValidatableObject { get; }
+
+        /// <summary>
+        /// Cache which store property values, result of functions and etc.
+        /// </summary>
+        public ValidationCache<TObject> ValidationCache { get; }
 
         /// <summary>
         /// Name of validatable property.
