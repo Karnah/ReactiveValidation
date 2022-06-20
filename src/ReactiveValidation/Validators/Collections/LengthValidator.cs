@@ -9,7 +9,7 @@ namespace ReactiveValidation.Validators
     /// Validator which check length of string.
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
-    public class LengthValidator <TObject> : PropertyValidator<TObject, string>
+    public class LengthValidator <TObject> : BaseSyncPropertyValidator<TObject, string>
         where TObject : IValidatableObject
     {
         private readonly ValidatorParameter<TObject, int> _minLength;

@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using ReactiveValidation.Exceptions;
+using ReactiveValidation.Helpers;
+using ReactiveValidation.Helpers.Nito.AsyncEx;
 using ReactiveValidation.Internal;
 using ReactiveValidation.Validators;
 
@@ -18,7 +22,9 @@ namespace ReactiveValidation
         private readonly ObjectObserver<TObject> _observer;
         private readonly IDictionary<string, ValidatableProperty<TObject>> _validatableProperties;
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
+        private readonly AsyncManualResetEvent _asyncValidationWaiter = new(true);
+
 
         private bool _isValid;
         private bool _hasWarnings;
@@ -80,6 +86,25 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
+        public bool IsAsyncValidating
+        {
+            get => !_asyncValidationWaiter.IsSet;
+            private set
+            {
+                var isValueChanged = _asyncValidationWaiter.IsSet == value;
+                if (!isValueChanged)
+                    return;
+                
+                if (value)
+                    _asyncValidationWaiter.Reset();
+                else
+                    _asyncValidationWaiter.Set();
+                    
+                OnPropertyChanged();
+            }
+        }
+
+        /// <inheritdoc />
         public IReadOnlyList<ValidationMessage> ValidationMessages
         {
             get => _validationMessages;
@@ -109,6 +134,16 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
+        public Task WaitValidatingCompletedAsync(CancellationToken cancellationToken = default)
+        {
+            lock (_lock)
+            {
+                // Only return task, it's prohibited to wait here (because of deadlocks).
+                return _asyncValidationWaiter.WaitAsync(cancellationToken);
+            }
+        }
+
+        /// <inheritdoc />
         public void Dispose()
         {
             Dispose(true);
@@ -133,7 +168,17 @@ namespace ReactiveValidation
                 if (ValidationOptions.LanguageManager.TrackCultureChanged)
                     ValidationOptions.LanguageManager.CultureChanged -= _cultureChangedEventHandler;
 
-                ValidationMessages = null;
+                // Cancel all async tasks.
+                // We don't need to wait them, because they won't affect on anything.
+                var asyncTokenSources = _validatableProperties
+                    .Values
+                    .SelectMany(p => p.AsyncValidatorCancellationTokenSources.Values);
+                foreach (var tokenSource in asyncTokenSources)
+                {
+                    tokenSource?.Cancel();
+                }
+                
+                ValidationMessages = Array.Empty<ValidationMessage>();
                 IsValid = true;
                 HasWarnings = false;
 
@@ -169,58 +214,155 @@ namespace ReactiveValidation
             {
                 var aggregatedValidationContext = new AggregatedValidationContext<TObject>(Instance, _displayNamesSources);
                 var changedProperties = new List<string>();
+                var propertiesAsyncValidators = new List<(string, List<IPropertyValidator<TObject>>)>();
 
                 foreach (var validatableProperty in _validatableProperties)
                 {
                     var info = validatableProperty.Value;
                     bool isTarget = string.IsNullOrEmpty(propertyName) || info.PropertyName == propertyName;
-                    bool isErrorsChanged = false;
+                    bool isMessagesChanged = false;
+                    bool isPropertyValid = true;
 
-                    foreach (var propertyValidator in info.Validators)
+                    // First we check all sync validators.
+                    foreach (var propertyValidator in info.SyncValidators)
                     {
                         if (!isTarget && !propertyValidator.RelatedProperties.Contains(propertyName))
                             continue;
 
                         var contextProvider = aggregatedValidationContext.CreateContextFactory(info.PropertyName);
-                        var messages = ValidateProperty(propertyValidator, contextProvider);
+                        var messages = ValidatePropertyValidator(propertyValidator, contextProvider);
+                        isPropertyValid &= messages.IsValid();
                         if (messages.SequenceEqual(info.ValidatorsValidationMessages[propertyValidator]))
                             continue;
 
                         info.ValidatorsValidationMessages[propertyValidator] = messages;
-                        isErrorsChanged = true;
+                        isMessagesChanged = true;
                     }
 
-                    if (isErrorsChanged)
+                    // Then we should reset messages of async validators.
+                    // They can be restored after async check.
+                    var asyncValidators = new List<IPropertyValidator<TObject>>();
+                    foreach (var propertyValidator in info.AsyncValidators)
+                    {
+                        if (!isTarget && !propertyValidator.RelatedProperties.Contains(propertyName))
+                            continue;
+                        
+                        var messages = info.ValidatorsValidationMessages[propertyValidator];
+                        if (messages.Any())
+                        {
+                            info.ValidatorsValidationMessages[propertyValidator] = Array.Empty<ValidationMessage>();
+                            isMessagesChanged = true;
+                        }
+
+                        // Cancel previous execution (if it is running).
+                        info.AsyncValidatorCancellationTokenSources[propertyValidator]?.Cancel();
+                        
+                        // We should use async validators only if all previous checks are success. 
+                        if (isPropertyValid)
+                        {
+                            // Create new token source for future execution.
+                            info.AsyncValidatorCancellationTokenSources[propertyValidator] =
+                                new CancellationTokenSource();
+                            
+                            asyncValidators.Add(propertyValidator);
+                        }
+                    }
+                    
+                    if (isMessagesChanged)
                         changedProperties.Add(info.PropertyName);
+
+                    if (asyncValidators.Any())
+                        propertiesAsyncValidators.Add((info.PropertyName, asyncValidators));
                 }
 
-                if (changedProperties.Count == 0)
-                    return;
+                NotifyChangedProperties(changedProperties);
+                ValidateInternalAsync(aggregatedValidationContext, propertiesAsyncValidators);
+            }
+        }
 
-                ValidationMessages = _validatableProperties
-                    .Values
-                    .SelectMany(vp => vp.ValidationMessages)
-                    .ToList();
+        /// <summary>
+        /// Validate using async validators.
+        /// </summary>
+        private async void ValidateInternalAsync(
+            AggregatedValidationContext<TObject> aggregatedValidationContext,
+            IReadOnlyList<(string, List<IPropertyValidator<TObject>>)> propertiesAsyncValidators)
+        {
+            if (propertiesAsyncValidators.Count == 0)
+                return;
 
-                IsValid = !ValidationMessages.Any(vm => vm?.ValidationMessageType == ValidationMessageType.Error ||
-                                                        vm?.ValidationMessageType == ValidationMessageType.SimpleError);
+            IsAsyncValidating = true;
 
-                HasWarnings = ValidationMessages.Any(vm => vm?.ValidationMessageType == ValidationMessageType.Warning ||
-                                                           vm?.ValidationMessageType == ValidationMessageType.SimpleWarning);
+            try
+            {
+                var tasks = new List<Task>();
 
-                foreach (var changedProperty in changedProperties)
+                foreach (var (propertyName, propertyValidators) in propertiesAsyncValidators)
                 {
-                    Instance.OnPropertyMessagesChanged(changedProperty);
+                    tasks.Add(ValidatePropertyAsync(aggregatedValidationContext, propertyName, propertyValidators));
+                }
+
+                await Task.WhenAll(tasks)
+                    .ConfigureAwait(false);
+            }
+            finally
+            {
+                lock (_lock)
+                {
+                    IsAsyncValidating = _validatableProperties
+                        .Values
+                        .SelectMany(vp => vp.AsyncValidatorCancellationTokenSources.Values)
+                        .Any(s => s?.IsCancellationRequested == false);
                 }
             }
         }
 
         /// <summary>
+        /// Validate property with async validators.
+        /// </summary>
+        private async Task ValidatePropertyAsync(
+            AggregatedValidationContext<TObject> aggregatedValidationContext,
+            string propertyName,
+            IReadOnlyList<IPropertyValidator<TObject>> propertyValidators)
+        {
+            var info = _validatableProperties[propertyName];
+            foreach (var propertyValidator in propertyValidators)
+            {
+                // Skip this validator because it should be revalidated with new property value.
+                var tokenSource = info.AsyncValidatorCancellationTokenSources[propertyValidator];
+                if (tokenSource.IsCancellationRequested)
+                    continue;
+
+                var contextProvider = aggregatedValidationContext.CreateContextFactory(info.PropertyName);
+                var messages = await ValidatePropertyValidatorAsync(propertyValidator, contextProvider, tokenSource.Token)
+                    .ConfigureAwait(false);
+
+                if (tokenSource.IsCancellationRequested)
+                    continue;
+                
+                lock (_lock)
+                {
+                    if (tokenSource.IsCancellationRequested)
+                        continue;
+
+                    tokenSource.Cancel();
+                    
+                    // Inside RevalidateInternal we have reset messages.
+                    // So we need only check if there are something new.
+                    if (messages.Any())
+                    {
+                        info.ValidatorsValidationMessages[propertyValidator] = messages;
+                        NotifyChangedProperties(new[] { propertyName });
+                    }
+                }
+            }
+        }
+        
+        /// <summary>
         /// Validate property by specified validator.
         /// </summary>
         /// <param name="propertyValidator">Property validator.</param>
         /// <param name="contextFactory">Context factory.</param>
-        private static IReadOnlyList<ValidationMessage> ValidateProperty(
+        private static IReadOnlyList<ValidationMessage> ValidatePropertyValidator(
             IPropertyValidator<TObject> propertyValidator,
             ValidationContextFactory<TObject> contextFactory)
         {
@@ -234,6 +376,57 @@ namespace ReactiveValidation
                 {
                     new ValidationMessage(new ExceptionSource(e)),
                 };
+            }
+        }
+
+        /// <summary>
+        /// Validate property by specified async validator.
+        /// </summary>
+        /// <param name="propertyValidator">Property validator.</param>
+        /// <param name="contextFactory">Context factory.</param>
+        /// <param name="cancellationToken">Token for cancelling validation.</param>
+        private static async Task<IReadOnlyList<ValidationMessage>> ValidatePropertyValidatorAsync(
+            IPropertyValidator<TObject> propertyValidator,
+            ValidationContextFactory<TObject> contextFactory,
+            CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await propertyValidator.ValidatePropertyAsync(contextFactory, cancellationToken);
+            }
+            // Ignore only if exception was thrown by cancellationToken, not because of user code.
+            catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                return Array.Empty<ValidationMessage>();
+            } 
+            catch (Exception e)
+            {
+                return new[]
+                {
+                    new ValidationMessage(new ExceptionSource(e)),
+                };
+            }
+        }
+
+        /// <summary>
+        /// Update state and notify if properties changed.
+        /// </summary>
+        /// <param name="changedProperties">List of changed properties.</param>
+        private void NotifyChangedProperties(IReadOnlyList<string> changedProperties)
+        {
+            if (changedProperties.Count == 0)
+                return;
+            
+            ValidationMessages = _validatableProperties
+                .Values
+                .SelectMany(vp => vp.ValidationMessages)
+                .ToList();
+            IsValid = ValidationMessages.IsValid();
+            HasWarnings = ValidationMessages.HasWarnings();
+
+            foreach (var changedProperty in changedProperties)
+            {
+                Instance.OnPropertyMessagesChanged(changedProperty);
             }
         }
 

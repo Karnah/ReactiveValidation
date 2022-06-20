@@ -63,7 +63,7 @@ namespace ReactiveValidation.Tests.Validators
                 where TProp : IComparable<TProp>
         {
             var lessThanValidator = new LessThanValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, nameof(TestValidatableObject.Number), null, value);
+            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
             var validationMessage = lessThanValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;

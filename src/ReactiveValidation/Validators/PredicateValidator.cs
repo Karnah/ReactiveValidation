@@ -9,7 +9,7 @@ namespace ReactiveValidation.Validators
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TProp">The type of validatable property.</typeparam>
-    public class PredicateValidator<TObject, TProp> : PropertyValidator<TObject, TProp>
+    public class PredicateValidator<TObject, TProp> : BaseSyncPropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
         private readonly Func<ValidationContext<TObject, TProp>, bool> _predicate;

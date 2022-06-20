@@ -7,7 +7,7 @@ namespace ReactiveValidation.Validators
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     /// <typeparam name="TProp">The type of validatable property.</typeparam>
-    public class NullValidator<TObject, TProp> : PropertyValidator<TObject, TProp>
+    public class NullValidator<TObject, TProp> : BaseSyncPropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
         /// <summary>

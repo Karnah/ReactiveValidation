@@ -12,7 +12,7 @@ namespace ReactiveValidation.Validators
     {
         private readonly TObject _validatableObject;
         private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
-        private readonly IDictionary<string, object> _propertiesValuesCache;
+        private readonly ValidationContextCache _validationContextCache;
 
         /// <summary>
         /// Create new aggregated validation context.
@@ -23,7 +23,7 @@ namespace ReactiveValidation.Validators
         {
             _validatableObject = validatableObject;
             _displayNamesSources = displayNamesSources;
-            _propertiesValuesCache = new Dictionary<string, object>();
+            _validationContextCache = new ValidationContextCache();
         }
 
         /// <summary>
@@ -31,21 +31,23 @@ namespace ReactiveValidation.Validators
         /// </summary>
         public ValidationContextFactory<TObject> CreateContextFactory(string propertyName)
         {
-            return new ValidationContextFactory<TObject>(_validatableObject, propertyName, _displayNamesSources[propertyName], GetPropertyValue(propertyName));
+            return new ValidationContextFactory<TObject>(_validatableObject, _validationContextCache, propertyName, _displayNamesSources[propertyName], GetPropertyValue(propertyName));
         }
 
         /// <summary>
-        /// Get current value of property.
+        /// Get property value.
         /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>Property value.</returns>
         private object GetPropertyValue(string propertyName)
         {
-            if (!_propertiesValuesCache.ContainsKey(propertyName))
+            if (!_validationContextCache.TryGetPropertyValue(propertyName, out var propertyValue))
             {
-                var propertyValue = ReactiveValidationHelper.GetPropertyValue<object>(_validatableObject, propertyName);
-                _propertiesValuesCache[propertyName] = propertyValue;
+                propertyValue = ReactiveValidationHelper.GetPropertyValue<object>(_validatableObject, propertyName);
+                _validationContextCache.SetPropertyValue(propertyName, propertyValue);
             }
-
-            return _propertiesValuesCache[propertyName];
+            
+            return propertyValue;
         }
     }
 }

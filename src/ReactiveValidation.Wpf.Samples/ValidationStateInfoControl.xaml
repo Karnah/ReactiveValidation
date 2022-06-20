@@ -12,6 +12,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Margin="3" FontWeight="Bold" Text="Validation messages:" />
@@ -36,9 +37,12 @@
 
 
         <CheckBox Grid.Row="2" Margin="3" IsEnabled="False" FontWeight="Bold"
-                  Content="Is valid" IsChecked="{Binding IsValid, Mode=OneWay}"  />
+                  Content="Is valid" IsChecked="{Binding IsValid, Mode=OneWay}" />
 
         <CheckBox Grid.Row="3" Margin="3" IsEnabled="False" FontWeight="Bold"
-                  Content="Has warnings" IsChecked="{Binding HasWarnings, Mode=OneWay}"  />
+                  Content="Has warnings" IsChecked="{Binding HasWarnings, Mode=OneWay}" />
+        
+        <CheckBox Grid.Row="4" Margin="3" IsEnabled="False" FontWeight="Bold"
+                  Content="Is async validation running" IsChecked="{Binding IsAsyncValidating, Mode=OneWay}" />
     </Grid>
 </UserControl>

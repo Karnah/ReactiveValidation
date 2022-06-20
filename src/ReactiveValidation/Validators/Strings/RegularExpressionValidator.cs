@@ -10,7 +10,7 @@ namespace ReactiveValidation.Validators
     /// Validator which checks property with regular expression.
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
-    public class RegularExpressionValidator<TObject> : PropertyValidator<TObject, string>
+    public class RegularExpressionValidator<TObject> : BaseSyncPropertyValidator<TObject, string>
         where TObject : IValidatableObject
     {
         private readonly ValidatorParameter<TObject, string> _regexPattern;

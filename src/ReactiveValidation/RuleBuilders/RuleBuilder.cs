@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-
 using ReactiveValidation.Exceptions;
 using ReactiveValidation.Extensions;
 using ReactiveValidation.Validators;
@@ -22,10 +20,9 @@ namespace ReactiveValidation
             where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
         private readonly List<IPropertyValidator<TObject>> _propertyValidators;
-        private readonly IList<LambdaExpression> _relatedProperties;
 
         private IPropertyValidator<TObject> _currentValidator;
-        private Func<TObject, bool> _commonCondition;
+        private IValidationCondition<TObject> _commonCondition;
 
         /// <summary>
         /// Create new base rule builder instance.
@@ -37,7 +34,6 @@ namespace ReactiveValidation
             ObservingPropertiesSettings = new ObservingPropertySettings();
 
             _propertyValidators = new List<IPropertyValidator<TObject>>();
-            _relatedProperties = new List<LambdaExpression>();
         }
 
 
@@ -53,8 +49,9 @@ namespace ReactiveValidation
             if (_commonCondition == null)
                 return _propertyValidators;
 
-            var complexValidator = new ComplexValidator<TObject>(_commonCondition, _propertyValidators, _relatedProperties.ToArray());
-            return new[] { complexValidator };
+            return _propertyValidators
+                .Select(pv => new WrappingValidator<TObject>(_commonCondition, pv))
+                .ToList();
         }
 
         /// <inheritdoc />
@@ -67,58 +64,12 @@ namespace ReactiveValidation
         }
 
 
-        #region When methods
-
         /// <inheritdoc />
-        public TBuilder When(Func<bool> condition)
-        {
-            var wrappedCondition = WrapCondition(condition);
-            return When(wrappedCondition);
-        }
-
-        /// <inheritdoc />
-        public TBuilder When(Expression<Func<TObject, bool>> conditionProperty)
-        {
-            var condition = conditionProperty.Compile();
-            return When(condition, conditionProperty);
-        }
-
-        /// <inheritdoc />
-        public TBuilder When<TParam>(
-            Expression<Func<TObject, TParam>> property,
-            Func<TParam, bool> condition)
-        {
-            var wrappedCondition = WrapCondition(property.Compile(), condition);
-            return When(wrappedCondition, property);
-        }
-
-        /// <inheritdoc />
-        public TBuilder When<TParam1, TParam2>(
-            Expression<Func<TObject, TParam1>> property1,
-            Expression<Func<TObject, TParam2>> property2,
-            Func<TParam1, TParam2, bool> condition)
-        {
-            var wrappedCondition = WrapCondition(property1.Compile(), property2.Compile(), condition);
-            return When(wrappedCondition, property1, property2);
-        }
-
-        /// <inheritdoc />
-        public TBuilder When<TParam1, TParam2, TParam3>(
-            Expression<Func<TObject, TParam1>> property1,
-            Expression<Func<TObject, TParam2>> property2,
-            Expression<Func<TObject, TParam3>> property3,
-            Func<TParam1, TParam2, TParam3, bool> condition)
-        {
-            var wrappedCondition = WrapCondition(property1.Compile(), property2.Compile(), property3.Compile(), condition);
-            return When(wrappedCondition, property1, property2, property3);
-        }
-
-
-        private TBuilder When(Func<TObject, bool> condition, params LambdaExpression[] relatedProperties)
+        public TBuilder When(IValidationCondition<TObject> condition)
         {
             if (_currentValidator is IPropertyValidatorSettings<TObject> validatorSettings)
             {
-                validatorSettings.ValidateWhen(condition, relatedProperties);
+                validatorSettings.ValidateWhen(condition);
             }
             else if (_currentValidator is WrappingValidator<TObject> wrappingValidator)
             {
@@ -126,7 +77,7 @@ namespace ReactiveValidation
             }
             else
             {
-                var wrappedValidator = new WrappingValidator<TObject>(condition, _currentValidator, relatedProperties);
+                var wrappedValidator = new WrappingValidator<TObject>(condition, _currentValidator);
 
                 ReplaceValidator(_currentValidator, wrappedValidator);
                 _currentValidator = wrappedValidator;
@@ -134,8 +85,6 @@ namespace ReactiveValidation
 
             return This;
         }
-
-        #endregion
 
 
         #region WithMessage/WithLocalizedMessage methods
@@ -187,78 +136,17 @@ namespace ReactiveValidation
 
         #endregion
 
-
-        #region AllWhen methods
-
+        
         /// <inheritdoc />
-        public IRuleBuilderOption<TObject, TProp> AllWhen(Func<bool> condition)
+        public IRuleBuilderOption<TObject, TProp> AllWhen(IValidationCondition<TObject> validationCondition)
         {
             _commonCondition.GuardNotCallTwice("Method 'AllWhen' already have been called");
-
-            _commonCondition = WrapCondition(condition);
-
-            return this;
-        }
-
-        /// <inheritdoc />
-        public IRuleBuilderOption<TObject, TProp> AllWhen(Expression<Func<TObject, bool>> conditionProperty)
-        {
-            _commonCondition.GuardNotCallTwice("Method 'AllWhen' already have been called");
-
-            _relatedProperties.Add(conditionProperty);
-            _commonCondition = conditionProperty.Compile();
+            _commonCondition = validationCondition;
 
             return This;
         }
 
-        /// <inheritdoc />
-        public IRuleBuilderOption<TObject, TProp> AllWhen<TParam>(
-            Expression<Func<TObject, TParam>> property,
-            Func<TParam, bool> condition)
-        {
-            _commonCondition.GuardNotCallTwice("Method 'AllWhen' already have been called");
-
-            _relatedProperties.Add(property);
-            _commonCondition = WrapCondition(property.Compile(), condition);
-
-            return This;
-        }
-
-        /// <inheritdoc />
-        public IRuleBuilderOption<TObject, TProp> AllWhen<TParam1, TParam2>(
-            Expression<Func<TObject, TParam1>> property1,
-            Expression<Func<TObject, TParam2>> property2,
-            Func<TParam1, TParam2, bool> condition)
-        {
-            _commonCondition.GuardNotCallTwice("Method 'AllWhen' already have been called");
-
-            _relatedProperties.Add(property1);
-            _relatedProperties.Add(property2);
-            _commonCondition = WrapCondition(property1.Compile(), property2.Compile(), condition);
-
-            return This;
-        }
-
-        /// <inheritdoc />
-        public IRuleBuilderOption<TObject, TProp> AllWhen<TParam1, TParam2, TParam3>(
-            Expression<Func<TObject, TParam1>> property1,
-            Expression<Func<TObject, TParam2>> property2,
-            Expression<Func<TObject, TParam3>> property3,
-            Func<TParam1, TParam2, TParam3, bool> condition)
-        {
-            _commonCondition.GuardNotCallTwice("Method 'AllWhen' already have been called");
-
-            _relatedProperties.Add(property1);
-            _relatedProperties.Add(property2);
-            _relatedProperties.Add(property3);
-            _commonCondition = WrapCondition(property1.Compile(), property2.Compile(), property3.Compile(), condition);
-
-            return This;
-        }
-
-        #endregion
-
-
+        
         /// <summary>
         /// Reference to strong-typed current object.
         /// </summary>
@@ -276,53 +164,6 @@ namespace ReactiveValidation
         {
             var index = _propertyValidators.IndexOf(oldValidator);
             _propertyValidators[index] = newValidator;
-        }
-
-
-        private static Func<TObject, bool> WrapCondition(Func<bool> condition)
-        {
-            return _ => condition();
-        }
-
-        private static Func<TObject, bool> WrapCondition<TParam>(
-            Func<TObject, TParam> paramFunc,
-            Func<TParam, bool> condition)
-        {
-            return instance =>
-            {
-                var param = paramFunc.Invoke(instance);
-                return condition.Invoke(param);
-            };
-        }
-
-        private static Func<TObject, bool> WrapCondition<TParam1, TParam2>(
-            Func<TObject, TParam1> param1Func,
-            Func<TObject, TParam2> param2Func,
-            Func<TParam1, TParam2, bool> condition)
-        {
-            return instance =>
-            {
-                var param1 = param1Func.Invoke(instance);
-                var param2 = param2Func.Invoke(instance);
-
-                return condition.Invoke(param1, param2);
-            };
-        }
-
-        private static Func<TObject, bool> WrapCondition<TParam1, TParam2, TParam3>(
-            Func<TObject, TParam1> param1Func,
-            Func<TObject, TParam2> param2Func,
-            Func<TObject, TParam3> param3Func,
-            Func<TParam1, TParam2, TParam3, bool> condition)
-        {
-            return instance =>
-            {
-                var param1 = param1Func.Invoke(instance);
-                var param2 = param2Func.Invoke(instance);
-                var param3 = param3Func.Invoke(instance);
-
-                return condition.Invoke(param1, param2, param3);
-            };
         }
     }
 

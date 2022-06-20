@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-
+using System.Threading;
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation
@@ -22,7 +23,10 @@ namespace ReactiveValidation
             PropertyName = propertyName;
             DisplayNameSource = displayNameSource;
             Validators = validators;
-            ValidatorsValidationMessages = Validators.ToDictionary(v => v, _ => (IReadOnlyList<ValidationMessage>) new ValidationMessage[0]);
+            SyncValidators = validators.Where(v => !v.IsAsync).ToList();
+            AsyncValidators = validators.Where(v => v.IsAsync).ToList();
+            AsyncValidatorCancellationTokenSources = AsyncValidators.ToDictionary(v => v, _ => (CancellationTokenSource) null);
+            ValidatorsValidationMessages = Validators.ToDictionary(v => v, _ => (IReadOnlyList<ValidationMessage>) Array.Empty<ValidationMessage>());
         }
 
 
@@ -40,6 +44,21 @@ namespace ReactiveValidation
         /// List of all property validators.
         /// </summary>
         public IReadOnlyList<IPropertyValidator<TObject>> Validators { get; }
+
+        /// <summary>
+        /// List of all sync property validators.
+        /// </summary>
+        public IReadOnlyList<IPropertyValidator<TObject>> SyncValidators { get; }
+        
+        /// <summary>
+        /// List of all async property validators.
+        /// </summary>
+        public IReadOnlyList<IPropertyValidator<TObject>> AsyncValidators { get; }
+        
+        /// <summary>
+        /// List of <see cref="CancellationTokenSource" /> for <see cref="AsyncValidators" />.
+        /// </summary>
+        public Dictionary<IPropertyValidator<TObject>, CancellationTokenSource> AsyncValidatorCancellationTokenSources { get; }
 
         /// <summary>
         /// List of property validators and its current validation messages.

@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="ReactiveValidation.Wpf.Samples._6._Async_validation.AsyncValidationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ReactiveValidation.Wpf.Samples._6._Async_validation"
+             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation.Wpf"
+             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation.Wpf"
+             xmlns:s="clr-namespace:ReactiveValidation.Wpf.Samples"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance local:AsyncValidationViewModel}">
+    <UserControl.Resources>
+        <!-- It is more convenient to create a base style for control.  -->
+        <Style x:Key="TextBox" TargetType="TextBox">
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+
+            <Setter Property="Margin" Value="3" />
+        </Style>
+
+        <Style x:Key="CheckBox" TargetType="CheckBox">
+            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
+            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+
+            <Setter Property="Margin" Value="3" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Phone number: " />
+            <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox}"
+                     Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap">
+                <Run Text="Phone number required if email is not specified." />
+                <LineBreak />
+                <Run Text="Must contains 11 digits." />
+                <LineBreak />
+                <Run Text="If '11111111111' then it is not valid (async check)." />
+            </TextBlock>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Email: " />
+            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBox}"
+                     Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap">
+                <Run Text="Email required if phone number is not specified." />
+                <LineBreak />
+                <Run Text="Expected format - 'xxx@yyy.zz'." />
+                <LineBreak />
+                <Run Text="if 'foo@bar.com' then is not valid (async check)." />
+            </TextBlock>
+
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                <Button HorizontalAlignment="Left"
+                        Content="Wait async validation completed"
+                        Command="{Binding WaitValidatingCompletedCommand}"/>
+            </Grid>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+        <s:ValidationStateInfoControl Grid.Column="2" DataContext="{Binding Validator}" />
+    </Grid>
+</UserControl>
