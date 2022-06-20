@@ -337,12 +337,12 @@ namespace ReactiveValidation
                     .ConfigureAwait(false);
 
                 if (tokenSource.IsCancellationRequested)
-                    return;
+                    continue;
                 
                 lock (_lock)
                 {
                     if (tokenSource.IsCancellationRequested)
-                        return;
+                        continue;
 
                     tokenSource.Cancel();
                     
@@ -352,9 +352,6 @@ namespace ReactiveValidation
                     {
                         info.ValidatorsValidationMessages[propertyValidator] = messages;
                         NotifyChangedProperties(new[] { propertyName });
-                        
-                        // For async validators using rule "First failure".
-                        return;
                     }
                 }
             }

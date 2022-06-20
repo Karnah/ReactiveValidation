@@ -4,10 +4,8 @@ using System.Linq.Expressions;
 
 namespace ReactiveValidation.Validators
 {
-    /// <summary>
-    /// Condition of executing for property validators.
-    /// </summary>
-    public class ValidationCondition<TObject>
+    /// <inheritdoc />
+    public class ValidationCondition<TObject> : IValidationCondition<TObject>
         where TObject : IValidatableObject
     {
         private readonly Func<TObject, bool> _conditionFunc;
@@ -23,21 +21,21 @@ namespace ReactiveValidation.Validators
             RelatedProperties = relatedProperties;
         }
 
-        /// <summary>
-        /// Properties which can affect on state of validatable condition.
-        /// </summary>
+        
+        /// <inheritdoc />
         public IReadOnlyList<LambdaExpression> RelatedProperties { get; }
 
-        /// <summary>
-        /// Check if property validator should not execute.
-        /// </summary>
-        /// <returns>
-        /// <see langword="true" />, if validator should not be executed.
-        /// <see langword="false" /> otherwise.
-        /// </returns>
-        public bool ShouldIgnoreValidation(ValidationCache<TObject> contextFactory)
+        
+        /// <inheritdoc />
+        public bool ShouldIgnoreValidation(ValidationContextFactory<TObject> validationContextFactory)
         {
-            return !contextFactory.GetConditionValue(_conditionFunc);
+            var validationCache = validationContextFactory.ValidationContextCache;
+            if (validationCache.TryGetValue(this, out var shouldIgnoreObject))
+                return (bool)shouldIgnoreObject;
+
+            var shouldIgnore = !_conditionFunc.Invoke(validationContextFactory.ValidatableObject);
+            validationCache.SetValue(this, shouldIgnore);
+            return shouldIgnore;
         }
     }
 }

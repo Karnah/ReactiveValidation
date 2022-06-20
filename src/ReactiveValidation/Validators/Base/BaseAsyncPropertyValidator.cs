@@ -40,7 +40,7 @@ namespace ReactiveValidation.Validators
         /// <inheritdoc />
         public sealed override async Task<IReadOnlyList<ValidationMessage>> ValidatePropertyAsync(ValidationContextFactory<TObject> contextFactory, CancellationToken cancellationToken)
         {
-            if (CheckIgnoreValidation(contextFactory.ValidationCache))
+            if (CheckIgnoreValidation(contextFactory))
                 return Array.Empty<ValidationMessage>();
             
             var context = contextFactory.CreateContext<TProp>();

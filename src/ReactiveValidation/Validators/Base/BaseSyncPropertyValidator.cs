@@ -34,7 +34,7 @@ namespace ReactiveValidation.Validators
         /// <inheritdoc />
         public sealed override IReadOnlyList<ValidationMessage> ValidateProperty(ValidationContextFactory<TObject> contextFactory)
         {
-            if (CheckIgnoreValidation(contextFactory.ValidationCache))
+            if (CheckIgnoreValidation(contextFactory))
                 return Array.Empty<ValidationMessage>();
             
             var context = contextFactory.CreateContext<TProp>();

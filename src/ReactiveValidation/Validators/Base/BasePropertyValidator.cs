@@ -20,7 +20,7 @@ namespace ReactiveValidation.Validators
         private readonly ValidationMessageType _validationMessageType;
         private readonly IStringSource _stringSource;
 
-        private ValidationCondition<TObject>  _condition;
+        private IValidationCondition<TObject>  _condition;
         private IStringSource _overriddenStringSource;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ReactiveValidation.Validators
         }
 
         /// <inheritdoc />
-        public void ValidateWhen(ValidationCondition<TObject> condition)
+        public void ValidateWhen(IValidationCondition<TObject> condition)
         {
             _condition.GuardNotCallTwice($"Method 'When' already have been called for {this.GetType()}");
             _condition = condition;
@@ -74,9 +74,9 @@ namespace ReactiveValidation.Validators
         /// <summary>
         /// Check that validation should be ignored.
         /// </summary>
-        protected virtual bool CheckIgnoreValidation(ValidationCache<TObject> validationCache)
+        protected virtual bool CheckIgnoreValidation(ValidationContextFactory<TObject> validationContextFactory)
         {
-            return _condition?.ShouldIgnoreValidation(validationCache) == true;
+            return _condition?.ShouldIgnoreValidation(validationContextFactory) == true;
         }
 
         /// <summary>

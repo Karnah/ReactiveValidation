@@ -16,14 +16,14 @@ namespace ReactiveValidation.Validators
         /// Create new instance of validation context.
         /// </summary>
         /// <param name="validatableObject">Instance of validatable object.</param>
-        /// <param name="validationCache">Cache which store property values, result of functions and etc.</param>
+        /// <param name="validationContextCache">Cache which store property values, result of functions and etc.</param>
         /// <param name="propertyName">Name of validatable property.</param>
         /// <param name="displayPropertySource">Source of display name of validatable property.</param>
         /// <param name="propertyValue">Value of validatable property.</param>
-        public ValidationContext(TObject validatableObject, ValidationCache<TObject> validationCache, string propertyName, IStringSource displayPropertySource, TProp propertyValue)
+        public ValidationContext(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource displayPropertySource, TProp propertyValue)
         {
             ValidatableObject = validatableObject;
-            ValidationCache = validationCache;
+            ValidationContextCache = validationContextCache;
             PropertyName = propertyName;
             DisplayPropertySource = displayPropertySource;
             PropertyValue = propertyValue;
@@ -39,7 +39,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         /// <param name="parentContext">Parent validation context.</param>
         public ValidationContext(ValidationContext<TObject, TProp> parentContext)
-            : this(parentContext.ValidatableObject, parentContext.ValidationCache, parentContext.PropertyName, parentContext.DisplayPropertySource, parentContext.PropertyValue)
+            : this(parentContext.ValidatableObject, parentContext.ValidationContextCache, parentContext.PropertyName, parentContext.DisplayPropertySource, parentContext.PropertyValue)
         {
         }
 
@@ -52,7 +52,7 @@ namespace ReactiveValidation.Validators
         /// <summary>
         /// Cache which store property values, result of functions and etc.
         /// </summary>
-        public ValidationCache<TObject> ValidationCache { get; }
+        public ValidationContextCache ValidationContextCache { get; }
 
         /// <summary>
         /// Name of validatable property.

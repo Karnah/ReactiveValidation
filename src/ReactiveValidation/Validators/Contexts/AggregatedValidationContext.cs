@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ReactiveValidation.Helpers;
 
 namespace ReactiveValidation.Validators
 {
@@ -11,7 +12,7 @@ namespace ReactiveValidation.Validators
     {
         private readonly TObject _validatableObject;
         private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
-        private readonly ValidationCache<TObject> _validationCache;
+        private readonly ValidationContextCache _validationContextCache;
 
         /// <summary>
         /// Create new aggregated validation context.
@@ -22,7 +23,7 @@ namespace ReactiveValidation.Validators
         {
             _validatableObject = validatableObject;
             _displayNamesSources = displayNamesSources;
-            _validationCache = new ValidationCache<TObject>(validatableObject);
+            _validationContextCache = new ValidationContextCache();
         }
 
         /// <summary>
@@ -30,7 +31,23 @@ namespace ReactiveValidation.Validators
         /// </summary>
         public ValidationContextFactory<TObject> CreateContextFactory(string propertyName)
         {
-            return new ValidationContextFactory<TObject>(_validatableObject, _validationCache, propertyName, _displayNamesSources[propertyName], _validationCache.GetPropertyValue(propertyName));
+            return new ValidationContextFactory<TObject>(_validatableObject, _validationContextCache, propertyName, _displayNamesSources[propertyName], GetPropertyValue(propertyName));
+        }
+
+        /// <summary>
+        /// Get property value.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <returns>Property value.</returns>
+        private object GetPropertyValue(string propertyName)
+        {
+            if (!_validationContextCache.TryGetPropertyValue(propertyName, out var propertyValue))
+            {
+                propertyValue = ReactiveValidationHelper.GetPropertyValue<object>(_validatableObject, propertyName);
+                _validationContextCache.SetPropertyValue(propertyName, propertyValue);
+            }
+            
+            return propertyValue;
         }
     }
 }

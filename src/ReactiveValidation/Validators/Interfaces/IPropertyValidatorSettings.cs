@@ -18,6 +18,6 @@
         /// Property always valid if condition is <see langword="false" />.
         /// </summary>
         /// <param name="condition">Condition.</param>
-        void ValidateWhen(ValidationCondition<TObject> condition);
+        void ValidateWhen(IValidationCondition<TObject> condition);
     }
 }

@@ -44,39 +44,9 @@ namespace ReactiveValidation
             where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
         /// <summary>
-        /// Last validator will check only if the condition is <see langword="true" />.
+        /// Last validator will check according to condition.
         /// </summary>
-        TBuilder When(Func<bool> condition);
-
-        /// <summary>
-        /// Last validator will check only if the condition is <see langword="true" />.
-        /// </summary>
-        TBuilder When(Expression<Func<TObject, bool>> conditionProperty);
-
-        /// <summary>
-        /// Last validator will check only if the condition is <see langword="true" />.
-        /// </summary>
-        TBuilder When<TParam>(
-            Expression<Func<TObject, TParam>> property,
-            Func<TParam, bool> condition);
-
-        /// <summary>
-        /// Last validator will check only if the condition is <see langword="true" />.
-        /// </summary>
-        TBuilder When<TParam1, TParam2>(
-            Expression<Func<TObject, TParam1>> property1,
-            Expression<Func<TObject, TParam2>> property2,
-            Func<TParam1, TParam2, bool> condition);
-
-        /// <summary>
-        /// Last validator will check only if the condition is <see langword="true" />.
-        /// </summary>
-        TBuilder When<TParam1, TParam2, TParam3>(
-            Expression<Func<TObject, TParam1>> property1,
-            Expression<Func<TObject, TParam2>> property2,
-            Expression<Func<TObject, TParam3>> property3,
-            Func<TParam1, TParam2, TParam3, bool> condition);
-
+        TBuilder When(IValidationCondition<TObject> condition);
 
 
         /// <summary>

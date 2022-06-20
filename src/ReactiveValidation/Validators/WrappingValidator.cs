@@ -15,7 +15,7 @@ namespace ReactiveValidation.Validators
     public class WrappingValidator<TObject> : IPropertyValidator<TObject>
         where TObject : IValidatableObject
     {
-        private readonly ValidationCondition<TObject> _condition;
+        private readonly IValidationCondition<TObject> _condition;
 
         /// <summary>
         /// Create new instance of wrapping validator.
@@ -23,7 +23,7 @@ namespace ReactiveValidation.Validators
         /// <param name="condition">Condition the using inner validator.</param>
         /// <param name="innerValidator">Inner validator.</param>
         public WrappingValidator(
-            ValidationCondition<TObject> condition,
+            IValidationCondition<TObject> condition,
             IPropertyValidator<TObject> innerValidator)
         {
             _condition = condition;
@@ -51,7 +51,7 @@ namespace ReactiveValidation.Validators
             if (IsAsync)
                 throw new NotSupportedException();
             
-            if (_condition.ShouldIgnoreValidation(contextFactory.ValidationCache))
+            if (_condition.ShouldIgnoreValidation(contextFactory))
                 return Array.Empty<ValidationMessage>();
 
             return InnerValidator.ValidateProperty(contextFactory);
@@ -63,7 +63,7 @@ namespace ReactiveValidation.Validators
             if (!IsAsync)
                 throw new NotSupportedException();
             
-            if (_condition.ShouldIgnoreValidation(contextFactory.ValidationCache))
+            if (_condition.ShouldIgnoreValidation(contextFactory))
                 return Array.Empty<ValidationMessage>();
 
             return await InnerValidator.ValidatePropertyAsync(contextFactory, cancellationToken);
