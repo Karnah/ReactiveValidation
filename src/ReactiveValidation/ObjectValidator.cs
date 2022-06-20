@@ -134,9 +134,13 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
-        public Task WaitValidatingAsync(CancellationToken cancellationToken = default)
+        public Task WaitValidatingCompletedAsync(CancellationToken cancellationToken = default)
         {
-            return _asyncValidationWaiter.WaitAsync(cancellationToken);
+            lock (_lock)
+            {
+                // Only return task, it's prohibited to wait here (because of deadlocks).
+                return _asyncValidationWaiter.WaitAsync(cancellationToken);
+            }
         }
 
         /// <inheritdoc />

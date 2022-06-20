@@ -49,6 +49,10 @@ namespace ReactiveValidation
         /// Wait until async validation is over.
         /// </summary>
         /// <param name="cancellationToken">Cancellation token.</param>
-        Task WaitValidatingAsync(CancellationToken cancellationToken = default);
+        /// <remarks>
+        /// IMPORTANT. If the property changed during the wait, then its changes will also be waited for.
+        /// Block UI to preserve infinity changing properties and infinity waiting.
+        /// </remarks>
+        Task WaitValidatingCompletedAsync(CancellationToken cancellationToken = default);
     }
 }

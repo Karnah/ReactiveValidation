@@ -22,7 +22,7 @@ namespace ReactiveValidation.Helpers
         /// </summary>
         public static bool HasWarnings(this IReadOnlyList<ValidationMessage> validationMessages)
         {
-            return !validationMessages.Any(vm =>
+            return validationMessages.Any(vm =>
                 vm?.ValidationMessageType is ValidationMessageType.Warning or ValidationMessageType.SimpleWarning);
         } 
     }

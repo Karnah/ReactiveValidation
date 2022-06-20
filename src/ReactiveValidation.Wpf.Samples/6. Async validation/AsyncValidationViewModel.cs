@@ -17,7 +17,7 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
         public AsyncValidationViewModel()
         {
             Validator = GetValidator();
-            WaitValidatingCommand = ReactiveCommand.CreateFromTask(WaitValidatingAsync);
+            WaitValidatingCompletedCommand = ReactiveCommand.CreateFromTask(WaitValidatingCompletedAsync);
         }
 
         
@@ -27,26 +27,11 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
         [Reactive]
         public string Email { get; set; }
 
-        [Reactive]
-        public string Password { get; set; }
+        public ICommand WaitValidatingCompletedCommand { get; }
 
-        [Reactive]
-        public string ConfirmPassword { get; set; }
-
-        [Reactive]
-        public bool AdditionalInformation { get; set; }
-
-        [Reactive]
-        public string Country { get; set; }
-
-        [Reactive]
-        public string City { get; set; }
-        
-        public ICommand WaitValidatingCommand { get; }
-
-        private async Task WaitValidatingAsync()
+        private async Task WaitValidatingCompletedAsync()
         {
-            await Validator.WaitValidatingAsync();
+            await Validator.WaitValidatingCompletedAsync();
             MessageBox.Show("Async validation has ended");
         }
         
@@ -66,23 +51,6 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
                 .When(vm => vm.PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber))
                 .Must(IsValidEmail)
                 .Must(CheckEmailIsInUseAsync).WithMessage("Email is already using");
-
-
-            builder.RuleFor(vm => vm.Password)
-                .NotEmpty()
-                .MinLength(8, ValidationMessageType.Warning);
-
-            builder.RuleFor(vm => vm.ConfirmPassword)
-                .Equal(vm => vm.Password);
-
-
-            builder.RuleFor(vm => vm.Country)
-                .NotEmpty()
-                .AllWhen(vm => vm.AdditionalInformation);
-
-            builder.RuleFor(vm => vm.City)
-                .NotEmpty()
-                .AllWhen(vm => vm.AdditionalInformation);
 
             return builder.Build(this);
         }
