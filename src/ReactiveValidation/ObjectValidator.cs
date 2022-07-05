@@ -514,8 +514,8 @@ namespace ReactiveValidation
                     previousSettings.TrackCollectionChanged |= settings.TrackCollectionChanged;
                     previousSettings.TrackCollectionItemChanged |= settings.TrackCollectionItemChanged;
                     previousSettings.TrackCollectionItemErrorsChanged |= settings.TrackCollectionItemErrorsChanged;
-                    previousSettings.PropertyValueFactoryMethod = previousSettings.PropertyValueFactoryMethod ?? settings.PropertyValueFactoryMethod;
-                    previousSettings.CollectionItemFactoryMethod = previousSettings.CollectionItemFactoryMethod ?? settings.CollectionItemFactoryMethod;
+                    previousSettings.PropertyValueFactoryMethod ??= settings.PropertyValueFactoryMethod;
+                    previousSettings.CollectionItemFactoryMethod ??= settings.CollectionItemFactoryMethod;
                 }
             }
 

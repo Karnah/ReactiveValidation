@@ -1,35 +1,43 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ReactiveValidation.Helpers;
+using ReactiveValidation.Validators.PropertyValueTransformers;
 
 namespace ReactiveValidation.Validators
 {
     /// <summary>
-    /// Wrap for validators which doesn't support <see cref="IPropertyValidatorSettings{TObject}" />.
+    /// Wrapper for validators to add common condition and/or value transformer.
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
-    public class WrappingValidator<TObject> : IPropertyValidator<TObject>
+    /// <typeparam name="TProp">Type of validatable property.</typeparam>
+    internal class WrappingValidator<TObject, TProp> : IPropertyValidator<TObject>
         where TObject : IValidatableObject
     {
-        private readonly IValidationCondition<TObject> _condition;
+        private readonly IValidationCondition<TObject>? _condition;
+        private readonly IValueTransformer<TObject, TProp>? _valueTransformer;
 
         /// <summary>
         /// Create new instance of wrapping validator.
         /// </summary>
         /// <param name="condition">Condition the using inner validator.</param>
+        /// <param name="valueTransformer"></param>
         /// <param name="innerValidator">Inner validator.</param>
         public WrappingValidator(
-            IValidationCondition<TObject> condition,
+            IValidationCondition<TObject>? condition,
+            IValueTransformer<TObject, TProp>? valueTransformer,
             IPropertyValidator<TObject> innerValidator)
         {
             _condition = condition;
+            _valueTransformer = valueTransformer;
+            
             InnerValidator = innerValidator;
-
-            UnionRelatedProperties(condition.RelatedProperties);
+            RelatedProperties = GetUnionRelatedProperties(innerValidator.RelatedProperties, condition?.RelatedProperties);
         }
 
 
@@ -42,7 +50,7 @@ namespace ReactiveValidation.Validators
         public bool IsAsync => InnerValidator.IsAsync;
 
         /// <inheritdoc />
-        public IReadOnlyList<string> RelatedProperties { get; private set; }
+        public IReadOnlyList<string> RelatedProperties { get; }
 
 
         /// <inheritdoc />
@@ -51,8 +59,11 @@ namespace ReactiveValidation.Validators
             if (IsAsync)
                 throw new NotSupportedException();
             
-            if (_condition.ShouldIgnoreValidation(contextFactory))
+            if (_condition?.ShouldIgnoreValidation(contextFactory) == true)
                 return Array.Empty<ValidationMessage>();
+
+            if (_valueTransformer != null)
+                contextFactory = GetTransformedContextFactory(contextFactory, _valueTransformer);
 
             return InnerValidator.ValidateProperty(contextFactory);
         }
@@ -63,25 +74,38 @@ namespace ReactiveValidation.Validators
             if (!IsAsync)
                 throw new NotSupportedException();
             
-            if (_condition.ShouldIgnoreValidation(contextFactory))
+            if (_condition?.ShouldIgnoreValidation(contextFactory) == true)
                 return Array.Empty<ValidationMessage>();
 
+            if (_valueTransformer != null)
+                contextFactory = GetTransformedContextFactory(contextFactory, _valueTransformer);
+            
             return await InnerValidator.ValidatePropertyAsync(contextFactory, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public void SetStringSource(IStringSource stringSource)
+        {
+            throw new NotSupportedException("Wrapping validator doesn't support settings");
+        }
+
+        /// <inheritdoc />
+        public void ValidateWhen(IValidationCondition<TObject> condition)
+        {
+            throw new NotSupportedException("Wrapping validator doesn't support settings");
         }
 
         /// <summary>
         /// Union related properties of inner validator and condition.
         /// </summary>
+        /// <param name="validatorRelatedProperties">Related properties of inner validator.</param>
         /// <param name="conditionRelatedProperties">Related properties of condition.</param>
-        private void UnionRelatedProperties(IReadOnlyList<LambdaExpression> conditionRelatedProperties)
+        private IReadOnlyList<string> GetUnionRelatedProperties(IReadOnlyList<string> validatorRelatedProperties, IReadOnlyList<LambdaExpression>? conditionRelatedProperties)
         {
             if (conditionRelatedProperties?.Any() != true)
-            {
-                RelatedProperties = InnerValidator.RelatedProperties;
-                return;
-            }
+                return InnerValidator.RelatedProperties;
 
-            var relatedProperties = new HashSet<string>(InnerValidator.RelatedProperties);
+            var relatedProperties = new HashSet<string>(validatorRelatedProperties);
             foreach (var expression in conditionRelatedProperties)
             {
                 var propertyName = ReactiveValidationHelper.GetPropertyName(typeof(TObject), expression);
@@ -89,7 +113,29 @@ namespace ReactiveValidation.Validators
                     relatedProperties.Add(propertyName);
             }
 
-            RelatedProperties = relatedProperties.ToList();
+            return relatedProperties.ToList();
+        }
+
+        /// <summary>
+        /// Get new context factory with transformed property value.
+        /// </summary>
+        private static ValidationContextFactory<TObject> GetTransformedContextFactory(
+            ValidationContextFactory<TObject> contextFactory,
+            IValueTransformer<TObject, TProp> valueTransformer)
+        {
+            var validationContextCache = contextFactory.ValidationContextCache;
+            if (!validationContextCache.TryGetValue(valueTransformer, out var transformedPropertyValue))
+            {
+                transformedPropertyValue = valueTransformer.Transform(contextFactory.ValidatableObject, contextFactory.PropertyValue);
+                validationContextCache.SetValue(valueTransformer, transformedPropertyValue);
+            }
+
+            return new ValidationContextFactory<TObject>(
+                contextFactory.ValidatableObject,
+                contextFactory.ValidationContextCache,
+                contextFactory.PropertyName,
+                contextFactory.DisplayNameSource,
+                transformedPropertyValue);
         }
     }
 }

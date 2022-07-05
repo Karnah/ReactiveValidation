@@ -40,5 +40,22 @@ namespace ReactiveValidation.Validators
         /// <param name="cancellationToken">Token for cancelling validation.</param>
         /// <returns>List of validation messages.</returns>
         Task<IReadOnlyList<ValidationMessage>> ValidatePropertyAsync(ValidationContextFactory<TObject> contextFactory, CancellationToken cancellationToken);
+
+        #region Settings
+
+        /// <summary>
+        /// Change the string source for validatable messages.
+        /// </summary>
+        /// <param name="stringSource">New string source.</param>
+        void SetStringSource(IStringSource stringSource);
+
+        /// <summary>
+        /// Validate property only if <paramref name="condition" /> is <see langword="true" />.
+        /// Property always valid if condition is <see langword="false" />.
+        /// </summary>
+        /// <param name="condition">Condition.</param>
+        void ValidateWhen(IValidationCondition<TObject> condition);
+
+        #endregion
     }
 }

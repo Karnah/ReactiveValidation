@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Internal;
+using ReactiveValidation.Validators.PropertyValueTransformers;
 
 namespace ReactiveValidation
 {
@@ -61,6 +62,27 @@ namespace ReactiveValidation
             return ruleBuilder;
         }
 
+        
+        /// <summary>
+        /// Create validator for single strongly typed property with transforming type.
+        /// </summary>
+        /// <param name="property">Validatable property.</param>
+        /// <param name="valueTransformer">Value converter.</param>
+        /// <typeparam name="TProp">The source type of property.</typeparam>
+        /// <typeparam name="TPropConverter">The target type of property.</typeparam>
+        /// <returns>Single property validator for <typeparamref name="TPropConverter" /> type.</returns>
+        protected ISinglePropertyRuleBuilderInitial<TObject, TPropConverter> Transform<TProp, TPropConverter>(
+            Expression<Func<TObject, TProp>> property,
+            IValueTransformer<TObject, TPropConverter> valueTransformer)
+        {
+            var propertyName = GetPropertyNameForValidator(property);
+            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, TPropConverter>(propertyName, valueTransformer);
+
+            _rulesBuilders.Add(ruleBuilder);
+
+            return ruleBuilder;
+        }
+        
 
         /// <summary>
         /// Create validator for collection of properties.

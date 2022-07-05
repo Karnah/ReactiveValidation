@@ -24,11 +24,12 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
             builder.RuleFor(vm => vm.PhoneNumber)
                 .NotEmpty()
                 .Matches(@"^\d{9,12}$");
-
-            builder.RuleFor(vm => vm.Age)
-                .NotNull()
+            
+            builder
+                .TransformToInt(vm => vm.AgeString)
+                .NotNull().WithMessage("Age should be valid integer string")
                 .Between(18, 35);
-
+            
             return builder.Build(this);
         }
 
@@ -60,11 +61,11 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
             }
         }
 
-        private int? _age;
-        public int? Age {
-            get => _age;
+        private string _ageString;
+        public string AgeString {
+            get => _ageString;
             set {
-                _age = value;
+                _ageString = value;
                 OnPropertyChanged();
             }
         }
