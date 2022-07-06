@@ -7,10 +7,6 @@
     public class ValidationContextFactory<TObject>
         where TObject : IValidatableObject
     {
-        private readonly string _propertyName;
-        private readonly IStringSource _displayNameSource;
-        private readonly object _propertyValue;
-
         /// <summary>
         /// Create new validation context factory.
         /// </summary>
@@ -21,9 +17,9 @@
         /// <param name="propertyValue">Value of property  which being validating.</param>
         internal ValidationContextFactory(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource displayNameSource, object propertyValue)
         {
-            _propertyName = propertyName;
-            _displayNameSource = displayNameSource;
-            _propertyValue = propertyValue;
+            PropertyName = propertyName;
+            DisplayNameSource = displayNameSource;
+            PropertyValue = propertyValue;
 
             ValidatableObject = validatableObject;
             ValidationContextCache = validationContextCache;
@@ -40,12 +36,27 @@
         public ValidationContextCache ValidationContextCache { get; }
         
         /// <summary>
+        /// Name of property which being validating.
+        /// </summary>
+        internal string PropertyName { get; }
+        
+        /// <summary>
+        /// Display name of validatable property.
+        /// </summary>
+        internal IStringSource DisplayNameSource { get; }
+        
+        /// <summary>
+        /// Value of property  which being validating.
+        /// </summary>
+        internal object PropertyValue { get; }
+        
+        /// <summary>
         /// Create context for validating property.
         /// </summary>
         /// <typeparam name="TProp">Type of validatable property.</typeparam>
         public ValidationContext<TObject, TProp> CreateContext<TProp>()
         {
-            return new ValidationContext<TObject, TProp>(ValidatableObject, ValidationContextCache, _propertyName, _displayNameSource, (TProp) _propertyValue);
+            return new ValidationContext<TObject, TProp>(ValidatableObject, ValidationContextCache, PropertyName, DisplayNameSource, (TProp) PropertyValue);
         }
     }
 }

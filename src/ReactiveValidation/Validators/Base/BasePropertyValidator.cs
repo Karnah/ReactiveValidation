@@ -14,7 +14,7 @@ namespace ReactiveValidation.Validators
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     /// <typeparam name="TProp">Type of validatable property.</typeparam>
-    public abstract class BasePropertyValidator<TObject, TProp> : IPropertyValidator<TObject>, IPropertyValidatorSettings<TObject>
+    public abstract class BasePropertyValidator<TObject, TProp> : IPropertyValidator<TObject>
         where TObject : IValidatableObject
     {
         private readonly ValidationMessageType _validationMessageType;

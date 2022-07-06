@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using ReactiveValidation.Exceptions;
 using ReactiveValidation.Extensions;
 using ReactiveValidation.Validators;
+using ReactiveValidation.Validators.PropertyValueTransformers;
 
 namespace ReactiveValidation
 {
@@ -19,6 +18,7 @@ namespace ReactiveValidation
             where TObject : IValidatableObject
             where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
+        private readonly IValueTransformer<TObject, TProp> _valueTransformer;
         private readonly List<IPropertyValidator<TObject>> _propertyValidators;
 
         private IPropertyValidator<TObject> _currentValidator;
@@ -28,12 +28,14 @@ namespace ReactiveValidation
         /// Create new base rule builder instance.
         /// </summary>
         /// <param name="validatableProperties">List of properties names which validating by this rules.</param>
-        protected BaseRuleBuilder(IReadOnlyList<string> validatableProperties)
+        /// <param name="valueTransformer">Property value transformer.</param>
+        protected BaseRuleBuilder(IReadOnlyList<string> validatableProperties, IValueTransformer<TObject, TProp> valueTransformer = null)
         {
+            _valueTransformer = valueTransformer;
+            _propertyValidators = new List<IPropertyValidator<TObject>>();
+            
             ValidatableProperties = validatableProperties;
             ObservingPropertiesSettings = new ObservingPropertySettings();
-
-            _propertyValidators = new List<IPropertyValidator<TObject>>();
         }
 
 
@@ -46,11 +48,11 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public IReadOnlyList<IPropertyValidator<TObject>> GetValidators()
         {
-            if (_commonCondition == null)
+            if (_commonCondition == null && _valueTransformer == null)
                 return _propertyValidators;
 
             return _propertyValidators
-                .Select(pv => new WrappingValidator<TObject>(_commonCondition, pv))
+                .Select(pv => new WrappingValidator<TObject, TProp>(_commonCondition, _valueTransformer, pv))
                 .ToList();
         }
 
@@ -67,21 +69,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder When(IValidationCondition<TObject> condition)
         {
-            if (_currentValidator is IPropertyValidatorSettings<TObject> validatorSettings)
-            {
-                validatorSettings.ValidateWhen(condition);
-            }
-            else if (_currentValidator is WrappingValidator<TObject> wrappingValidator)
-            {
-                throw new MethodAlreadyCalledException($"Method 'When' already have been called for {wrappingValidator.InnerValidator.GetType()}");
-            }
-            else
-            {
-                var wrappedValidator = new WrappingValidator<TObject>(condition, _currentValidator);
-
-                ReplaceValidator(_currentValidator, wrappedValidator);
-                _currentValidator = wrappedValidator;
-            }
+            _currentValidator.ValidateWhen(condition);
 
             return This;
         }
@@ -92,14 +80,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithMessage(string message)
         {
-            if (_currentValidator is IPropertyValidatorSettings<TObject> validatorSettings)
-            {
-                validatorSettings.SetStringSource(new StaticStringSource(message));
-            }
-            else
-            {
-                throw new NotImplementedException($"{_currentValidator.GetType()} must implement IPropertyValidatorSettings<TObject> for {nameof(WithMessage)} method");
-            }
+            _currentValidator.SetStringSource(new StaticStringSource(message));
 
             return This;
         }
@@ -107,14 +88,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithLocalizedMessage(string messageKey)
         {
-            if (_currentValidator is IPropertyValidatorSettings<TObject> validatorSettings)
-            {
-                validatorSettings.SetStringSource(new LanguageStringSource(messageKey));
-            }
-            else
-            {
-                throw new NotImplementedException($"{_currentValidator.GetType()} must implement IPropertyValidatorSettings<TObject> for {nameof(WithMessage)} method");
-            }
+            _currentValidator.SetStringSource(new LanguageStringSource(messageKey));
 
             return This;
         }
@@ -122,14 +96,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithLocalizedMessage(string resource, string messageKey)
         {
-            if (_currentValidator is IPropertyValidatorSettings<TObject> validatorSettings)
-            {
-                validatorSettings.SetStringSource(new LanguageStringSource(resource, messageKey));
-            }
-            else
-            {
-                throw new NotImplementedException($"{_currentValidator.GetType()} must implement IPropertyValidatorSettings<TObject> for {nameof(WithMessage)} method");
-            }
+            _currentValidator.SetStringSource(new LanguageStringSource(resource, messageKey));
 
             return This;
         }
@@ -151,20 +118,6 @@ namespace ReactiveValidation
         /// Reference to strong-typed current object.
         /// </summary>
         protected abstract TBuilder This { get; }
-
-
-        /// <summary>
-        /// Replace one validator by another.
-        /// </summary>
-        /// <param name="oldValidator">Old validator.</param>
-        /// <param name="newValidator">New validator.</param>
-        private void ReplaceValidator(
-            IPropertyValidator<TObject> oldValidator,
-            IPropertyValidator<TObject> newValidator)
-        {
-            var index = _propertyValidators.IndexOf(oldValidator);
-            _propertyValidators[index] = newValidator;
-        }
     }
 
 
@@ -179,7 +132,7 @@ namespace ReactiveValidation
             where TObject : IValidatableObject
     {
         /// <inheritdoc />
-        public SinglePropertyRuleBuilder(string validatablePropertyName) : base(new []{ validatablePropertyName })
+        public SinglePropertyRuleBuilder(string validatablePropertyName, IValueTransformer<TObject, TProp> valueTransformer = null) : base(new []{ validatablePropertyName }, valueTransformer)
         {
         }
 

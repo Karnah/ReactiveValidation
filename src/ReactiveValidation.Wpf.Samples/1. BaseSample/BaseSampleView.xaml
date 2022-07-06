@@ -62,9 +62,9 @@
 
             <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Age: " />
             <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBox}"
-                     Text="{Binding Age, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding AgeString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Grid.Row="3" Grid.Column="2" Margin="3" MaxWidth="150" TextWrapping="Wrap"
-                       Text="Age should be between 18 and 35" />
+                       Text="Age should be valid integer string and has value between 18 and 35" />
         </Grid>
 
         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
