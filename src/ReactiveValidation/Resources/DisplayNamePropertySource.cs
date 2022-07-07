@@ -1,4 +1,5 @@
-﻿using ReactiveValidation.Attributes;
+﻿using System;
+using ReactiveValidation.Attributes;
 
 namespace ReactiveValidation
 {
@@ -15,7 +16,7 @@ namespace ReactiveValidation
         /// <param name="displayNameAttribute">Attribute for display name.</param>
         public DisplayNamePropertySource(DisplayNameAttribute displayNameAttribute)
         {
-            _displayNameAttribute = displayNameAttribute;
+            _displayNameAttribute = displayNameAttribute ?? throw new ArgumentNullException(nameof(displayNameAttribute));
         }
 
         /// <inheritdoc />
@@ -36,7 +37,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return (_displayNameAttribute != null ? _displayNameAttribute.GetHashCode() : 0);
+            return _displayNameAttribute.GetHashCode();
         }
 
         /// <summary>

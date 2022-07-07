@@ -5,18 +5,15 @@ using ReactiveUI;
 
 namespace ReactiveValidation.Wpf.Samples
 {
-    public class ReactiveValidatableObject : ReactiveObject, IValidatableObject
+    public abstract class ReactiveValidatableObject : ReactiveObject, IValidatableObject
     {
-        public ReactiveValidatableObject()
-        { }
-
 
         /// <inheritdoc />
         public IObjectValidator Validator { get; set; }
 
 
         /// <inheritdoc />
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
 
         /// <inheritdoc />
@@ -32,7 +29,7 @@ namespace ReactiveValidation.Wpf.Samples
         /// <inheritdoc />
         IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
         {
-            return Validator?.GetMessages(propertyName);
+            return Validator.GetMessages(propertyName);
         }
     }
 }

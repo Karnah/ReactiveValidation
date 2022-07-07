@@ -50,17 +50,17 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
             return builder.Build(this);
         }
 
-        private static bool IsValidEmail(string email)
+        private static bool IsValidEmail(string? email)
         {
-            if (string.IsNullOrEmpty(email) == true)
+            if (string.IsNullOrEmpty(email))
                 return true;
 
             return Regex.IsMatch(email, @"^\w+@\w+.\w+$");
         }
 
 
-        private string _phoneNumber;
-        public string PhoneNumber {
+        private string? _phoneNumber;
+        public string? PhoneNumber {
             get => _phoneNumber;
             set {
                 _phoneNumber = value;
@@ -68,8 +68,8 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
             }
         }
 
-        private string _email;
-        public string Email {
+        private string? _email;
+        public string? Email {
             get => _email;
             set {
                 _email = value;
@@ -77,8 +77,8 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
             }
         }
 
-        private string _password;
-        public string Password {
+        private string? _password;
+        public string? Password {
             get => _password;
             set {
                 _password = value;
@@ -86,8 +86,8 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
             }
         }
 
-        private string _confirmPassword;
-        public string ConfirmPassword {
+        private string? _confirmPassword;
+        public string? ConfirmPassword {
             get => _confirmPassword;
             set {
                 _confirmPassword = value;
@@ -104,8 +104,8 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
             }
         }
 
-        private string _country;
-        public string Country {
+        private string? _country;
+        public string? Country {
             get => _country;
             set {
                 _country = value;
@@ -113,8 +113,8 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
             }
         }
 
-        private string _city;
-        public string City {
+        private string? _city;
+        public string? City {
             get => _city;
             set {
                 _city = value;

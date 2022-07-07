@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
-
 using ReactiveValidation.Attributes;
 using ReactiveValidation.Helpers;
 
@@ -13,29 +12,25 @@ namespace ReactiveValidation.Internal
     internal class DefaultDisplayNameResolver : IDisplayNameResolver
     {
         /// <inheritdoc />
-        public IStringSource GetPropertyNameSource(Type type, PropertyInfo propertyInfo, LambdaExpression expression)
+        public IStringSource? GetPropertyNameSource(PropertyInfo propertyInfo)
         {
-            if (propertyInfo != null)
-            {
-                var displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
-                return displayNameAttribute == null
-                    ? null
-                    : new DisplayNamePropertySource(displayNameAttribute);
-            }
+            var displayNameAttribute = propertyInfo.GetCustomAttribute<DisplayNameAttribute>();
+            return displayNameAttribute == null
+                ? null
+                : new DisplayNamePropertySource(displayNameAttribute);
+        }
 
-            if (type != null && expression != null)
-            {
-                var propertyName = ReactiveValidationHelper.GetPropertyName(type, expression);
-                if (string.IsNullOrEmpty(propertyName))
-                    return null;
+        /// <inheritdoc />
+        public IStringSource? GetPropertyNameSource(Type objectType, LambdaExpression expression)
+        {
+            var propertyName = ReactiveValidationHelper.GetPropertyName(objectType, expression);
+            if (string.IsNullOrEmpty(propertyName))
+                return null;
 
-                var displayNameAttribute = type.GetProperty(propertyName)?.GetCustomAttribute<DisplayNameAttribute>();
-                return displayNameAttribute == null
-                    ? null
-                    : new DisplayNamePropertySource(displayNameAttribute);
-            }
-
-            return null;
+            var displayNameAttribute = objectType.GetProperty(propertyName)?.GetCustomAttribute<DisplayNameAttribute>();
+            return displayNameAttribute == null
+                ? null
+                : new DisplayNamePropertySource(displayNameAttribute);
         }
     }
 }

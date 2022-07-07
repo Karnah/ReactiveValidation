@@ -34,8 +34,8 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
         }
 
 
-        private string _name;
-        public string Name {
+        private string? _name;
+        public string? Name {
             get => _name;
             set {
                 _name = value;
@@ -43,8 +43,8 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
             }
         }
 
-        private string _surname;
-        public string Surname {
+        private string? _surname;
+        public string? Surname {
             get => _surname;
             set {
                 _surname = value;
@@ -52,8 +52,8 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
             }
         }
 
-        private string _phoneNumber;
-        public string PhoneNumber {
+        private string? _phoneNumber;
+        public string? PhoneNumber {
             get => _phoneNumber;
             set {
                 _phoneNumber = value;
@@ -61,8 +61,8 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
             }
         }
 
-        private string _ageString;
-        public string AgeString {
+        private string? _ageString;
+        public string? AgeString {
             get => _ageString;
             set {
                 _ageString = value;

@@ -28,11 +28,9 @@ namespace ReactiveValidation
             _instance = instance;
             _instance.PropertyChanged += InstanceOnPropertyChanged;
 
-            _observingProperties = settings.ToDictionary(s => s.Key, s => new ObservingProperty
-            {
-                PropertyName = s.Key,
-                Settings = s.Value
-            });
+            _observingProperties = settings.ToDictionary(
+                s => s.Key,
+                s => new ObservingProperty(s.Key, s.Value));
 
             foreach (var observingProperty in _observingProperties)
             {
@@ -44,7 +42,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Event of changing property of observable object.
         /// </summary>
-        public event EventHandler<PropertyChangedEventArgs> PropertyChanged;
+        public event EventHandler<PropertyChangedEventArgs>? PropertyChanged;
 
 
         /// <inheritdoc />

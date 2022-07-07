@@ -22,9 +22,9 @@ namespace ReactiveValidation.Validators.PropertyValueTransformers
         }
 
         /// <inheritdoc />
-        public TTo Transform(TObject obj, object from)
+        public TTo Transform(TObject obj, object? from)
         {
-            return _func.Invoke(obj, (TFrom)from);
+            return _func.Invoke(obj, (TFrom)from!);
         }
     }
 }

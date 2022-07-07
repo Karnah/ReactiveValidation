@@ -9,7 +9,8 @@ namespace ReactiveValidation.WPF.Converters
 {
     internal class ErrorsToValidationMessagesConverter : IMultiValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        /// <inheritdoc />
+        public object? Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var errors = (values[0] as IReadOnlyCollection<ValidationError>)
                 ?.Select(ve => ve.ErrorContent)
@@ -21,9 +22,10 @@ namespace ReactiveValidation.WPF.Converters
             return errors;
         }
 
+        /// <inheritdoc />
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

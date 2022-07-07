@@ -1,8 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
+using System.Diagnostics.CodeAnalysis;
 using ReactiveValidation.Exceptions;
 using ReactiveValidation.Internal;
 
@@ -13,7 +14,9 @@ namespace ReactiveValidation.Factory
     {
         private readonly Dictionary<Type, IObjectValidatorBuilder> _validatorsBuilder;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Create instance of <see cref="ValidatorFactory" /> class.
+        /// </summary>
         public ValidatorFactory()
         {
             _validatorsBuilder = new Dictionary<Type, IObjectValidatorBuilder>();
@@ -46,7 +49,7 @@ namespace ReactiveValidation.Factory
         /// Method, which allows get creator by its type.
         /// This can be DI method.
         /// </param>
-        public void Register(Assembly assembly, Func<Type, IObjectValidatorBuilderCreator> factoryMethod = null)
+        public void Register(Assembly assembly, Func<Type, IObjectValidatorBuilderCreator>? factoryMethod = null)
         {
             var creatorTypes = assembly
                 .GetTypes()
@@ -76,7 +79,7 @@ namespace ReactiveValidation.Factory
         }
 
         /// <inheritdoc />
-        public bool TryGetValidator<TObject>(IValidatableObject instance, out IObjectValidator objectValidator)
+        public bool TryGetValidator<TObject>(IValidatableObject instance, [NotNullWhen(true)]out IObjectValidator? objectValidator)
         {
             if (instance == null)
                 throw new ArgumentNullException(nameof(instance));
@@ -99,19 +102,21 @@ namespace ReactiveValidation.Factory
         /// <see langword="true" /> if builder founded for type or base types.
         /// <see langword="false" /> otherwise.
         /// </returns>
-        private bool TryGetValidatorBuilder(Type validatableObjectType, out IObjectValidatorBuilder builder)
+        private bool TryGetValidatorBuilder(Type validatableObjectType,
+            [NotNullWhen(true)] out IObjectValidatorBuilder? builder)
         {
             builder = null;
 
-            while (validatableObjectType != typeof(object))
+            while (true)
             {
                 if (_validatorsBuilder.TryGetValue(validatableObjectType, out builder))
                     return true;
 
+                if (validatableObjectType.BaseType == null)
+                    return false;
+                
                 validatableObjectType = validatableObjectType.BaseType;
             }
-
-            return false;
         }
     }
 }

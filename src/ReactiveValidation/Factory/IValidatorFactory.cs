@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+using System;
+using System.Diagnostics.CodeAnalysis;
 using ReactiveValidation.Exceptions;
 
 namespace ReactiveValidation.Factory
@@ -27,6 +29,6 @@ namespace ReactiveValidation.Factory
         /// <see langword="false" /> otherwise.
         /// </returns>
         /// <exception cref="ArgumentNullException">If <paramref name="instance"/> is <see langword="null" />.</exception>
-        bool TryGetValidator<TObject>(IValidatableObject instance, out IObjectValidator objectValidator);
+        bool TryGetValidator<TObject>(IValidatableObject instance, [NotNullWhen(true)]out IObjectValidator? objectValidator);
     }
 }

@@ -11,7 +11,7 @@ namespace ReactiveValidation.WPF.Controls
             nameof(IsTargetVisible), typeof(bool), typeof(AttachedPopup), new PropertyMetadata(default(bool)));
 
 
-        private UIElement _lastInputHitTest;
+        private UIElement? _lastInputHitTest;
 
         public AttachedPopup()
         {
@@ -87,7 +87,7 @@ namespace ReactiveValidation.WPF.Controls
             var childCenter = target.TranslatePoint(new Point(target.ActualWidth / 2, target.ActualHeight / 2), window);
             var control = window.InputHitTest(childCenter) as UIElement;
 
-            if (Equals(_lastInputHitTest, control) == true)
+            if (Equals(_lastInputHitTest, control))
                 return;
 
             _lastInputHitTest = control;

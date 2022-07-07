@@ -39,7 +39,7 @@ namespace ReactiveValidation
             {
                 DisplayNameSource = ValidationOptions
                     .DisplayNameResolver
-                    .GetPropertyNameSource(typeof(TObject), null, paramExpression);;
+                    .GetPropertyNameSource(typeof(TObject), paramExpression);;
             }
         }
 
@@ -48,13 +48,13 @@ namespace ReactiveValidation
         /// Name of parameter.
         /// <see langword="null" /> if parameter is constant value.
         /// </summary>
-        public string Name { get; }
+        public string? Name { get; }
 
         /// <summary>
         /// Source of display name of parameter.
         /// <see langword="null" /> if parameter is constant value.
         /// </summary>
-        public IStringSource DisplayNameSource { get; }
+        public IStringSource? DisplayNameSource { get; }
 
         /// <summary>
         /// Function for getting value.

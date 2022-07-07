@@ -22,10 +22,10 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
 
         
         [Reactive]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Reactive]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         public ICommand WaitValidatingCompletedCommand { get; }
 
@@ -58,7 +58,7 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
         /// <summary>
         /// Async check that phone is already using.
         /// </summary>
-        private static async Task<bool> CheckPhoneIsInUseAsync(string phoneNumber, CancellationToken cancellationToken)
+        private static async Task<bool> CheckPhoneIsInUseAsync(string? phoneNumber, CancellationToken cancellationToken)
         {
             await Task.Delay(3000, cancellationToken);
             return phoneNumber != "11111111111";
@@ -67,7 +67,7 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
         /// <summary>
         /// Check of email is valid.
         /// </summary>
-        private static bool IsValidEmail(string email)
+        private static bool IsValidEmail(string? email)
         {
             if (string.IsNullOrEmpty(email))
                 return true;
@@ -78,7 +78,7 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
         /// <summary>
         /// Async check that email is already using.
         /// </summary>
-        private static async Task<bool> CheckEmailIsInUseAsync(string email, CancellationToken cancellationToken)
+        private static async Task<bool> CheckEmailIsInUseAsync(string? email, CancellationToken cancellationToken)
         {
             await Task.Delay(3000, cancellationToken);
             return email != "foo@bar.com";

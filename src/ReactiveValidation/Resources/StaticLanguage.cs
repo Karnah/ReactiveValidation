@@ -26,7 +26,7 @@ namespace ReactiveValidation
 
 
         /// <inheritdoc />
-        public string GetTranslation(string key)
+        public string? GetTranslation(string key)
         {
             if (_translations.TryGetValue(key, out var message))
                 return message;

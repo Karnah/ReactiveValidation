@@ -9,13 +9,13 @@ namespace ReactiveValidation.Internal
     public abstract class BaseNotifyPropertyChanged : INotifyPropertyChanged
     {
         /// <inheritdoc />
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Raise <see cref="PropertyChanged" /> event.
         /// </summary>
         /// <param name="propertyName">Name of property.</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -27,7 +27,7 @@ namespace ReactiveValidation.Internal
         /// <param name="field">Field of property.</param>
         /// <param name="value">New value.</param>
         /// <param name="propertyName">Name of property.</param>
-        protected virtual void SetAndRaiseIfChanged<TProp>(ref TProp field, TProp value, [CallerMemberName] string propertyName = null)
+        protected virtual void SetAndRaiseIfChanged<TProp>(ref TProp field, TProp value, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(field, value))
                 return;

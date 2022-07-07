@@ -47,22 +47,15 @@ namespace ReactiveValidation.Validators
             ValidationMessageType validationMessageType)
             : base(stringSource, validationMessageType, minCountExpression, maxCountExpression)
         {
-            if (minCountExpression != null)
-                _minCount = new ValidatorParameter<TObject, int>(minCountExpression);
-
-            if (maxCountExpression != null)
-                _maxCount = new ValidatorParameter<TObject, int>(maxCountExpression);
+            _minCount = new ValidatorParameter<TObject, int>(minCountExpression);
+            _maxCount = new ValidatorParameter<TObject, int>(maxCountExpression);
         }
 
 
         /// <inheritdoc />
         protected override bool IsValid(ValidationContext<TObject, TCollection> context)
         {
-            int min = 0,
-                max = 0;
-            if (_minCount != null)
-                min = context.GetParamValue(_minCount);
-            if (_maxCount != null)
+            int min = context.GetParamValue(_minCount),
                 max = context.GetParamValue(_maxCount);
 
             var totalCount = context.PropertyValue?.Count() ?? 0;

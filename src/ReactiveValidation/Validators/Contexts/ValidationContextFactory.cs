@@ -15,7 +15,7 @@
         /// <param name="propertyName">Name of property which being validating.</param>
         /// <param name="displayNameSource">Display name of validatable property.</param>
         /// <param name="propertyValue">Value of property  which being validating.</param>
-        internal ValidationContextFactory(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource displayNameSource, object propertyValue)
+        internal ValidationContextFactory(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource? displayNameSource, object? propertyValue)
         {
             PropertyName = propertyName;
             DisplayNameSource = displayNameSource;
@@ -43,12 +43,12 @@
         /// <summary>
         /// Display name of validatable property.
         /// </summary>
-        internal IStringSource DisplayNameSource { get; }
+        internal IStringSource? DisplayNameSource { get; }
         
         /// <summary>
         /// Value of property  which being validating.
         /// </summary>
-        internal object PropertyValue { get; }
+        internal object? PropertyValue { get; }
         
         /// <summary>
         /// Create context for validating property.
@@ -56,7 +56,7 @@
         /// <typeparam name="TProp">Type of validatable property.</typeparam>
         public ValidationContext<TObject, TProp> CreateContext<TProp>()
         {
-            return new ValidationContext<TObject, TProp>(ValidatableObject, ValidationContextCache, PropertyName, DisplayNameSource, (TProp) PropertyValue);
+            return new ValidationContext<TObject, TProp>(ValidatableObject, ValidationContextCache, PropertyName, DisplayNameSource, (TProp) PropertyValue!);
         }
     }
 }

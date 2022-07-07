@@ -13,6 +13,6 @@ namespace ReactiveValidation.Validators.PropertyValueTransformers
         /// <param name="obj">Object which store value.</param>
         /// <param name="from">Source value.</param>
         /// <returns>Transformed value.</returns>
-        TTo Transform(TObject obj, object from);
+        TTo Transform(TObject obj, object? from);
     }
 }

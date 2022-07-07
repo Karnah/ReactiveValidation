@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -54,7 +55,7 @@ namespace ReactiveValidation.Helpers
         /// <param name="type">Type which contain property.</param>
         /// <param name="expression">Lambda expression.</param>
         /// <returns>Property name or null if expression is not a property.</returns>
-        internal static string GetPropertyName(Type type, LambdaExpression expression)
+        internal static string? GetPropertyName(Type type, LambdaExpression expression)
         {
             var member = expression.Body as MemberExpression;
             if (member == null)
@@ -80,7 +81,7 @@ namespace ReactiveValidation.Helpers
         internal static Type GetPropertyType(Type type, string propertyName)
         {
             var propertyInfo = GetPropertyInfo(type, propertyName);
-            return propertyInfo?.PropertyType;
+            return propertyInfo.PropertyType;
         }
 
         /// <summary>

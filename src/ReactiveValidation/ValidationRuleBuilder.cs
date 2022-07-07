@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -19,7 +21,9 @@ namespace ReactiveValidation
     {
         private readonly List<IRuleBuilder<TObject>> _rulesBuilders;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Create instance of <see cref="ValidationBuilder{TObject}" /> class.
+        /// </summary>
         protected ValidationRuleBuilder()
         {
             _rulesBuilders = new List<IRuleBuilder<TObject>>();

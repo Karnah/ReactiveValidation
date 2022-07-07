@@ -139,7 +139,7 @@ namespace ReactiveValidation
         /// Method, which allows get creator by its type.
         /// This can be DI method.
         /// </param>
-        public ValidationOptionsBuilder RegisterForValidatorFactory(Assembly assembly, Func<Type, IObjectValidatorBuilderCreator> factoryMethod = null)
+        public ValidationOptionsBuilder RegisterForValidatorFactory(Assembly assembly, Func<Type, IObjectValidatorBuilderCreator>? factoryMethod = null)
         {
             if (assembly == null)
                 throw new ArgumentNullException(nameof(assembly));
@@ -159,7 +159,7 @@ namespace ReactiveValidation
         /// Method, which allows get creator by its type.
         /// This can be DI method.
         /// </param>
-        public ValidationOptionsBuilder RegisterForValidatorFactory(IEnumerable<Assembly> assemblies, Func<Type, IObjectValidatorBuilderCreator> factoryMethod = null)
+        public ValidationOptionsBuilder RegisterForValidatorFactory(IEnumerable<Assembly> assemblies, Func<Type, IObjectValidatorBuilderCreator>? factoryMethod = null)
         {
             if (assemblies == null)
                 throw new ArgumentNullException(nameof(assemblies));
@@ -242,9 +242,6 @@ namespace ReactiveValidation
         {
             if (_isUseCustomValidatorFactoryCalled)
                 throw new MethodAlreadyCalledException("Cannot set register creator for custom validation factory");
-
-            if (ValidationOptions.ValidatorFactory == null)
-                ValidationOptions.ValidatorFactory = new ValidatorFactory();
 
             return (ValidatorFactory) ValidationOptions.ValidatorFactory;
         }

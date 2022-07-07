@@ -39,7 +39,7 @@ namespace ReactiveValidation.Wpf.Samples._5._Validation_builder_factory
         /// <summary>
         /// Check of email is valid.
         /// </summary>
-        private static bool IsValidEmail(string email)
+        private static bool IsValidEmail(string? email)
         {
             if (string.IsNullOrEmpty(email))
                 return true;

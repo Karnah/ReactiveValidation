@@ -18,18 +18,18 @@ namespace ReactiveValidation
             where TObject : IValidatableObject
             where TBuilder : IRuleBuilder<TObject, TProp, TBuilder>
     {
-        private readonly IValueTransformer<TObject, TProp> _valueTransformer;
+        private readonly IValueTransformer<TObject, TProp>? _valueTransformer;
         private readonly List<IPropertyValidator<TObject>> _propertyValidators;
 
-        private IPropertyValidator<TObject> _currentValidator;
-        private IValidationCondition<TObject> _commonCondition;
+        private IPropertyValidator<TObject>? _currentValidator;
+        private IValidationCondition<TObject>? _commonCondition;
 
         /// <summary>
         /// Create new base rule builder instance.
         /// </summary>
         /// <param name="validatableProperties">List of properties names which validating by this rules.</param>
         /// <param name="valueTransformer">Property value transformer.</param>
-        protected BaseRuleBuilder(IReadOnlyList<string> validatableProperties, IValueTransformer<TObject, TProp> valueTransformer = null)
+        protected BaseRuleBuilder(IReadOnlyList<string> validatableProperties, IValueTransformer<TObject, TProp>? valueTransformer = null)
         {
             _valueTransformer = valueTransformer;
             _propertyValidators = new List<IPropertyValidator<TObject>>();
@@ -69,6 +69,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder When(IValidationCondition<TObject> condition)
         {
+            _currentValidator.GuardNotNull("Current validator hasn't set");
             _currentValidator.ValidateWhen(condition);
 
             return This;
@@ -80,6 +81,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithMessage(string message)
         {
+            _currentValidator.GuardNotNull("Current validator hasn't set");
             _currentValidator.SetStringSource(new StaticStringSource(message));
 
             return This;
@@ -88,6 +90,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithLocalizedMessage(string messageKey)
         {
+            _currentValidator.GuardNotNull("Current validator hasn't set");
             _currentValidator.SetStringSource(new LanguageStringSource(messageKey));
 
             return This;
@@ -96,6 +99,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithLocalizedMessage(string resource, string messageKey)
         {
+            _currentValidator.GuardNotNull("Current validator hasn't set");
             _currentValidator.SetStringSource(new LanguageStringSource(resource, messageKey));
 
             return This;
@@ -132,7 +136,7 @@ namespace ReactiveValidation
             where TObject : IValidatableObject
     {
         /// <inheritdoc />
-        public SinglePropertyRuleBuilder(string validatablePropertyName, IValueTransformer<TObject, TProp> valueTransformer = null) : base(new []{ validatablePropertyName }, valueTransformer)
+        public SinglePropertyRuleBuilder(string validatablePropertyName, IValueTransformer<TObject, TProp>? valueTransformer = null) : base(new []{ validatablePropertyName }, valueTransformer)
         {
         }
 
