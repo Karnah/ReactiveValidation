@@ -7,16 +7,16 @@ namespace ReactiveValidation.Validators
     /// </summary>
     public class ValidationContextCache
     {
-        private readonly ConcurrentDictionary<string, object> _propertiesValuesCache;
-        private readonly ConcurrentDictionary<object, object> _objectValuesCache;
+        private readonly ConcurrentDictionary<string, object?> _propertiesValuesCache;
+        private readonly ConcurrentDictionary<object, object?> _objectValuesCache;
         
         /// <summary>
         /// Create new instance of <see cref="ValidationContextCache" />.
         /// </summary>
         public ValidationContextCache()
         {
-            _propertiesValuesCache = new ConcurrentDictionary<string, object>();
-            _objectValuesCache = new ConcurrentDictionary<object, object>();
+            _propertiesValuesCache = new ConcurrentDictionary<string, object?>();
+            _objectValuesCache = new ConcurrentDictionary<object, object?>();
         }
         
         /// <summary>
@@ -28,7 +28,7 @@ namespace ReactiveValidation.Validators
         /// <see langword="true" />, if value has fonded in cache.
         /// <see langword="false" /> if there is not value for this property in cache.
         /// </returns>
-        public bool TryGetPropertyValue(string propertyName, out object propertyValue)
+        public bool TryGetPropertyValue(string propertyName, out object? propertyValue)
         {
             return _propertiesValuesCache.TryGetValue(propertyName, out propertyValue);
         }
@@ -38,7 +38,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <param name="propertyValue">Property value.</param>
-        public void SetPropertyValue(string propertyName, object propertyValue)
+        public void SetPropertyValue(string propertyName, object? propertyValue)
         {
             _propertiesValuesCache.TryAdd(propertyName, propertyValue);
         }
@@ -52,7 +52,7 @@ namespace ReactiveValidation.Validators
         /// <see langword="true" />, if value has fonded in cache.
         /// <see langword="false" /> if there is not value for this key in cache.
         /// </returns>
-        public bool TryGetValue(object keyObject, out object value)
+        public bool TryGetValue(object keyObject, out object? value)
         {
             return _objectValuesCache.TryGetValue(keyObject, out value);
         }
@@ -62,7 +62,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         /// <param name="keyObject">Key.</param>
         /// <param name="value">Value.</param>
-        public void SetValue(object keyObject, object value)
+        public void SetValue(object keyObject, object? value)
         {
             _objectValuesCache.TryAdd(keyObject, value);
         }

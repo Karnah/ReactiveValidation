@@ -18,6 +18,6 @@
         /// Localized string if resource contains key.
         /// <see langword="null" /> otherwise.
         /// </returns>
-        string GetTranslation(string key);
+        string? GetTranslation(string key);
     }
 }

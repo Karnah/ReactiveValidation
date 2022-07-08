@@ -15,7 +15,7 @@ namespace ReactiveValidation.Validators
     public class NotEqualValidator<TObject, TProp, TParam> : BaseSyncPropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
-        private readonly IEqualityComparer _comparer;
+        private readonly IEqualityComparer? _comparer;
         private readonly ValidatorParameter<TObject, TParam> _valueToCompare;
 
         /// <summary>
@@ -24,10 +24,11 @@ namespace ReactiveValidation.Validators
         /// <param name="valueToCompareExpression">Expression of value to compare.</param>
         /// <param name="comparer">The values comparer.</param>
         /// <param name="validationMessageType">Type of validation message.</param>
-        public NotEqualValidator(Expression<Func<TObject, TParam>> valueToCompareExpression, IEqualityComparer comparer,
-            ValidationMessageType validationMessageType) : base(
-            new LanguageStringSource(ValidatorsNames.NotEqualValidator), validationMessageType,
-            valueToCompareExpression)
+        public NotEqualValidator(
+            Expression<Func<TObject, TParam>> valueToCompareExpression,
+            IEqualityComparer? comparer,
+            ValidationMessageType validationMessageType
+            ) : base(new LanguageStringSource(ValidatorsNames.NotEqualValidator), validationMessageType, valueToCompareExpression)
         {
             _comparer = comparer;
             _valueToCompare = new ValidatorParameter<TObject, TParam>(valueToCompareExpression);
@@ -62,9 +63,11 @@ namespace ReactiveValidation.Validators
         /// <param name="valueToCompareExpression">Expression of value to compare.</param>
         /// <param name="comparer">The values comparer.</param>
         /// <param name="validationMessageType">Type of validation message.</param>
-        public NotEqualValidator(Expression<Func<TObject, TProp>> valueToCompareExpression, IEqualityComparer comparer,
-            ValidationMessageType validationMessageType) : base(valueToCompareExpression, comparer,
-            validationMessageType)
+        public NotEqualValidator(
+            Expression<Func<TObject, TProp>> valueToCompareExpression,
+            IEqualityComparer? comparer,
+            ValidationMessageType validationMessageType
+            ) : base(valueToCompareExpression, comparer, validationMessageType)
         {
         }
     }

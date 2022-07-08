@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ReactiveValidation.Validators
 {
@@ -20,7 +21,7 @@ namespace ReactiveValidation.Validators
         /// <param name="propertyName">Name of validatable property.</param>
         /// <param name="displayPropertySource">Source of display name of validatable property.</param>
         /// <param name="propertyValue">Value of validatable property.</param>
-        public ValidationContext(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource displayPropertySource, TProp propertyValue)
+        public ValidationContext(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource? displayPropertySource, TProp propertyValue)
         {
             ValidatableObject = validatableObject;
             ValidationContextCache = validationContextCache;
@@ -62,7 +63,7 @@ namespace ReactiveValidation.Validators
         /// <summary>
         /// Source of display name of validatable property.
         /// </summary>
-        public IStringSource DisplayPropertySource { get; }
+        public IStringSource? DisplayPropertySource { get; }
 
         /// <summary>
         /// Value of validatable property.
@@ -88,7 +89,7 @@ namespace ReactiveValidation.Validators
         /// <param name="placeholder">Placeholder in base source.</param>
         /// <param name="validatorParameter">Validator parameter.</param>
         /// <param name="paramValue">Validator value.</param>
-        public void RegisterMessageArgument<TParam>(string placeholder, ValidatorParameter<TObject, TParam> validatorParameter, TParam paramValue)
+        public void RegisterMessageArgument<TParam>(string placeholder, ValidatorParameter<TObject, TParam>? validatorParameter, TParam paramValue)
         {
             if (validatorParameter?.DisplayNameSource != null)
             {
@@ -96,7 +97,7 @@ namespace ReactiveValidation.Validators
             }
             else
             {
-                var stringSource = new StaticStringSource(validatorParameter?.Name ?? paramValue?.ToString());
+                var stringSource = new StaticStringSource(validatorParameter?.Name ?? paramValue?.ToString() ?? string.Empty);
                 _messageArguments.Add(placeholder, stringSource);
             }
         }

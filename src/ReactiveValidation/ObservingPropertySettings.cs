@@ -39,12 +39,12 @@ namespace ReactiveValidation
         /// <summary>
         /// If property inherit <see cref="IValidatableObject" /> - this method allows create <see cref="IObjectValidator" /> for property value.
         /// </summary>
-        public Func<IValidatableObject, IObjectValidator> PropertyValueFactoryMethod { get; set; }
+        public Func<IValidatableObject, IObjectValidator>? PropertyValueFactoryMethod { get; set; }
 
         /// <summary>
         /// If property is collection and its items inherit <see cref="IValidatableObject" /> - this method allows create <see cref="IObjectValidator" /> for collection items.
         /// </summary>
-        public Func<IValidatableObject, IObjectValidator> CollectionItemFactoryMethod { get; set; }
+        public Func<IValidatableObject, IObjectValidator>? CollectionItemFactoryMethod { get; set; }
 
         /// <summary>
         /// <see langword="false" /> if no settings are used.

@@ -26,7 +26,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Factory for creating validator for object.
         /// </summary>
-        public static IValidatorFactory ValidatorFactory { get; internal set; }
+        public static IValidatorFactory ValidatorFactory { get; internal set; } = new ValidatorFactory();
 
         /// <summary>
         /// Specials objects for creating observers for properties.

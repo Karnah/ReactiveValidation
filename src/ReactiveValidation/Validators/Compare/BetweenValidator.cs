@@ -30,7 +30,7 @@ namespace ReactiveValidation.Validators
         public BetweenValidator(
             Expression<Func<TObject, TParam>> fromExpression,
             Expression<Func<TObject, TParam>> toExpression,
-            IComparer comparer,
+            IComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.BetweenValidator), validationMessageType, fromExpression, toExpression)
         {
@@ -83,7 +83,7 @@ namespace ReactiveValidation.Validators
         public BetweenValidator(
             Expression<Func<TObject, TProp>> fromExpression,
             Expression<Func<TObject, TProp>> toExpression,
-            IComparer comparer,
+            IComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(fromExpression, toExpression, comparer, validationMessageType)
         { }

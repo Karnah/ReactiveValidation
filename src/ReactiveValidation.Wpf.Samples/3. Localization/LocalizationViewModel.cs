@@ -83,9 +83,9 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
             return builder.Build(this);
         }
 
-        private static bool IsValidEmail(string email)
+        private static bool IsValidEmail(string? email)
         {
-            if (string.IsNullOrEmpty(email) == true)
+            if (string.IsNullOrEmpty(email))
                 return true;
 
             return Regex.IsMatch(email, @"^\w+@\w+.\w+$");
@@ -93,26 +93,26 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
 
 
         [Reactive, DisplayName(DisplayNameKey = nameof(Resources.Default.PhoneNumber))]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Reactive, DisplayName(DisplayNameKey = nameof(Resources.Default.Email))]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Reactive, DisplayName(DisplayNameKey = nameof(Resources.Default.Password))]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Reactive, DisplayName(DisplayNameKey = nameof(Resources.Default.ConfirmPassword))]
-        public string ConfirmPassword { get; set; }
+        public string? ConfirmPassword { get; set; }
 
         [Reactive]
         public bool AdditionalInformation { get; set; }
 
         [Reactive]
         [DisplayName(DisplayNameResource = nameof(Resources.Additional), DisplayNameKey = nameof(Resources.Additional.Country))]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [Reactive, DisplayName(DisplayNameKey = nameof(Resources.Default.City))]
-        public string City { get; set; }
+        public string? City { get; set; }
 
 
         public ICommand SetEnglishLanguageCommand { get; }

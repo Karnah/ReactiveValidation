@@ -31,7 +31,7 @@ namespace ReactiveValidation.WPF.Templates
                 Source = new Uri("/ReactiveValidation.Wpf;component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
             };
 
-            return templateDictionary[templateName] as ControlTemplate;
+            return (ControlTemplate)templateDictionary[templateName];
         }
     }
 }

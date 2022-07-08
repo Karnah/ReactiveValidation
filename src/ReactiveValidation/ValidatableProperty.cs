@@ -18,14 +18,14 @@ namespace ReactiveValidation
         /// <param name="propertyName">Name of property.</param>
         /// <param name="displayNameSource">Source of display name.</param>
         /// <param name="validators">List of all property validators.</param>
-        public ValidatableProperty(string propertyName, IStringSource displayNameSource, IReadOnlyList<IPropertyValidator<TObject>> validators)
+        public ValidatableProperty(string propertyName, IStringSource? displayNameSource, IReadOnlyList<IPropertyValidator<TObject>> validators)
         {
             PropertyName = propertyName;
             DisplayNameSource = displayNameSource;
             Validators = validators;
             SyncValidators = validators.Where(v => !v.IsAsync).ToList();
             AsyncValidators = validators.Where(v => v.IsAsync).ToList();
-            AsyncValidatorCancellationTokenSources = AsyncValidators.ToDictionary(v => v, _ => (CancellationTokenSource) null);
+            AsyncValidatorCancellationTokenSources = AsyncValidators.ToDictionary(v => v, _ => (CancellationTokenSource?) null);
             ValidatorsValidationMessages = Validators.ToDictionary(v => v, _ => (IReadOnlyList<ValidationMessage>) Array.Empty<ValidationMessage>());
         }
 
@@ -38,7 +38,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Source of display name.
         /// </summary>
-        public IStringSource DisplayNameSource { get; }
+        public IStringSource? DisplayNameSource { get; }
 
         /// <summary>
         /// List of all property validators.
@@ -58,7 +58,7 @@ namespace ReactiveValidation
         /// <summary>
         /// List of <see cref="CancellationTokenSource" /> for <see cref="AsyncValidators" />.
         /// </summary>
-        public Dictionary<IPropertyValidator<TObject>, CancellationTokenSource> AsyncValidatorCancellationTokenSources { get; }
+        public Dictionary<IPropertyValidator<TObject>, CancellationTokenSource?> AsyncValidatorCancellationTokenSources { get; }
 
         /// <summary>
         /// List of property validators and its current validation messages.

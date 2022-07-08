@@ -20,8 +20,8 @@ namespace ReactiveValidation.Validators
         private readonly ValidationMessageType _validationMessageType;
         private readonly IStringSource _stringSource;
 
-        private IValidationCondition<TObject>  _condition;
-        private IStringSource _overriddenStringSource;
+        private IValidationCondition<TObject>? _condition;
+        private IStringSource? _overriddenStringSource;
 
         /// <summary>
         /// Create new validator for property value.
@@ -34,7 +34,7 @@ namespace ReactiveValidation.Validators
             _stringSource = stringSource;
             _validationMessageType = validationMessageType;
 
-            RelatedProperties = GetRelatedProperties(relatedProperties);
+            RelatedProperties = GetUnionRelatedProperties(relatedProperties);
         }
 
 
@@ -58,7 +58,7 @@ namespace ReactiveValidation.Validators
             _condition.GuardNotCallTwice($"Method 'When' already have been called for {this.GetType()}");
             _condition = condition;
 
-            RelatedProperties = GetRelatedProperties(condition.RelatedProperties);
+            RelatedProperties = GetUnionRelatedProperties(condition.RelatedProperties);
         }
 
 
@@ -93,17 +93,21 @@ namespace ReactiveValidation.Validators
         /// <summary>
         /// Get names of related properties.
         /// </summary>
-        private static IReadOnlyList<string> GetRelatedProperties(IReadOnlyList<LambdaExpression> relatedPropertiesExpressions, IReadOnlyList<string> existingRelatedProperties = null)
+        private IReadOnlyList<string> GetUnionRelatedProperties(IReadOnlyList<LambdaExpression> relatedPropertiesExpressions)
         {
-            if (relatedPropertiesExpressions?.Any() != true)
-                return existingRelatedProperties ?? Array.Empty<string>();
+            // Because this method call from ctor, RelatedProperties can be null at this moment.
+            // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+            var existingRelatedProperties = RelatedProperties ?? Array.Empty<string>();
+            
+            if (relatedPropertiesExpressions.Any() != true)
+                return existingRelatedProperties;
 
-            var relatedProperties = new HashSet<string>(existingRelatedProperties ?? Array.Empty<string>());
+            var relatedProperties = new HashSet<string>(existingRelatedProperties);
             foreach (var expression in relatedPropertiesExpressions)
             {
                 var propertyName = ReactiveValidationHelper.GetPropertyName(typeof(TObject), expression);
-                if (string.IsNullOrEmpty(propertyName) == false)
-                    relatedProperties.Add(propertyName);
+                if (!string.IsNullOrEmpty(propertyName))
+                    relatedProperties.Add(propertyName!);
             }
 
             return relatedProperties.ToList();

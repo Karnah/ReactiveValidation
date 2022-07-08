@@ -10,7 +10,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Empty validation message which doesn't display or affect on <see cref="IObjectValidator.IsValid" /> property.
         /// </summary>
-        public static ValidationMessage Empty => null;
+        public static ValidationMessage? Empty => null;
 
         /// <summary>
         /// Source which allow dynamic get messages.
@@ -66,7 +66,7 @@ namespace ReactiveValidation
         {
             unchecked
             {
-                return ((_stringSource != null ? _stringSource.GetHashCode() : 0) * 397) ^ (int) ValidationMessageType;
+                return (_stringSource.GetHashCode() * 397) ^ (int) ValidationMessageType;
             }
         }
 

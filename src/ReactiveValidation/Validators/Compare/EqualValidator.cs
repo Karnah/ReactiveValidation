@@ -15,7 +15,7 @@ namespace ReactiveValidation.Validators
     public class EqualValidator<TObject, TProp, TParam> : BaseSyncPropertyValidator<TObject, TProp>
         where TObject : IValidatableObject
     {
-        private readonly IEqualityComparer _comparer;
+        private readonly IEqualityComparer? _comparer;
         private readonly ValidatorParameter<TObject, TParam> _valueToCompare;
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace ReactiveValidation.Validators
         /// <param name="validationMessageType">The type of validatable message.</param>
         public EqualValidator(
             Expression<Func<TObject, TParam>> valueToCompareExpression,
-            IEqualityComparer comparer,
+            IEqualityComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.EqualValidator), validationMessageType, valueToCompareExpression)
         {
@@ -66,7 +66,7 @@ namespace ReactiveValidation.Validators
         /// <param name="validationMessageType">The type of validatable message.</param>
         public EqualValidator(
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IEqualityComparer comparer,
+            IEqualityComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(valueToCompareExpression, comparer, validationMessageType)
         { }

@@ -36,7 +36,7 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return (_exception != null ? _exception.GetHashCode() : 0);
+            return _exception.GetHashCode();
         }
 
         /// <summary>

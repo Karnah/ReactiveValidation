@@ -12,29 +12,29 @@ namespace ReactiveValidation.Attributes
         /// <summary>
         /// Display name for property.
         /// </summary>
-        public string DisplayName { get; set; }
+        public string? DisplayName { get; set; }
 
         /// <summary>
         /// Key of display name for <see cref="IStringProvider" /> in <see cref="ValidationOptions.LanguageManager" />.
         /// </summary>
-        public string DisplayNameKey { get; set; }
+        public string? DisplayNameKey { get; set; }
 
         /// <summary>
         /// Name of resource for <see cref="IStringProvider" /> in <see cref="ValidationOptions.LanguageManager" />.
         /// </summary>
-        public string DisplayNameResource { get; set; }
+        public string? DisplayNameResource { get; set; }
 
 
         /// <summary>
         /// Get display name of property.
         /// </summary>
         /// <returns>Localized display name.</returns>
-        internal string GetDisplayName()
+        public string GetDisplayName()
         {
             if (!string.IsNullOrEmpty(DisplayNameKey))
-                return ValidationOptions.LanguageManager.GetString(DisplayNameKey, DisplayNameResource);
+                return ValidationOptions.LanguageManager.GetString(DisplayNameKey!, DisplayNameResource);
 
-            return DisplayName;
+            return DisplayName ?? string.Empty;
         }
     }
 }

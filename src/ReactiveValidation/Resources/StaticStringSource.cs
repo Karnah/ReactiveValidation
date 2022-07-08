@@ -1,4 +1,6 @@
-﻿namespace ReactiveValidation
+﻿using System;
+
+namespace ReactiveValidation
 {
     /// <summary>
     /// String source which always return one string.
@@ -13,7 +15,7 @@
         /// <param name="message">Message.</param>
         public StaticStringSource(string message)
         {
-            _message = message;
+            _message = message ?? throw new ArgumentNullException(nameof(message));
         }
 
         /// <inheritdoc />
@@ -34,7 +36,7 @@
         /// <inheritdoc />
         public override int GetHashCode()
         {
-            return (_message != null ? _message.GetHashCode() : 0);
+            return _message.GetHashCode();
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -19,8 +20,8 @@ namespace ReactiveValidation
         /// <param name="arguments">Sources of message arguments.</param>
         public ValidationMessageStringSource(IStringSource patternStringSource, Dictionary<string, IStringSource> arguments)
         {
-            _patternStringSource = patternStringSource;
-            _arguments = arguments;
+            _patternStringSource = patternStringSource ?? throw new ArgumentNullException(nameof(patternStringSource));
+            _arguments = arguments ?? throw new ArgumentNullException(nameof(arguments));
         }
 
         /// <inheritdoc />
@@ -50,7 +51,7 @@ namespace ReactiveValidation
         {
             unchecked
             {
-                return ((_patternStringSource != null ? _patternStringSource.GetHashCode() : 0) * 397) ^ (_arguments != null ? _arguments.GetHashCode() : 0);
+                return (_patternStringSource.GetHashCode() * 397) ^ (_arguments.GetHashCode());
             }
         }
 
@@ -60,8 +61,7 @@ namespace ReactiveValidation
         protected bool Equals(ValidationMessageStringSource other)
         {
             return Equals(_patternStringSource, other._patternStringSource) &&
-                    (_arguments == null && other._arguments == null ||
-                     _arguments != null && other._arguments != null && _arguments.SequenceEqual(other._arguments));
+                    _arguments.SequenceEqual(other._arguments);
         }
     }
 }

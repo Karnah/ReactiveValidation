@@ -31,7 +31,7 @@ namespace ReactiveValidation.Validators
         {
             var validationCache = validationContextFactory.ValidationContextCache;
             if (validationCache.TryGetValue(this, out var shouldIgnoreObject))
-                return (bool)shouldIgnoreObject;
+                return (bool)shouldIgnoreObject!;
 
             var shouldIgnore = !_conditionFunc.Invoke(validationContextFactory.ValidatableObject);
             validationCache.SetValue(this, shouldIgnore);

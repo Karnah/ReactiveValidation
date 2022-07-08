@@ -27,7 +27,7 @@ namespace ReactiveValidation.Validators
         protected AbstractComparisonValidator(
             IStringSource stringSource,
             Expression<Func<TObject, TParam>> valueToCompareExpression,
-            IComparer comparer,
+            IComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(stringSource, validationMessageType, valueToCompareExpression)
         {

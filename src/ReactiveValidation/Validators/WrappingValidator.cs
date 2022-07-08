@@ -1,6 +1,4 @@
-﻿#nullable enable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -110,7 +108,7 @@ namespace ReactiveValidation.Validators
             {
                 var propertyName = ReactiveValidationHelper.GetPropertyName(typeof(TObject), expression);
                 if (!string.IsNullOrEmpty(propertyName))
-                    relatedProperties.Add(propertyName);
+                    relatedProperties.Add(propertyName!);
             }
 
             return relatedProperties.ToList();

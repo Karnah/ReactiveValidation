@@ -17,7 +17,7 @@ namespace ReactiveValidation
     internal class ObjectValidator<TObject> : BaseNotifyPropertyChanged, IObjectValidator
         where TObject : IValidatableObject
     {
-        private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
+        private readonly IReadOnlyDictionary<string, IStringSource?> _displayNamesSources;
 
         private readonly ObjectObserver<TObject> _observer;
         private readonly IDictionary<string, ValidatableProperty<TObject>> _validatableProperties;
@@ -28,7 +28,7 @@ namespace ReactiveValidation
 
         private bool _isValid;
         private bool _hasWarnings;
-        private IReadOnlyList<ValidationMessage> _validationMessages;
+        private IReadOnlyList<ValidationMessage> _validationMessages = Array.Empty<ValidationMessage>();
 
         private bool _isDisposed;
 
@@ -39,7 +39,7 @@ namespace ReactiveValidation
         /// After this WeakReference will be collected too.
         /// </remarks>
         /// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private readonly EventHandler<CultureChangedEventArgs> _cultureChangedEventHandler;
+        private readonly EventHandler<CultureChangedEventArgs>? _cultureChangedEventHandler;
 
         /// <summary>
         /// Create new instance of object validator.
@@ -116,12 +116,12 @@ namespace ReactiveValidation
         public IReadOnlyList<ValidationMessage> GetMessages(string propertyName)
         {
             if (string.IsNullOrEmpty(propertyName))
-                return null;
+                return Array.Empty<ValidationMessage>();
 
             lock (_lock)
             {
                 if (!_validatableProperties.ContainsKey(propertyName))
-                    return null;
+                    return Array.Empty<ValidationMessage>();
 
                 return _validatableProperties[propertyName].ValidationMessages;
             }
@@ -208,7 +208,7 @@ namespace ReactiveValidation
         /// Name of changed property.
         /// <see langword="null" /> if all properties should be revalidated.
         /// </param>
-        private void RevalidateInternal(string propertyName = null)
+        private void RevalidateInternal(string? propertyName = null)
         {
             lock (_lock)
             {
@@ -329,7 +329,7 @@ namespace ReactiveValidation
             {
                 // Skip this validator because it should be revalidated with new property value.
                 var tokenSource = info.AsyncValidatorCancellationTokenSources[propertyValidator];
-                if (tokenSource.IsCancellationRequested)
+                if (tokenSource!.IsCancellationRequested)
                     continue;
 
                 var contextProvider = aggregatedValidationContext.CreateContextFactory(info.PropertyName);
@@ -444,15 +444,15 @@ namespace ReactiveValidation
         /// <summary>
         /// Create list of display name for all properties of instance.
         /// </summary>
-        private static IReadOnlyDictionary<string, IStringSource> GetDisplayNames()
+        private static IReadOnlyDictionary<string, IStringSource?> GetDisplayNames()
         {
             const BindingFlags bindingAttributes = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
 
-            var displayNamesSources = new Dictionary<string, IStringSource>();
+            var displayNamesSources = new Dictionary<string, IStringSource?>();
             var properties = typeof(TObject).GetProperties(bindingAttributes);
             foreach (var property in properties)
             {
-                displayNamesSources.Add(property.Name, ValidationOptions.DisplayNameResolver.GetPropertyNameSource(typeof(TObject), property, null));
+                displayNamesSources.Add(property.Name, ValidationOptions.DisplayNameResolver.GetPropertyNameSource(property));
             }
 
             return displayNamesSources;

@@ -18,24 +18,24 @@ namespace ReactiveValidation.Wpf.Samples._5._Validation_builder_factory
         }
 
         [Reactive]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Reactive]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Reactive]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Reactive]
-        public string ConfirmPassword { get; set; }
+        public string? ConfirmPassword { get; set; }
 
         [Reactive]
         public bool AdditionalInformation { get; set; }
 
         [Reactive]
-        public string Country { get; set; }
+        public string? Country { get; set; }
 
         [Reactive]
-        public string City { get; set; }
+        public string? City { get; set; }
     }
 }

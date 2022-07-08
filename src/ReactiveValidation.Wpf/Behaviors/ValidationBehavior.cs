@@ -10,8 +10,8 @@ namespace ReactiveValidation.WPF.Behaviors
 {
     /// <summary>
     /// The class is designed to handle implicit validation behaviors in WPF
-    /// 1. If the control was not immediately initialized or it was called Unload() - when you call Load () ErrorTemplate will not be used with a high probability (the error is due to the fact that AdornerPlaceholder does not have time to initialize)
-    /// 2. If BindingMode is a OneWayToSource, then the validation error is not always diplayed
+    /// 1. If the control was not immediately initialized or it was called Unload() - when you call Load () ErrorTemplate will not be used with a high probability (the error is due to the fact that AdornedPlaceholder does not have time to initialize)
+    /// 2. If BindingMode is a OneWayToSource, then the validation error is not always displayed
     /// 3. In some cases, even if the HasError property is false, ErrorTemplate is still used
     /// </summary>
     public static class ReactiveValidation
@@ -35,13 +35,14 @@ namespace ReactiveValidation.WPF.Behaviors
             if (element == null)
                 return;
 
-            var autoResfreshTemplate = (bool) args.NewValue;
-
-            if (autoResfreshTemplate == true) {
+            var autoRefreshTemplate = (bool) args.NewValue;
+            if (autoRefreshTemplate)
+            {
                 element.Loaded += ElementOnLoaded;
                 element.Unloaded += ElementOnUnloaded;
             }
-            else {
+            else
+            {
                 element.Loaded -= ElementOnLoaded;
                 element.Unloaded -= ElementOnUnloaded;
             }
@@ -54,7 +55,8 @@ namespace ReactiveValidation.WPF.Behaviors
                 return;
 
             //Revalidate all Bindings
-            foreach (var be in BindingOperations.GetSourceUpdatingBindings(element)) {
+            foreach (var be in BindingOperations.GetSourceUpdatingBindings(element))
+            {
                 be.UpdateSource();
             }
 
@@ -91,7 +93,8 @@ namespace ReactiveValidation.WPF.Behaviors
             Validation.SetErrorTemplate(element, null);
 
             var hasError = Validation.GetHasError(element);
-            if (hasError == true) {
+            if (hasError)
+            {
                 var errorTemplate = GetErrorTemplate(element);
                 if (errorTemplate == null)
                     return;
@@ -109,9 +112,9 @@ namespace ReactiveValidation.WPF.Behaviors
             element.SetValue(ErrorTemplateProperty, value);
         }
 
-        public static ControlTemplate GetErrorTemplate(DependencyObject element)
+        public static ControlTemplate? GetErrorTemplate(DependencyObject element)
         {
-            return (ControlTemplate)element.GetValue(ErrorTemplateProperty);
+            return (ControlTemplate?)element.GetValue(ErrorTemplateProperty);
         }
     }
 }

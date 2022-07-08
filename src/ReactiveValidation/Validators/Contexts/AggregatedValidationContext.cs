@@ -11,7 +11,7 @@ namespace ReactiveValidation.Validators
         where TObject : IValidatableObject
     {
         private readonly TObject _validatableObject;
-        private readonly IReadOnlyDictionary<string, IStringSource> _displayNamesSources;
+        private readonly IReadOnlyDictionary<string, IStringSource?> _displayNamesSources;
         private readonly ValidationContextCache _validationContextCache;
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         /// <param name="validatableObject">Object which being validating.</param>
         /// <param name="displayNamesSources">Sources of display names.</param>
-        public AggregatedValidationContext(TObject validatableObject, IReadOnlyDictionary<string, IStringSource> displayNamesSources)
+        public AggregatedValidationContext(TObject validatableObject, IReadOnlyDictionary<string, IStringSource?> displayNamesSources)
         {
             _validatableObject = validatableObject;
             _displayNamesSources = displayNamesSources;
@@ -39,7 +39,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         /// <returns>Property value.</returns>
-        private object GetPropertyValue(string propertyName)
+        private object? GetPropertyValue(string propertyName)
         {
             if (!_validationContextCache.TryGetPropertyValue(propertyName, out var propertyValue))
             {

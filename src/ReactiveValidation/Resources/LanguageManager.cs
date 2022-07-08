@@ -54,8 +54,7 @@ namespace ReactiveValidation
             };
             _languages = languages.ToDictionary(l => l.Name, l => l);
             _cultureChangedCollection = new WeakCollection<EventHandler<CultureChangedEventArgs>>();
-
-            Culture = CultureInfo.CurrentUICulture;
+            _culture = CultureInfo.CurrentUICulture;
         }
 
 
@@ -71,7 +70,7 @@ namespace ReactiveValidation
                 if (Equals(_culture, value))
                     return;
 
-                _culture = value;
+                _culture = value ?? throw new ArgumentNullException(nameof(value));
                 OnCultureChanged();
             }
         }
@@ -79,7 +78,7 @@ namespace ReactiveValidation
         /// <summary>
         /// String provider, which keeping strings (including for localization).
         /// </summary>
-        public IStringProvider StringProvider { get; internal set; }
+        public IStringProvider? StringProvider { get; internal set; }
 
         /// <summary>
         /// If <see langword="true" /> all validation messages will change its message on <see cref="CultureChanged" /> event.
@@ -112,7 +111,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Get localized string by its key.
         /// </summary>
-        public string GetString(string key, string resource = null)
+        public string GetString(string key, string? resource = null)
         {
             var code = Culture.Name;
             if (!Culture.IsNeutralCulture && !_languages.ContainsKey(code))
@@ -139,12 +138,12 @@ namespace ReactiveValidation
         /// <param name="key">Key of string.</param>
         /// <param name="languageCode">Code of language for static resources.</param>
         /// <param name="culture">Culture for resource manager.</param>
-        private string GetLocalizedString(string resource, string key, string languageCode, CultureInfo culture)
+        private string? GetLocalizedString(string? resource, string key, string languageCode, CultureInfo culture)
         {
             // First trying get from string provider.
             var message = string.IsNullOrEmpty(resource)
                 ? StringProvider?.GetString(key, culture)
-                : StringProvider?.GetString(resource, key, culture);
+                : StringProvider?.GetString(resource!, key, culture);
 
             // If empty - trying get from languages.
             if (string.IsNullOrEmpty(message) && _languages.ContainsKey(languageCode))

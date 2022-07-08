@@ -23,7 +23,7 @@ namespace ReactiveValidation.Validators
         /// <param name="validationMessageType">Type of validation message.</param>
         public LessThanOrEqualValidator(
             Expression<Func<TObject, TParam>> valueToCompareExpression,
-            IComparer comparer,
+            IComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(new LanguageStringSource(ValidatorsNames.LessThanOrEqualValidator), valueToCompareExpression, comparer, validationMessageType)
         { }
@@ -53,7 +53,7 @@ namespace ReactiveValidation.Validators
         /// <param name="validationMessageType">Type of validation message.</param>
         public LessThanOrEqualValidator(
             Expression<Func<TObject, TProp>> valueToCompareExpression,
-            IComparer comparer,
+            IComparer? comparer,
             ValidationMessageType validationMessageType)
             : base(valueToCompareExpression, comparer, validationMessageType)
         { }

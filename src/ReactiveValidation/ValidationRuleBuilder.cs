@@ -19,7 +19,9 @@ namespace ReactiveValidation
     {
         private readonly List<IRuleBuilder<TObject>> _rulesBuilders;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Create instance of <see cref="ValidationBuilder{TObject}" /> class.
+        /// </summary>
         protected ValidationRuleBuilder()
         {
             _rulesBuilders = new List<IRuleBuilder<TObject>>();
@@ -54,9 +56,9 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="propertyName">Name of validatable property.</param>
         /// <returns>Single property validator for <see cref="object"/> type.</returns>
-        protected ISinglePropertyRuleBuilderInitial<TObject, object> RuleFor(string propertyName)
+        protected ISinglePropertyRuleBuilderInitial<TObject, object?> RuleFor(string propertyName)
         {
-            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object>(propertyName);
+            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object?>(propertyName);
             _rulesBuilders.Add(ruleBuilder);
 
             return ruleBuilder;
@@ -89,7 +91,7 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="properties">Validatable properties.</param>
         /// <returns>Properties collection validator.</returns>
-        protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object>>[] properties)
+        protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object?>>[] properties)
         {
             var propertiesNames = properties.Select(GetPropertyNameForValidator).ToArray();
 

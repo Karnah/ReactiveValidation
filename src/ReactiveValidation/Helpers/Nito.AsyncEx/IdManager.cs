@@ -1,3 +1,5 @@
+#nullable disable
+
 using System.Threading;
 
 // Original code from StephenCleary: https://github.com/StephenCleary/AsyncEx

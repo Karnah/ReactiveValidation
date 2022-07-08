@@ -47,11 +47,9 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
             return builder.Build(this);
         }
 
-        [Reactive]
-        public InnerObject InnerObjectValue { get; set; }
+        public InnerObject InnerObjectValue { get; }
 
-        [Reactive]
-        public ObservableCollection<InnerObject> InnerObjectsCollection { get; set; }
+        public ObservableCollection<InnerObject> InnerObjectsCollection { get; }
 
 
         public ICommand AddItemCommand { get; }
@@ -86,7 +84,7 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
             }
 
             [Reactive]
-            public string Name { get; set; }
+            public string? Name { get; set; }
         }
     }
 }

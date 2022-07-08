@@ -1,4 +1,6 @@
-﻿namespace ReactiveValidation
+﻿using System;
+
+namespace ReactiveValidation
 {
     /// <summary>
     /// Source which return localized message by its key and resource.
@@ -6,7 +8,7 @@
     public class LanguageStringSource : IStringSource
     {
         private readonly string _key;
-        private readonly string _resource;
+        private readonly string? _resource;
 
         /// <summary>
         /// Create new language source by its key.
@@ -14,7 +16,7 @@
         /// <param name="key">Key of string.</param>
         public LanguageStringSource(string key)
         {
-            _key = key;
+            _key = key ?? throw new ArgumentNullException(nameof(key));
         }
 
         /// <summary>
@@ -24,8 +26,8 @@
         /// <param name="key">Key of string.</param>
         public LanguageStringSource(string resource, string key)
         {
-            _key = key;
-            _resource = resource;
+            _key = key ?? throw new ArgumentNullException(nameof(key));
+            _resource = resource ?? throw new ArgumentNullException(nameof(resource));
         }
 
 
@@ -49,7 +51,7 @@
         {
             unchecked
             {
-                return ((_key != null ? _key.GetHashCode() : 0) * 397) ^ (_resource != null ? _resource.GetHashCode() : 0);
+                return (_key.GetHashCode() * 397) ^ (_resource != null ? _resource.GetHashCode() : 0);
             }
         }
 

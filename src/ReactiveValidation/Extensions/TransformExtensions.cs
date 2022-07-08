@@ -51,7 +51,7 @@ namespace ReactiveValidation.Extensions
             this IValidationBuilder<TObject> builder,
             Expression<Func<TObject, TProp>> property,
             Func<TProp, TPropTransformed> transformer)
-            where TObject : IValidatableObject
+                where TObject : IValidatableObject
         {
             if (builder == null)
                 throw new ArgumentNullException(nameof(builder));
@@ -74,8 +74,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Short}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, short?> TransformToShort<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => short.TryParse(s, out var num) ? num : (short?)null);
         }
@@ -89,8 +89,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{UShort}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, ushort?> TransformToUShort<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => ushort.TryParse(s, out var num) ? num : (ushort?)null);
         }
@@ -104,7 +104,7 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Int}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, int?> TransformToInt<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
+            Expression<Func<TObject, string?>> property)
                 where TObject : IValidatableObject
         {
             return builder.Transform(property, s => int.TryParse(s, out var num) ? num : (int?)null);
@@ -119,8 +119,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{UInt}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, uint?> TransformToUInt<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => uint.TryParse(s, out var num) ? num : (uint?)null);
         }
@@ -134,8 +134,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Long}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, long?> TransformToLong<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => long.TryParse(s, out var num) ? num : (long?)null);
         }
@@ -149,8 +149,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Ulong}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, ulong?> TransformToULong<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => ulong.TryParse(s, out var num) ? num : (ulong?)null);
         }
@@ -164,8 +164,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Float}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, float?> TransformToFloat<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => float.TryParse(s, out var num) ? num : (float?)null);
         }
@@ -179,8 +179,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Double}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, double?> TransformToDouble<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => double.TryParse(s, out var num) ? num : (double?)null);
         }
@@ -194,8 +194,8 @@ namespace ReactiveValidation.Extensions
         /// <returns>Single property validator for <see cref="Nullable{Decimal}"/> type.</returns>
         public static ISinglePropertyRuleBuilderInitial<TObject, decimal?> TransformToDecimal<TObject>(
             this IValidationBuilder<TObject> builder,
-            Expression<Func<TObject, string>> property)
-            where TObject : IValidatableObject
+            Expression<Func<TObject, string?>> property)
+                where TObject : IValidatableObject
         {
             return builder.Transform(property, s => decimal.TryParse(s, out var num) ? num : (decimal?)null);
         }

@@ -10,33 +10,42 @@ namespace ReactiveValidation
     internal class ObservingProperty
     {
         /// <summary>
-        /// Name of property.
+        /// Create instance of <see cref="ObservingProperty" /> class.
         /// </summary>
-        public string PropertyName { get; set; }
+        public ObservingProperty(string propertyName, ObservingPropertySettings settings)
+        {
+            PropertyName = propertyName;
+            Settings = settings;
+        }
 
         /// <summary>
-        /// Previous value of property.
+        /// Name of property.
         /// </summary>
-        public object PreviousValue { get; set; }
+        public string PropertyName { get; }
 
         /// <summary>
         /// Observing property settings.
         /// </summary>
-        public ObservingPropertySettings Settings { get; set; }
+        public ObservingPropertySettings Settings { get; }
+        
+        /// <summary>
+        /// Previous value of property.
+        /// </summary>
+        public object? PreviousValue { get; set; }
 
         /// <summary>
         /// Action for tracking property or collection items.
         /// </summary>
-        public PropertyChangedEventHandler ValueChangedAction { get; set; }
+        public PropertyChangedEventHandler? ValueChangedAction { get; set; }
 
         /// <summary>
         /// Action for tracking property or collection items errors.
         /// </summary>
-        public EventHandler<DataErrorsChangedEventArgs> ErrorsChangedAction { get; set; }
+        public EventHandler<DataErrorsChangedEventArgs>? ErrorsChangedAction { get; set; }
 
         /// <summary>
         /// Action for tracking collection.
         /// </summary>
-        public NotifyCollectionChangedEventHandler CollectionChangedAction { get; set; }
+        public NotifyCollectionChangedEventHandler? CollectionChangedAction { get; set; }
     }
 }
