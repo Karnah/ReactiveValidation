@@ -150,7 +150,7 @@ namespace ReactiveValidation
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
     internal class PropertiesRuleBuilder<TObject> :
-        BaseRuleBuilder<TObject, object, IPropertiesRuleBuilder<TObject>>,
+        BaseRuleBuilder<TObject, object?, IPropertiesRuleBuilder<TObject>>,
         IPropertiesRuleBuilder<TObject>
             where TObject : IValidatableObject
     {

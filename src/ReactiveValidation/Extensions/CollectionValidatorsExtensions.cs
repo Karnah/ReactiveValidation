@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
@@ -30,7 +28,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TItem>(_ => minCount, _ => maxCount, validationMessageType));
         }
@@ -52,7 +49,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TItem>(_ => minCount, maxCountExpression, validationMessageType));
         }
@@ -74,7 +70,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TItem>(minCountExpression, _ => maxCount, validationMessageType));
         }
@@ -96,7 +91,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new CountValidator<TObject, TCollection, TItem>(minCountExpression, maxCountExpression, validationMessageType));
         }
@@ -116,7 +110,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new MinCountValidator<TObject, TCollection, TItem>(_ => minCount, validationMessageType));
         }
@@ -136,7 +129,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new MinCountValidator<TObject, TCollection, TItem>(minCountExpression, validationMessageType));
         }
@@ -156,7 +148,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new MaxCountValidator<TObject, TCollection, TItem>(_ => maxCount, validationMessageType));
         }
@@ -176,7 +167,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new MaxCountValidator<TObject, TCollection, TItem>(maxCountExpression, validationMessageType));
         }
@@ -196,7 +186,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new ExactCountValidator<TObject, TCollection, TItem>(_ => count, validationMessageType));
         }
@@ -216,7 +205,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new ExactCountValidator<TObject, TCollection, TItem>(countExpression, validationMessageType));
         }
@@ -273,7 +261,6 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
         {
             return ruleBuilder.SetValidator(new NotEmptyCollectionValidator<TObject, TCollection, TItem>(validationMessageType));
         }

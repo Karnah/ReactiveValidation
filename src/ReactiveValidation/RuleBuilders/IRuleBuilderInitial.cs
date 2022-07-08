@@ -50,7 +50,7 @@ namespace ReactiveValidation
     /// </summary>
     /// <typeparam name="TObject">The type of validatable object.</typeparam>
     public interface IPropertiesRuleBuilderInitial<TObject> :
-        IRuleBuilderInitial<TObject, object, IPropertiesRuleBuilder<TObject>>
+        IRuleBuilderInitial<TObject, object?, IPropertiesRuleBuilder<TObject>>
             where TObject : IValidatableObject
     { }
 

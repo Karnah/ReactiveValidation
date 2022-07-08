@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -58,9 +56,9 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="propertyName">Name of validatable property.</param>
         /// <returns>Single property validator for <see cref="object"/> type.</returns>
-        protected ISinglePropertyRuleBuilderInitial<TObject, object> RuleFor(string propertyName)
+        protected ISinglePropertyRuleBuilderInitial<TObject, object?> RuleFor(string propertyName)
         {
-            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object>(propertyName);
+            var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object?>(propertyName);
             _rulesBuilders.Add(ruleBuilder);
 
             return ruleBuilder;
@@ -93,7 +91,7 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="properties">Validatable properties.</param>
         /// <returns>Properties collection validator.</returns>
-        protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object>>[] properties)
+        protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object?>>[] properties)
         {
             var propertiesNames = properties.Select(GetPropertyNameForValidator).ToArray();
 

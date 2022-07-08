@@ -25,7 +25,7 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="propertyName">Name of validatable property.</param>
         /// <returns>Single property validator for <see cref="object"/> type.</returns>
-        ISinglePropertyRuleBuilderInitial<TObject, object> RuleFor(string propertyName);
+        ISinglePropertyRuleBuilderInitial<TObject, object?> RuleFor(string propertyName);
 
         
         /// <summary>
@@ -46,7 +46,7 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="properties">Validatable properties.</param>
         /// <returns>Properties collection validator.</returns>
-        IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object>>[] properties);
+        IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object?>>[] properties);
 
         /// <summary>
         /// Create validator for collection of properties names.

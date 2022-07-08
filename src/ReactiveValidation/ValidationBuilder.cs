@@ -1,6 +1,4 @@
-﻿#nullable disable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using ReactiveValidation.Validators.PropertyValueTransformers;
@@ -19,7 +17,7 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
-        public new ISinglePropertyRuleBuilderInitial<TObject, object> RuleFor(string propertyName)
+        public new ISinglePropertyRuleBuilderInitial<TObject, object?> RuleFor(string propertyName)
         {
             return base.RuleFor(propertyName);
         }
@@ -33,7 +31,7 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
-        public new IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object>>[] properties)
+        public new IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object?>>[] properties)
         {
             return base.RuleFor(properties);
         }
