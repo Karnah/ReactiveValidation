@@ -9,7 +9,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>bin\Debug\ReactiveValidation.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\ReactiveValidation.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

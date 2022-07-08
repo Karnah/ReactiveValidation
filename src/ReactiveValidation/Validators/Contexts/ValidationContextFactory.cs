@@ -1,4 +1,6 @@
-﻿namespace ReactiveValidation.Validators
+﻿using ReactiveValidation.Resources.StringSources;
+
+namespace ReactiveValidation.Validators
 {
     /// <summary>
     /// Factory for creating validation context.

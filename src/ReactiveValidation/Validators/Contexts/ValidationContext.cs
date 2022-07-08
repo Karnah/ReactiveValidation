@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ReactiveValidation.Resources.StringSources;
 
 namespace ReactiveValidation.Validators
 {

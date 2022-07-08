@@ -4,8 +4,9 @@ using System.Reflection;
 
 using ReactiveValidation.Attributes;
 using ReactiveValidation.Exceptions;
-using ReactiveValidation.Factory;
-using ReactiveValidation.Internal;
+using ReactiveValidation.Resources.StringProviders;
+using ReactiveValidation.Resources.StringSources;
+using ReactiveValidation.ValidatorFactory;
 
 namespace ReactiveValidation
 {
@@ -178,72 +179,14 @@ namespace ReactiveValidation
         }
 
         /// <summary>
-        /// Add auto creation observers which can allows revalidate property by event.
-        /// </summary>
-        /// <param name="canObserve">
-        /// Function which allows check if can create observer for property.
-        /// First parameter - type of validatable object.
-        /// Second parameter - type of property.
-        /// Returns <see langword="true" /> if observer can be created.
-        /// </param>
-        /// <param name="createObserver">
-        /// Function which allow create observer for property value.
-        /// First parameter - value of validatable object.
-        /// Second parameter - value of property.
-        /// Third parameter - action which should be executed when event fired.
-        /// Returns object which allows unsubscribe.
-        /// </param>
-        public ValidationOptionsBuilder AddPropertyObserver(Func<Type, Type, bool> canObserve,
-            Func<object, object, Action, IDisposable> createObserver)
-        {
-            if (canObserve == null)
-                throw new ArgumentNullException(nameof(canObserve));
-
-            if (createObserver == null)
-                throw new ArgumentNullException(nameof(createObserver));
-
-            ValidationOptions.PropertyObservers.Add(new ObserverInfo(canObserve, createObserver));
-            return this;
-        }
-
-        /// <summary>
-        /// Add auto creation observers which can allows revalidate collection by event.
-        /// </summary>
-        /// <param name="canObserve">
-        /// Function which allows check if can create observer for collection.
-        /// First parameter - type of validatable object.
-        /// Second parameter - type of collection.
-        /// Returns <see langword="true" /> if observer can be created.
-        /// </param>
-        /// <param name="createObserver">
-        /// Function which allow create observer for collection.
-        /// First parameter - value of validatable object.
-        /// Second parameter - value of collection.
-        /// Third parameter - action which should be executed when event fired.
-        /// Returns object which allows unsubscribe.
-        /// </param>
-        public ValidationOptionsBuilder AddCollectionObserver(Func<Type, Type, bool> canObserve,
-            Func<object, object, Action, IDisposable> createObserver)
-        {
-            if (canObserve == null)
-                throw new ArgumentNullException(nameof(canObserve));
-
-            if (createObserver == null)
-                throw new ArgumentNullException(nameof(createObserver));
-
-            ValidationOptions.CollectionObservers.Add(new ObserverInfo(canObserve, createObserver));
-            return this;
-        }
-
-        /// <summary>
         /// Get or create default validator factory.
         /// </summary>
-        private ValidatorFactory GetDefaultValidatorFactory()
+        private DefaultValidatorFactory GetDefaultValidatorFactory()
         {
             if (_isUseCustomValidatorFactoryCalled)
                 throw new MethodAlreadyCalledException("Cannot set register creator for custom validation factory");
 
-            return (ValidatorFactory) ValidationOptions.ValidatorFactory;
+            return (DefaultValidatorFactory) ValidationOptions.ValidatorFactory;
         }
     }
 }

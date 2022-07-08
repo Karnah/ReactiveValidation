@@ -1,4 +1,5 @@
 ﻿using ReactiveValidation.Internal;
+using ReactiveValidation.Resources.StringSources;
 
 namespace ReactiveValidation
 {

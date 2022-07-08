@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-
 using ReactiveValidation.Helpers;
-using ReactiveValidation.Languages;
+using ReactiveValidation.Resources.Languages;
+using ReactiveValidation.Resources.StringProviders;
 
+// ReSharper disable once CheckNamespace
 namespace ReactiveValidation
 {
     /// <summary>

@@ -19,7 +19,7 @@ namespace ReactiveValidation.Extensions
         /// <typeparam name="TProp">The original type of validatable property.</typeparam>
         /// <typeparam name="TPropTransformed">The target type of validatable property.</typeparam>
         /// <returns>Single property validator for <typeparamref name="TPropTransformed" /> type.</returns>
-        /// <exception cref="ArgumentNullException">If <see cref="builder" /> or <see cref="property" /> or <see cref="transformer" /> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <see paramref="builder" /> or <see paramref="property" /> or <see paramref="transformer" /> is null.</exception>
         public static ISinglePropertyRuleBuilderInitial<TObject, TPropTransformed> Transform<TObject, TProp, TPropTransformed>(
             this IValidationBuilder<TObject> builder,
             Expression<Func<TObject, TProp>> property,
@@ -46,7 +46,7 @@ namespace ReactiveValidation.Extensions
         /// <typeparam name="TProp">The original type of validatable property.</typeparam>
         /// <typeparam name="TPropTransformed">The target type of validatable property.</typeparam>
         /// <returns>Single property validator for <typeparamref name="TPropTransformed" /> type.</returns>
-        /// <exception cref="ArgumentNullException">If <see cref="builder" /> or <see cref="property" /> or <see cref="transformer" /> is null.</exception>
+        /// <exception cref="ArgumentNullException">If <see paramref="builder" /> or <see paramref="property" /> or <see paramref="transformer" /> is null.</exception>
         public static ISinglePropertyRuleBuilderInitial<TObject, TPropTransformed> Transform<TObject, TProp, TPropTransformed>(
             this IValidationBuilder<TObject> builder,
             Expression<Func<TObject, TProp>> property,

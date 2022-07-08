@@ -1,4 +1,6 @@
 ﻿using System;
+using ReactiveValidation.Resources;
+using ReactiveValidation.Resources.StringProviders;
 
 namespace ReactiveValidation.Attributes
 {

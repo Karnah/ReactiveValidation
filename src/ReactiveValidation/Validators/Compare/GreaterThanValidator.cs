@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq.Expressions;
 
 using ReactiveValidation.Helpers;
+using ReactiveValidation.Resources.StringSources;
 
 namespace ReactiveValidation.Validators
 {

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ReactiveValidation.Extensions;
+using ReactiveValidation.ObjectObserver;
+using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators;
+using ReactiveValidation.Validators.Conditions;
 using ReactiveValidation.Validators.PropertyValueTransformers;
 
 namespace ReactiveValidation

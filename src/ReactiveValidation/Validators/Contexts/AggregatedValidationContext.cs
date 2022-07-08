@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ReactiveValidation.Helpers;
+using ReactiveValidation.Resources.StringSources;
 
 namespace ReactiveValidation.Validators
 {

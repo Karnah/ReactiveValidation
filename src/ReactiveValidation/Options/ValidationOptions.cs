@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
 using ReactiveValidation.Exceptions;
-using ReactiveValidation.Factory;
 using ReactiveValidation.Internal;
+using ReactiveValidation.ValidatorFactory;
 
 namespace ReactiveValidation
 {
@@ -26,17 +26,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Factory for creating validator for object.
         /// </summary>
-        public static IValidatorFactory ValidatorFactory { get; internal set; } = new ValidatorFactory();
-
-        /// <summary>
-        /// Specials objects for creating observers for properties.
-        /// </summary>
-        internal static List<ObserverInfo> PropertyObservers { get; } = new List<ObserverInfo>();
-
-        /// <summary>
-        /// Specials objects for creating observers for collections.
-        /// </summary>
-        internal static List<ObserverInfo> CollectionObservers { get; } = new List<ObserverInfo>();
+        public static IValidatorFactory ValidatorFactory { get; internal set; } = new DefaultValidatorFactory();
 
         /// <summary>
         /// Setup validation options.

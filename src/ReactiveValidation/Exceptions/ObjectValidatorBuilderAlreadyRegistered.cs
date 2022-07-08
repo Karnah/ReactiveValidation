@@ -1,5 +1,5 @@
 ﻿using System;
-using ReactiveValidation.Factory;
+using ReactiveValidation.ValidatorFactory;
 
 namespace ReactiveValidation.Exceptions
 {

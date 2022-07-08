@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Resources;
 using System.Windows;
-
-using ReactiveUI.Legacy;
+using ReactiveValidation.Resources.StringProviders;
 using ReactiveValidation.Wpf.Samples._5._Validation_builder_factory;
 
 namespace ReactiveValidation.Wpf.Samples
@@ -24,10 +22,7 @@ namespace ReactiveValidation.Wpf.Samples
                         { nameof(Samples.Resources.Additional), Samples.Resources.Additional.ResourceManager },
                     }))
                 .TrackCultureChanged()
-
-                // For sample 4.
-                //.AddCollectionObserver(CanObserve, CreateReactiveCollectionItemChangedObserver)
-
+                
                 // For sample 5.
                 .RegisterForValidatorFactory(new ViewModelValidation())
                 // Also allowed pass assembly or assemblies as parameter - all validators will found and registered.

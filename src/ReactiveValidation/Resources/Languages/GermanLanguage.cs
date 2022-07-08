@@ -1,6 +1,6 @@
 ﻿using ReactiveValidation.Helpers;
 
-namespace ReactiveValidation.Languages
+namespace ReactiveValidation.Resources.Languages
 {
     /// <summary>
     /// German language.

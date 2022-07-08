@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using ReactiveValidation.Helpers;
+using ReactiveValidation.Resources.StringSources;
 
 namespace ReactiveValidation.Validators
 {

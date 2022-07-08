@@ -1,6 +1,7 @@
 using System;
 using System.Linq.Expressions;
 using ReactiveValidation.Validators;
+using ReactiveValidation.Validators.Conditions;
 
 namespace ReactiveValidation.Extensions
 {
@@ -148,33 +149,33 @@ namespace ReactiveValidation.Extensions
 
         #endregion
         
-        private static ValidationCondition<TObject> WrapCondition<TObject>(Func<bool> condition)
+        private static FuncValidationCondition<TObject> WrapCondition<TObject>(Func<bool> condition)
             where TObject : IValidatableObject
         {
-            return new ValidationCondition<TObject>(_ => condition());
+            return new FuncValidationCondition<TObject>(_ => condition());
         }
 
-        private static ValidationCondition<TObject> WrapCondition<TObject>(Expression<Func<TObject, bool>> conditionProperty)
+        private static FuncValidationCondition<TObject> WrapCondition<TObject>(Expression<Func<TObject, bool>> conditionProperty)
             where TObject : IValidatableObject
         {
-            return new ValidationCondition<TObject>(conditionProperty.Compile(), conditionProperty);
+            return new FuncValidationCondition<TObject>(conditionProperty.Compile(), conditionProperty);
         }
         
-        private static ValidationCondition<TObject> WrapCondition<TObject, TParam>(
+        private static FuncValidationCondition<TObject> WrapCondition<TObject, TParam>(
             Func<TParam, bool> condition,
             Expression<Func<TObject, TParam>> property)
             where TObject : IValidatableObject
         {
             var paramFunc = property.Compile();
             
-            return new ValidationCondition<TObject>(instance =>
+            return new FuncValidationCondition<TObject>(instance =>
             {
                 var param = paramFunc.Invoke(instance);
                 return condition.Invoke(param);
             }, property);
         }
 
-        private static ValidationCondition<TObject> WrapCondition<TObject, TParam1, TParam2>(
+        private static FuncValidationCondition<TObject> WrapCondition<TObject, TParam1, TParam2>(
             Func<TParam1, TParam2, bool> condition,
             Expression<Func<TObject, TParam1>> property1,
             Expression<Func<TObject, TParam2>> property2)
@@ -183,7 +184,7 @@ namespace ReactiveValidation.Extensions
             var param1Func = property1.Compile();
             var param2Func = property2.Compile();
             
-            return new ValidationCondition<TObject>(instance =>
+            return new FuncValidationCondition<TObject>(instance =>
             {
                 var param1 = param1Func.Invoke(instance);
                 var param2 = param2Func.Invoke(instance);
@@ -192,7 +193,7 @@ namespace ReactiveValidation.Extensions
             }, property1, property2);
         }
 
-        private static ValidationCondition<TObject> WrapCondition<TObject, TParam1, TParam2, TParam3>(
+        private static FuncValidationCondition<TObject> WrapCondition<TObject, TParam1, TParam2, TParam3>(
             Func<TParam1, TParam2, TParam3, bool> condition,
             Expression<Func<TObject, TParam1>> property1,
             Expression<Func<TObject, TParam2>> property2,
@@ -203,7 +204,7 @@ namespace ReactiveValidation.Extensions
             var param2Func = property2.Compile();
             var param3Func = property3.Compile();
             
-            return new ValidationCondition<TObject>(instance =>
+            return new FuncValidationCondition<TObject>(instance =>
             {
                 var param1 = param1Func.Invoke(instance);
                 var param2 = param2Func.Invoke(instance);
