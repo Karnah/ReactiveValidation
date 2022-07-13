@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using ReactiveValidation.Extensions;
 
-namespace ReactiveValidation.Wpf.Samples._5._Validation_builder_factory
+namespace ReactiveValidation.Avalonia.Samples._5._Validation_builder_factory
 {
     public class ViewModelValidation : ValidationRuleBuilder<ValidationBuilderFactoryViewModel>
     {

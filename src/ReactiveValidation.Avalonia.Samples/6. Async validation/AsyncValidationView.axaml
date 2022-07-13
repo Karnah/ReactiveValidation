@@ -1,0 +1,63 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ReactiveValidation.Avalonia.Samples._6._Async_validation"
+             xmlns:s="clr-namespace:ReactiveValidation.Avalonia.Samples"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ReactiveValidation.Avalonia.Samples._6._Async_validation.AsyncValidationView"
+             x:DataType="local:AsyncValidationViewModel"
+             x:CompileBindings="True">
+    <Design.DataContext>
+        <local:AsyncValidationViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Phone number: " />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding PhoneNumber, Mode=TwoWay}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Phone number required if email is not specified.
+&#x0a;Must contains 11 digits.
+&#x0a;If '11111111111' then it is not valid (async check)." />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Email: " />
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Text="{Binding Email, Mode=TwoWay}" />
+            <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Email required if phone number is not specified.
+&#x0a;Expected format - 'xxx@yyy.zz'.
+&#x0a;i=If 'foo@bar.com' then is not valid (async check)." />
+
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                <Button HorizontalAlignment="Left"
+                        Content="Wait async validation completed"
+                        Command="{Binding WaitValidatingCompletedCommand}"/>
+            </Grid>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+        <s:ValidationStateInfoControl Grid.Column="2" DataContext="{Binding Validator}" />
+    </Grid>
+</UserControl>

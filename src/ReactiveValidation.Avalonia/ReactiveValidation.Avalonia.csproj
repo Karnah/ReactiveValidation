@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ReactiveValidation\ReactiveValidation.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia">
+        <Version>0.10.16</Version>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="ReactiveValidation.Avalonia.csproj.DotSettings" />
+    </ItemGroup>
+
+</Project>
