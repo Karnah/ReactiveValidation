@@ -1,16 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveValidation.Extensions;
 
-namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collection
+namespace ReactiveValidation.Avalonia.Samples._4._Inner_validatable_object_and_collection
 {
     /// <summary>
     /// This sample also shows the use of ReactiveUI and ReactiveUI.Fody.
-    /// More information: https://reactiveui.net/ and https://github.com/kswoll/ReactiveUI.Fody
-    /// Pay attention to the base class - it's inherit from ReactiveObject
+    /// More information: https://docs.avaloniaui.net/guides/deep-dives/reactiveui and https://github.com/kswoll/ReactiveUI.Fody
+    /// Pay attention to the base class - it's inherit from ReactiveObject.
     /// </summary>
     public class InnerValidatableObjectAndCollectionViewModel : ReactiveValidatableObject
     {

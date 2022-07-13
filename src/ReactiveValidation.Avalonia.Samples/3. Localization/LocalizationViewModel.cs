@@ -1,20 +1,19 @@
 ﻿using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
-
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveValidation.Attributes;
 using ReactiveValidation.Extensions;
 
-namespace ReactiveValidation.Wpf.Samples._3._Localization
+namespace ReactiveValidation.Avalonia.Samples._3._Localization
 {
     /// <summary>
     /// This sample also shows the use of ReactiveUI and ReactiveUI.Fody.
-    /// More information: https://reactiveui.net/ and https://github.com/kswoll/ReactiveUI.Fody
+    /// More information: https://docs.avaloniaui.net/guides/deep-dives/reactiveui and https://github.com/kswoll/ReactiveUI.Fody
     /// Pay attention to the base class - it's inherit from ReactiveObject.
     ///
-    /// Please see how setup base ResourceManager and TrackCultureChanged in <see cref="App.OnStartup" />.
+    /// Please see how setup base ResourceManager and TrackCultureChanged in <see cref="Program.BuildAvaloniaApp" />.
     /// </summary>
     public class LocalizationViewModel : ReactiveValidatableObject
     {

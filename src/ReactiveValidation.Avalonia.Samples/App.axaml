@@ -1,0 +1,32 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:ReactiveValidation.Avalonia.Samples"
+             xmlns:rvThemes="clr-namespace:ReactiveValidation.Avalonia.Themes;assembly=ReactiveValidation.Avalonia"
+             x:Class="ReactiveValidation.Avalonia.Samples.App">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme Mode="Light" />
+        
+        <!-- It's contains styles for FluentTheme with overridden behavior. -->
+        <!-- You should use it when: -->
+        <!-- 1. You are using warnings (not only errors).  -->
+        <!-- 2. You need runtime localization.  -->
+        <!-- Otherwise you can use just default Avalonia theme. -->
+        <rvThemes:FluentTheme />
+        
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="3" />
+        </Style>
+
+        <Style Selector="CheckBox">
+            <Setter Property="Margin" Value="3" />
+        </Style>
+        
+        <Style Selector="ItemsControl">
+            <Setter Property="Margin" Value="3" />
+        </Style>
+    </Application.Styles>
+</Application>

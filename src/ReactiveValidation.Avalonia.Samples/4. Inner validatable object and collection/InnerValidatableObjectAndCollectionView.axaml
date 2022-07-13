@@ -1,30 +1,16 @@
-﻿<UserControl x:Class="ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collection.InnerValidatableObjectAndCollectionView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collection"
-             xmlns:s="clr-namespace:ReactiveValidation.Wpf.Samples"
-             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation.Wpf"
-             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation.Wpf"
-             mc:Ignorable="d" d:DataContext="{d:DesignInstance local:InnerValidatableObjectAndCollectionViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <!-- It is more convenient to create a base style for control. -->
-        <Style x:Key="TextBox" TargetType="TextBox">
-            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
-
-            <Setter Property="Margin" Value="3" />
-        </Style>
-
-        <Style x:Key="ItemsControl" TargetType="ItemsControl">
-            <!-- ItemsControl with with errors template is look ugly. -->
-            <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
-
-            <Setter Property="Margin" Value="3" />
-        </Style>
-    </UserControl.Resources>
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ReactiveValidation.Avalonia.Samples._4._Inner_validatable_object_and_collection"
+             xmlns:s="clr-namespace:ReactiveValidation.Avalonia.Samples"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ReactiveValidation.Avalonia.Samples._4._Inner_validatable_object_and_collection.InnerValidatableObjectAndCollectionView"
+             x:DataType="local:InnerValidatableObjectAndCollectionViewModel"
+             x:CompileBindings="True">
+    <Design.DataContext>
+        <local:InnerValidatableObjectAndCollectionViewModel />
+    </Design.DataContext>
 
     <Grid x:Name="Root">
         <Grid.ColumnDefinitions>
@@ -48,8 +34,8 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Inner object value: " />
-            <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox}"
-                     Text="{Binding InnerObjectValue.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding InnerObjectValue.Name, Mode=TwoWay}" />
             <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
                        Text="In inner object value should be not empty" />
 
@@ -58,7 +44,7 @@
                        Text="Collection should contains from 3 to 5 elements and they should be valid" />
 
             <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
-                <ItemsControl Style="{StaticResource ItemsControl}" ItemsSource="{Binding InnerObjectsCollection}">
+                <ItemsControl Items="{Binding InnerObjectsCollection}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -67,11 +53,11 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBox Grid.Column="0" Style="{StaticResource TextBox}"
-                                         Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding Name, Mode=TwoWay}" />
 
                                 <Button Grid.Column="1" Margin="3" Padding="6,3,6,3" Content="Delete"
-                                        Command="{Binding ElementName=Root, Path=DataContext.DeleteItemCommand}"
+                                        Command="{ReflectionBinding  ElementName=Root, Path=DataContext.DeleteItemCommand}"
                                         CommandParameter="{Binding }" />
                             </Grid>
                         </DataTemplate>

@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using ReactiveValidation.Extensions;
 
-namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
+namespace ReactiveValidation.Avalonia.Samples._2._Dependent_properties
 {
     public class DependentPropertiesViewModel : ValidatableObject
     {

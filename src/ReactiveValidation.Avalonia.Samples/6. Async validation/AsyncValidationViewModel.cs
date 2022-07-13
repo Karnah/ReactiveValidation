@@ -1,13 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveValidation.Extensions;
 
-namespace ReactiveValidation.Wpf.Samples._6._Async_validation
+namespace ReactiveValidation.Avalonia.Samples._6._Async_validation
 {
     /// <summary>
     /// </summary>
@@ -32,7 +31,10 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
         private async Task WaitValidatingCompletedAsync()
         {
             await Validator.WaitValidatingCompletedAsync();
-            MessageBox.Show("Async validation has ended");
+            
+            var dialog = MessageBox.Avalonia.MessageBoxManager
+                    .GetMessageBoxStandardWindow("", "Async validation has ended");
+            await dialog.Show();
         }
         
         private IObjectValidator GetValidator()

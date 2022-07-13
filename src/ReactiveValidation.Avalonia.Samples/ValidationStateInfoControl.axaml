@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rv="clr-namespace:ReactiveValidation;assembly=ReactiveValidation"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ReactiveValidation.Avalonia.Samples.ValidationStateInfoControl"
+             x:DataType="rv:IObjectValidator"
+             x:CompileBindings="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Margin="3" FontWeight="Bold" Text="Validation messages:" />
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl Margin="3" Items="{Binding ValidationMessages}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Margin="3" Text="*" />
+
+                            <TextBlock Grid.Column="1" Margin="3" TextWrapping="Wrap" Text="{Binding Message}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+
+        <CheckBox Grid.Row="2" Margin="3" IsEnabled="False" FontWeight="Bold"
+                  Content="Is valid" IsChecked="{Binding IsValid, Mode=OneWay}" />
+
+        <CheckBox Grid.Row="3" Margin="3" IsEnabled="False" FontWeight="Bold"
+                  Content="Has warnings" IsChecked="{Binding HasWarnings, Mode=OneWay}" />
+        
+        <CheckBox Grid.Row="4" Margin="3" IsEnabled="False" FontWeight="Bold"
+                  Content="Is async validation running" IsChecked="{Binding IsAsyncValidating, Mode=OneWay}" />
+    </Grid>
+</UserControl>

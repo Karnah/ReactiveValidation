@@ -25,7 +25,7 @@ namespace ReactiveValidation.Wpf.Samples
                 
                 // For sample 5.
                 .RegisterForValidatorFactory(new ViewModelValidation())
-                // Also allowed pass assembly or assemblies as parameter - all validators will found and registered.
+                // Also allowed pass assembly or assemblies as parameter - all validators will be found and registered.
                 //.RegisterForValidatorFactory(Assembly.GetExecutingAssembly())
                 ;
 

@@ -83,7 +83,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Check if two validation messages are equal.
         /// </summary>
-        protected bool Equals(ValidationMessage other)
+        private bool Equals(ValidationMessage other)
         {
             return Equals(_stringSource, other._stringSource) && ValidationMessageType == other.ValidationMessageType;
         }
