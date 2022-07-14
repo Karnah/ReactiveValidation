@@ -224,11 +224,13 @@ namespace ReactiveValidation
                     bool isTarget = string.IsNullOrEmpty(propertyName) || info.PropertyName == propertyName;
                     bool isMessagesChanged = false;
                     bool isPropertyValid = true;
+                    bool shouldRevalidateAsyncValidators = false;
 
                     // First we check all sync validators.
                     foreach (var propertyValidator in info.SyncValidators)
                     {
-                        if (!isTarget && !propertyValidator.RelatedProperties.Contains(propertyName))
+                        var isRelated = propertyValidator.RelatedProperties.Contains(propertyName);
+                        if (!isTarget && !isRelated)
                             continue;
 
                         var contextProvider = aggregatedValidationContext.CreateContextFactory(info.PropertyName);
@@ -239,6 +241,11 @@ namespace ReactiveValidation
 
                         info.ValidatorsValidationMessages[propertyValidator] = messages;
                         isMessagesChanged = true;
+
+                        // Async validators are using rule "first failure".
+                        // Because of that we need revalidate all async validators if validator with related property changed its messages. 
+                        if (!isTarget && isRelated)
+                            shouldRevalidateAsyncValidators = isPropertyValid;
                     }
 
                     // Then we should reset messages of async validators.
@@ -246,7 +253,10 @@ namespace ReactiveValidation
                     var asyncValidators = new List<IPropertyValidator<TObject>>();
                     foreach (var propertyValidator in info.AsyncValidators)
                     {
-                        if (!isTarget && !propertyValidator.RelatedProperties.Contains(propertyName))
+                        // Async validators are using rule "first failure".
+                        // If some of previous validators of this property changed messages, we need revalidate async validators.
+                        var isRelated = propertyValidator.RelatedProperties.Contains(propertyName);
+                        if (!isTarget && !isRelated && !shouldRevalidateAsyncValidators)
                             continue;
                         
                         var messages = info.ValidatorsValidationMessages[propertyValidator];
@@ -267,6 +277,10 @@ namespace ReactiveValidation
                                 new CancellationTokenSource();
                             
                             asyncValidators.Add(propertyValidator);
+                            
+                            // All subsequent async validators should be revalidated.
+                            if (!isTarget && isRelated)
+                                shouldRevalidateAsyncValidators = true;
                         }
                     }
                     
