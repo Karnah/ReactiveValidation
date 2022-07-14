@@ -2,29 +2,56 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:rv="clr-namespace:ReactiveValidation;assembly=ReactiveValidation"
                     xmlns:converters="clr-namespace:ReactiveValidation.WPF.Converters"
-                    xmlns:controls="clr-namespace:ReactiveValidation.WPF.Controls">
-
+                    xmlns:controls="clr-namespace:ReactiveValidation.WPF.Controls"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <SolidColorBrush x:Key="ValidationErrorBrush" Color="Red" />
+    <SolidColorBrush x:Key="ValidationWarningBrush" Color="Orange" />
+    <SolidColorBrush x:Key="ValidationMessageForegroundBrush" Color="Black" />
+    <SolidColorBrush x:Key="ValidationMessageBackgroundBrush" Color="White" />
+    
     <ControlTemplate x:Key="ValidationErrorTemplate">
         <ControlTemplate.Resources>
             <converters:ShowValidationPopupConverter x:Key="ShowValidationPopupConverter" />
-            <converters:MessageTypeToColorConverter x:Key="MessageTypeToColorConverter" />
-            <converters:ErrorsToMarkColorConverter x:Key="ErrorsToMarkColorConverter" />
             <converters:ErrorsToValidationMessagesConverter x:Key="ErrorsToValidationMessagesConverter" />
+            <converters:ValidationMessageTypeToIsWarningConverter x:Key="ValidationMessageTypeToIsWarningConverter" />
+            <converters:ValidationMessagesToIsAllAreWarningsConverter x:Key="ValidationMessagesToIsAllAreWarningsConverter" />
+            <converters:NotEqualConverter x:Key="NotEqualConverter" />
+            
+            <system:Int32 x:Key="IntZero">0</system:Int32>
         </ControlTemplate.Resources>
 
         <Grid>
             <Border x:Name="PART_Border" BorderThickness="0,0,1,0" BorderBrush="Transparent">
                 <Grid>
+                    <!-- Triangle near right top corner of control. -->
                     <Polygon Margin="-1" Points="6,6 6,0 0,0"
                              HorizontalAlignment="Right" VerticalAlignment="Top"
                              IsHitTestVisible="True">
-                        <Polygon.Fill>
-                            <MultiBinding Converter="{StaticResource ErrorsToMarkColorConverter}">
-                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
-                                <!-- If binding only to Validation.Errors then binding doesn't call converter. -->
-                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
-                            </MultiBinding>
-                        </Polygon.Fill>
+                        <Polygon.Style>
+                            <Style TargetType="Polygon">
+                                <Setter Property="Fill" Value="Transparent" />
+
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=PART_Adorner, Path=AdornedElement.(Validation.Errors).Count,
+                                                                   Converter={StaticResource NotEqualConverter}, ConverterParameter={StaticResource IntZero}}"
+                                                 Value="True">
+                                        <Setter Property="Fill" Value="{DynamicResource ValidationErrorBrush}" />
+                                    </DataTrigger>
+
+                                    <DataTrigger Value="True">
+                                        <DataTrigger.Binding>
+                                            <MultiBinding Converter="{StaticResource ValidationMessagesToIsAllAreWarningsConverter}">
+                                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
+                                                <!-- If binding only to Validation.Errors then binding doesn't call converter. -->
+                                                <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
+                                            </MultiBinding>
+                                        </DataTrigger.Binding>
+                                        
+                                        <Setter Property="Fill" Value="{DynamicResource ValidationWarningBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Polygon.Style>
                     </Polygon>
 
                     <Polyline Points="7,7 0,0" Margin="-1" HorizontalAlignment="Right"
@@ -37,6 +64,7 @@
                 </Grid>
             </Border>
 
+            <!-- Popup with all validation messages. Appear when mouse over the control or control focused (except SimpleError and SimpleWarning). -->
             <controls:AttachedPopup x:Name="PART_ErrorPopup" AllowsTransparency="True"
                                     PlacementTarget="{Binding ElementName=PART_Adorner, Path=AdornedElement, UpdateSourceTrigger=PropertyChanged}"
                                     Placement="Right">
@@ -53,9 +81,21 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="rv:ValidationMessage">
                                 <Border BorderThickness="1"
-                                        BorderBrush="{Binding ValidationMessageType, Converter={StaticResource MessageTypeToColorConverter}, Mode=OneWay}"
-                                        Background="White" Margin="0,3,0,3" Padding="8,3,8,3">
-                                    <TextBlock Text="{Binding Message}" Foreground="Black" TextWrapping="Wrap" />
+                                        Background="{DynamicResource ValidationMessageBackgroundBrush}" Margin="0,3,0,3" Padding="8,3,8,3">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="{DynamicResource ValidationErrorBrush}" />
+                                            
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ValidationMessageType, Converter={StaticResource ValidationMessageTypeToIsWarningConverter}, Mode=OneWay}"
+                                                             Value="True">
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource ValidationWarningBrush}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>    
+                                    </Border.Style>
+                                    
+                                    <TextBlock Text="{Binding Message}" Foreground="{DynamicResource ValidationMessageForegroundBrush}" TextWrapping="Wrap" />
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -83,8 +123,41 @@
     </ControlTemplate>
 
     <ControlTemplate x:Key="WpfErrorTemplate">
-        <Border BorderBrush="Red" BorderThickness="1">
-            <AdornedElementPlaceholder />
+        <ControlTemplate.Resources>
+            <converters:ValidationMessagesToIsAllAreWarningsConverter x:Key="ValidationMessagesToIsAllAreWarningsConverter" />
+            <converters:NotEqualConverter x:Key="NotEqualConverter" />
+            
+            <system:Int32 x:Key="IntZero">0</system:Int32>
+        </ControlTemplate.Resources>
+        
+        <Border BorderThickness="1">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="Transparent" />
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=PART_Adorner, Path=AdornedElement.(Validation.Errors).Count,
+                                                       Converter={StaticResource NotEqualConverter}, ConverterParameter={StaticResource IntZero}}"
+                                     Value="True">
+                            <Setter Property="BorderBrush" Value="{DynamicResource ValidationErrorBrush}" />
+                        </DataTrigger>
+
+                        <DataTrigger Value="True">
+                            <DataTrigger.Binding>
+                                <MultiBinding Converter="{StaticResource ValidationMessagesToIsAllAreWarningsConverter}">
+                                    <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors)" />
+                                    <!-- If binding only to Validation.Errors then binding doesn't call converter. -->
+                                    <Binding ElementName="PART_Adorner" Path="AdornedElement.(Validation.Errors).Count" />
+                                </MultiBinding>
+                            </DataTrigger.Binding>
+                                        
+                            <Setter Property="BorderBrush" Value="{DynamicResource ValidationWarningBrush}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            
+            <AdornedElementPlaceholder x:Name="PART_Adorner" />
         </Border>
     </ControlTemplate>
 </ResourceDictionary>

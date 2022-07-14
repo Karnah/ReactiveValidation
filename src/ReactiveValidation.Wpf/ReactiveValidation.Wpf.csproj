@@ -44,11 +44,12 @@
   <ItemGroup>
     <Compile Include="Behaviors\ValidationBehavior.cs" />
     <Compile Include="Controls\AttachedPopup.cs" />
+    <Compile Include="Converters\NotEqualConverter.cs" />
+    <Compile Include="Converters\ValidationMessagesToIsAllAreWarningsConverter.cs" />
+    <Compile Include="Converters\ValidationMessageTypeToIsWarningConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Converters\ErrorsToValidationMessagesConverter.cs" />
     <Compile Include="Converters\ShowValidationPopupConverter.cs" />
-    <Compile Include="Converters\ErrorsToMarkColorConverter.cs" />
-    <Compile Include="Converters\MessageTypeToColorConverter.cs" />
     <Compile Include="Templates\ErrorTemplates.cs" />
   </ItemGroup>
   <ItemGroup>

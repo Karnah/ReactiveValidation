@@ -7,6 +7,9 @@ using System.Windows.Data;
 
 namespace ReactiveValidation.WPF.Converters
 {
+    /// <summary>
+    /// Check if popup with validation messages should be visible.
+    /// </summary>
     internal class ShowValidationPopupConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -30,14 +33,14 @@ namespace ReactiveValidation.WPF.Converters
                 errors.Select(result => result.ErrorContent as ValidationMessage)
                     .Any(message => message?.ValidationMessageType == ValidationMessageType.Error ||
                                     message?.ValidationMessageType == ValidationMessageType.Warning ||
-                                    isMouseOver == true);
+                                    isMouseOver);
 
-            return existsVisibleMessages == true;
+            return existsVisibleMessages;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
