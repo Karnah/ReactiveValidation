@@ -27,12 +27,14 @@ namespace ReactiveValidation.WPF.Controls
             element.Loaded -= OnLoaded;
 
             var target = PlacementTarget as FrameworkElement;
-            if (target != null) {
+            if (target != null)
+            {
                 target.LayoutUpdated += TargetOnLayoutUpdated;
             }
 
             var window = Window.GetWindow(target ?? this);
-            if (window != null) {
+            if (window != null)
+            {
                 window.LocationChanged += WindowOnLocationChanged;
                 window.SizeChanged += WindowOnSizeChanged;
             }
@@ -47,20 +49,20 @@ namespace ReactiveValidation.WPF.Controls
         }
 
 
-        private void TargetOnLayoutUpdated(object sender, EventArgs eventArgs)
+        private void TargetOnLayoutUpdated(object? sender, EventArgs eventArgs)
         {
             CheckTargetVisibility();
             ResetPlacement();
         }
 
-        private void WindowOnSizeChanged(object sender, SizeChangedEventArgs sizeChangedEventArgs)
+        private void WindowOnSizeChanged(object? sender, SizeChangedEventArgs sizeChangedEventArgs)
         {
             CheckTargetVisibility();
             ResetPlacement();
         }
 
 
-        private void WindowOnLocationChanged(object sender, EventArgs eventArgs)
+        private void WindowOnLocationChanged(object? sender, EventArgs eventArgs)
         {
             CheckTargetVisibility();
             ResetPlacement();

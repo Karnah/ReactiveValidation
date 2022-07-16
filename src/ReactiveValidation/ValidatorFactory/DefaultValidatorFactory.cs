@@ -58,7 +58,7 @@ namespace ReactiveValidation.ValidatorFactory
                 if (factoryMethod != null)
                     creator = factoryMethod.Invoke(creatorType);
                 else
-                    creator = (IObjectValidatorBuilderCreator) Activator.CreateInstance(creatorType);
+                    creator = (IObjectValidatorBuilderCreator) Activator.CreateInstance(creatorType)!;
 
                 Register(creator);
             }

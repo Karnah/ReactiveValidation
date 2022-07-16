@@ -90,10 +90,10 @@ namespace ReactiveValidation.Helpers
         /// <param name="instance">Instance.</param>
         /// <param name="propertyName">Property name.</param>
         /// <returns>Property type or exception if property not exist or cannot cast to type.</returns>
-        internal static TProp GetPropertyValue<TProp>(object instance, string propertyName)
+        internal static TProp? GetPropertyValue<TProp>(object instance, string propertyName)
         {
             var propertyInfo = GetPropertyInfo(instance.GetType(), propertyName);
-            return (TProp)propertyInfo.GetValue(instance);
+            return (TProp?)propertyInfo.GetValue(instance);
         }
 
 

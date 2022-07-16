@@ -30,6 +30,9 @@ namespace ReactiveValidation.Avalonia.Samples._6._Async_validation
 
         private async Task WaitValidatingCompletedAsync()
         {
+            if (Validator == null)
+                return;
+            
             await Validator.WaitValidatingCompletedAsync();
             
             var dialog = MessageBox.Avalonia.MessageBoxManager

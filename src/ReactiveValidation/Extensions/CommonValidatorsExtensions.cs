@@ -719,7 +719,7 @@ namespace ReactiveValidation.Extensions
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(
-                new PredicateValidator<TObject, TProp>(context => predicate.Invoke(context.PropertyValue),
+                new PredicateValidator<TObject, TProp>(context => predicate.Invoke(context.PropertyValue!),
                                                        validationMessageType));
         }
 
@@ -742,7 +742,7 @@ namespace ReactiveValidation.Extensions
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(
-                new PredicateValidator<TObject, TProp>(context => predicate.Invoke(context.PropertyName, context.PropertyValue), validationMessageType));
+                new PredicateValidator<TObject, TProp>(context => predicate.Invoke(context.PropertyName, context.PropertyValue!), validationMessageType));
         }
 
         /// <summary>
@@ -785,7 +785,7 @@ namespace ReactiveValidation.Extensions
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(
-                new AsyncPredicateValidator<TObject, TProp>((context, _) => predicate.Invoke(context.PropertyValue),
+                new AsyncPredicateValidator<TObject, TProp>((context, _) => predicate.Invoke(context.PropertyValue!),
                                                        validationMessageType));
         }
 
@@ -808,7 +808,7 @@ namespace ReactiveValidation.Extensions
             where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(
-                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyValue, token),
+                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyValue!, token),
                     validationMessageType));
         }
         
@@ -831,7 +831,7 @@ namespace ReactiveValidation.Extensions
                 where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(
-                new AsyncPredicateValidator<TObject, TProp>((context, _) => predicate.Invoke(context.PropertyName, context.PropertyValue),
+                new AsyncPredicateValidator<TObject, TProp>((context, _) => predicate.Invoke(context.PropertyName, context.PropertyValue!),
                                                        validationMessageType));
         }
 
@@ -854,7 +854,7 @@ namespace ReactiveValidation.Extensions
             where TObject : IValidatableObject
         {
             return ruleBuilder.SetValidator(
-                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyName, context.PropertyValue, token),
+                new AsyncPredicateValidator<TObject, TProp>((context, token) => predicate.Invoke(context.PropertyName, context.PropertyValue!, token),
                     validationMessageType));
         }
         

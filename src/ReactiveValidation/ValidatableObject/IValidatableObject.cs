@@ -10,7 +10,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Validator of current object.
         /// </summary>
-        IObjectValidator Validator { get; set; }
+        IObjectValidator? Validator { get; set; }
 
         /// <summary>
         /// Raise event <see cref="INotifyDataErrorInfo.ErrorsChanged" />.

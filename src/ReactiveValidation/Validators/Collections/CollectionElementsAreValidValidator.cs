@@ -32,7 +32,7 @@ namespace ReactiveValidation.Validators
             if (context.PropertyValue?.Any() != true)
                 return true;
 
-            return context.PropertyValue.All(element => element?.Validator.IsValid != false);
+            return context.PropertyValue.All(element => element?.Validator?.IsValid != false);
         }
     }
 }

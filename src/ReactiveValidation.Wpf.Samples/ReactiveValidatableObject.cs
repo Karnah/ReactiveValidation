@@ -7,17 +7,12 @@ namespace ReactiveValidation.Wpf.Samples
 {
     public abstract class ReactiveValidatableObject : ReactiveObject, IValidatableObject
     {
-
         /// <inheritdoc />
-        public IObjectValidator Validator { get; set; }
+        public IObjectValidator? Validator { get; set; }
 
 
         /// <inheritdoc />
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-
-        /// <inheritdoc />
-        bool INotifyDataErrorInfo.HasErrors => Validator?.IsValid == false || Validator?.HasWarnings == true;
 
 
         /// <inheritdoc />
@@ -26,10 +21,23 @@ namespace ReactiveValidation.Wpf.Samples
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
+        
+        #region INotifyDataErrorInfo
+
         /// <inheritdoc />
-        IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
+        bool INotifyDataErrorInfo.HasErrors => Validator?.IsValid == false || Validator?.HasWarnings == true;
+
+        /// <inheritdoc />
+        IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {
-            return Validator.GetMessages(propertyName);
+            if (Validator == null)
+                return Array.Empty<ValidationMessage>();
+            
+            return string.IsNullOrEmpty(propertyName)
+                ? Validator.ValidationMessages
+                : Validator.GetMessages(propertyName!);
         }
+
+        #endregion
     }
 }

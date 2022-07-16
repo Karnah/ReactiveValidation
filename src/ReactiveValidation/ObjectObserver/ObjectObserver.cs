@@ -26,7 +26,7 @@ namespace ReactiveValidation.ObjectObserver
         public ObjectObserver(TObject instance, Dictionary<string, ObservingPropertySettings> settings)
         {
             _instance = instance;
-            _instance.PropertyChanged += InstanceOnPropertyChanged;
+            _instance.PropertyChanged += OnInstancePropertyChanged;
 
             _observingProperties = settings.ToDictionary(
                 s => s.Key,
@@ -53,6 +53,15 @@ namespace ReactiveValidation.ObjectObserver
         }
 
         /// <summary>
+        /// Unsubscribe from previous value of property and subscribe to new.
+        /// </summary>
+        private void ResubscribePropertyValue(ObservingProperty observingProperty)
+        {
+            UnsubscribePropertyValue(observingProperty);
+            SubscribePropertyValue(observingProperty);
+        }
+        
+        /// <summary>
         /// Subscribe on new value of property.
         /// </summary>
         /// <param name="observingProperty">Info of observing property.</param>
@@ -76,7 +85,7 @@ namespace ReactiveValidation.ObjectObserver
             if (settings.TrackValueChanged)
             {
                 if (observingProperty.ValueChangedAction == null)
-                    observingProperty.ValueChangedAction = (sender, args) => OnPropertyChanged(propertyName);
+                    observingProperty.ValueChangedAction = (_, _) => OnPropertyChanged(propertyName);
 
                 var notifyPropertyChanged = (INotifyPropertyChanged) propertyValue;
                 notifyPropertyChanged.PropertyChanged += observingProperty.ValueChangedAction;
@@ -85,7 +94,7 @@ namespace ReactiveValidation.ObjectObserver
             if (settings.TrackValueErrorsChanged)
             {
                 if (observingProperty.ErrorsChangedAction == null)
-                    observingProperty.ErrorsChangedAction = (sender, args) => OnErrorsChanged(propertyName);
+                    observingProperty.ErrorsChangedAction = (_, _) => OnErrorsChanged(propertyName);
 
                 var validatableObject = (IValidatableObject) propertyValue;
                 validatableObject.ErrorsChanged += observingProperty.ErrorsChangedAction;
@@ -94,7 +103,7 @@ namespace ReactiveValidation.ObjectObserver
             if (settings.TrackCollectionChanged)
             {
                 if (observingProperty.CollectionChangedAction == null)
-                    observingProperty.CollectionChangedAction = (sender, args) => OnCollectionChanged(propertyName, args);
+                    observingProperty.CollectionChangedAction = (_, args) => OnCollectionChanged(propertyName, args);
 
                 var notifyCollectionChanged = (INotifyCollectionChanged) propertyValue;
                 notifyCollectionChanged.CollectionChanged += observingProperty.CollectionChangedAction;
@@ -103,30 +112,33 @@ namespace ReactiveValidation.ObjectObserver
             if (settings.TrackCollectionItemChanged)
             {
                 if (observingProperty.ValueChangedAction == null)
-                    observingProperty.ValueChangedAction = (sender, args) => OnPropertyChanged(propertyName);
+                    observingProperty.ValueChangedAction = (_, _) => OnPropertyChanged(propertyName);
 
-                foreach (INotifyPropertyChanged item in (IEnumerable) propertyValue)
+                foreach (INotifyPropertyChanged? item in (IEnumerable) propertyValue)
                 {
-                    item.PropertyChanged += observingProperty.ValueChangedAction;
+                    if (item != null)
+                        item.PropertyChanged += observingProperty.ValueChangedAction;
                 }
             }
 
             if (settings.TrackCollectionItemErrorsChanged)
             {
                 if (observingProperty.ErrorsChangedAction == null)
-                    observingProperty.ErrorsChangedAction = (sender, args) => OnErrorsChanged(propertyName);
+                    observingProperty.ErrorsChangedAction = (_, _) => OnErrorsChanged(propertyName);
 
-                foreach (IValidatableObject item in (IEnumerable) propertyValue)
+                foreach (IValidatableObject? item in (IEnumerable) propertyValue)
                 {
-                    item.ErrorsChanged += observingProperty.ErrorsChangedAction;
+                    if (item != null)
+                        item.ErrorsChanged += observingProperty.ErrorsChangedAction;
                 }
             }
 
             if (settings.CollectionItemFactoryMethod != null)
             {
-                foreach (IValidatableObject item in (IEnumerable) propertyValue)
+                foreach (IValidatableObject? item in (IEnumerable) propertyValue)
                 {
-                    item.Validator = settings.CollectionItemFactoryMethod.Invoke(item);
+                    if (item != null)
+                        item.Validator = settings.CollectionItemFactoryMethod.Invoke(item);
                 }
             }
         }
@@ -163,18 +175,22 @@ namespace ReactiveValidation.ObjectObserver
 
             if (settings.TrackCollectionItemChanged)
             {
-                foreach (INotifyPropertyChanged item in (IEnumerable) propertyValue)
+                foreach (INotifyPropertyChanged? item in (IEnumerable) propertyValue)
                 {
-                    item.PropertyChanged -= observingProperty.ValueChangedAction;
+                    if (item != null)
+                        item.PropertyChanged -= observingProperty.ValueChangedAction;
                 }
             }
 
             if (settings.TrackCollectionItemErrorsChanged || settings.CollectionItemFactoryMethod != null)
             {
-                foreach (IValidatableObject item in (IEnumerable) propertyValue)
+                foreach (IValidatableObject? item in (IEnumerable) propertyValue)
                 {
-                    item.ErrorsChanged -= observingProperty.ErrorsChangedAction;
-                    item.Validator?.Dispose();
+                    if (item != null)
+                    {
+                        item.ErrorsChanged -= observingProperty.ErrorsChangedAction;
+                        item.Validator?.Dispose();
+                    }
                 }
             }
         }
@@ -182,15 +198,26 @@ namespace ReactiveValidation.ObjectObserver
         /// <summary>
         /// Handle instance <see cref="INotifyPropertyChanged.PropertyChanged" /> event.
         /// </summary>
-        private void InstanceOnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void OnInstancePropertyChanged(object? sender, PropertyChangedEventArgs args)
         {
             var propertyName = args.PropertyName;
-            if (_observingProperties.TryGetValue(propertyName, out var observingProperty))
+            
+            // If propertyName is empty, it's mean that all properties are changed.
+            if (string.IsNullOrEmpty(propertyName))
             {
-                UnsubscribePropertyValue(observingProperty);
-                SubscribePropertyValue(observingProperty);
+                foreach (var observingProperty in _observingProperties.Values)
+                {
+                    ResubscribePropertyValue(observingProperty);
+                }
             }
-
+            else
+            {
+                if (_observingProperties.TryGetValue(propertyName, out var observingProperty))
+                {
+                    ResubscribePropertyValue(observingProperty);
+                } 
+            }  
+                
             PropertyChanged?.Invoke(this, args);
         }
 
@@ -225,6 +252,9 @@ namespace ReactiveValidation.ObjectObserver
             {
                 foreach (var oldItem in args.OldItems)
                 {
+                    if (oldItem == null)
+                        continue;
+                    
                     if (settings.TrackCollectionItemChanged)
                     {
                         var notifyPropertyChanged = (INotifyPropertyChanged) oldItem;
@@ -244,6 +274,9 @@ namespace ReactiveValidation.ObjectObserver
             {
                 foreach (var newItem in args.NewItems)
                 {
+                    if (newItem == null)
+                        continue;
+                    
                     if (settings.TrackCollectionItemChanged)
                     {
                         var notifyPropertyChanged = (INotifyPropertyChanged) newItem;

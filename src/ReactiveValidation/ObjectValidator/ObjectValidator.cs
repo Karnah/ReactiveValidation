@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using ReactiveValidation.Exceptions;
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Helpers.Nito.AsyncEx;
-using ReactiveValidation.Internal;
 using ReactiveValidation.ObjectObserver;
 using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators;
@@ -19,6 +18,11 @@ namespace ReactiveValidation
     internal class ObjectValidator<TObject> : BaseNotifyPropertyChanged, IObjectValidator
         where TObject : IValidatableObject
     {
+        /// <summary>
+        /// Instance of validatable object.
+        /// </summary>
+        private readonly TObject _instance;
+        
         private readonly IReadOnlyDictionary<string, IStringSource?> _displayNamesSources;
 
         private readonly ObjectObserver<TObject> _observer;
@@ -50,12 +54,12 @@ namespace ReactiveValidation
         /// <param name="ruleBuilders">List of rules builders.</param>
         public ObjectValidator(TObject instance, IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
         {
-            Instance = instance;
+            _instance = instance;
 
             _displayNamesSources = GetDisplayNames();
             _validatableProperties = GetValidatableProperties(ruleBuilders);
 
-            _observer = new ObjectObserver<TObject>(Instance, GetPropertySettings(ruleBuilders));
+            _observer = new ObjectObserver<TObject>(_instance, GetPropertySettings(ruleBuilders));
             _observer.PropertyChanged += OnPropertyChanged;
 
             if (ValidationOptions.LanguageManager.TrackCultureChanged)
@@ -64,12 +68,6 @@ namespace ReactiveValidation
                 ValidationOptions.LanguageManager.CultureChanged += _cultureChangedEventHandler;
             }
         }
-
-
-        /// <summary>
-        /// Instance of validatable object.
-        /// </summary>
-        public TObject Instance { get; }
 
         #region IObjectValidator
 
@@ -186,7 +184,7 @@ namespace ReactiveValidation
 
                 foreach (var validatableProperty in _validatableProperties.Keys)
                 {
-                    Instance.OnPropertyMessagesChanged(validatableProperty);
+                    _instance.OnPropertyMessagesChanged(validatableProperty);
                 }
 
                 _isDisposed = true;
@@ -198,7 +196,7 @@ namespace ReactiveValidation
         /// <summary>
         /// Handle property changed event.
         /// </summary>
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
+        private void OnPropertyChanged(object? sender, PropertyChangedEventArgs args)
         {
             RevalidateInternal(args.PropertyName);
         }
@@ -214,9 +212,9 @@ namespace ReactiveValidation
         {
             lock (_lock)
             {
-                var aggregatedValidationContext = new AggregatedValidationContext<TObject>(Instance, _displayNamesSources);
+                var aggregatedValidationContext = new AggregatedValidationContext<TObject>(_instance, _displayNamesSources);
                 var changedProperties = new List<string>();
-                var propertiesAsyncValidators = new List<(string, List<IPropertyValidator<TObject>>)>();
+                var propertiesAsyncValidators = new Dictionary<string, List<IPropertyValidator<TObject>>>();
 
                 foreach (var validatableProperty in _validatableProperties)
                 {
@@ -288,7 +286,7 @@ namespace ReactiveValidation
                         changedProperties.Add(info.PropertyName);
 
                     if (asyncValidators.Any())
-                        propertiesAsyncValidators.Add((info.PropertyName, asyncValidators));
+                        propertiesAsyncValidators.Add(info.PropertyName, asyncValidators);
                 }
 
                 NotifyChangedProperties(changedProperties);
@@ -301,7 +299,7 @@ namespace ReactiveValidation
         /// </summary>
         private async void ValidateInternalAsync(
             AggregatedValidationContext<TObject> aggregatedValidationContext,
-            IReadOnlyList<(string, List<IPropertyValidator<TObject>>)> propertiesAsyncValidators)
+            Dictionary<string, List<IPropertyValidator<TObject>>> propertiesAsyncValidators)
         {
             if (propertiesAsyncValidators.Count == 0)
                 return;
@@ -312,9 +310,9 @@ namespace ReactiveValidation
             {
                 var tasks = new List<Task>();
 
-                foreach (var (propertyName, propertyValidators) in propertiesAsyncValidators)
+                foreach (var propertyValidators in propertiesAsyncValidators)
                 {
-                    tasks.Add(ValidatePropertyAsync(aggregatedValidationContext, propertyName, propertyValidators));
+                    tasks.Add(ValidatePropertyAsync(aggregatedValidationContext, propertyValidators.Key, propertyValidators.Value));
                 }
 
                 await Task.WhenAll(tasks)
@@ -442,14 +440,14 @@ namespace ReactiveValidation
 
             foreach (var changedProperty in changedProperties)
             {
-                Instance.OnPropertyMessagesChanged(changedProperty);
+                _instance.OnPropertyMessagesChanged(changedProperty);
             }
         }
 
         /// <summary>
         /// Handle application culture changed event.
         /// </summary>
-        private void OnCultureChanged(object sender, CultureChangedEventArgs e)
+        private void OnCultureChanged(object? sender, CultureChangedEventArgs e)
         {
             foreach (var validationMessage in ValidationMessages)
             {

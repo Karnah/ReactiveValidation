@@ -1,5 +1,4 @@
-﻿using ReactiveValidation.Internal;
-using ReactiveValidation.Resources.StringSources;
+﻿using ReactiveValidation.Resources.StringSources;
 
 namespace ReactiveValidation
 {
@@ -54,7 +53,7 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;

@@ -22,7 +22,7 @@ namespace ReactiveValidation.Validators
         /// <param name="propertyName">Name of validatable property.</param>
         /// <param name="displayPropertySource">Source of display name of validatable property.</param>
         /// <param name="propertyValue">Value of validatable property.</param>
-        public ValidationContext(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource? displayPropertySource, TProp propertyValue)
+        public ValidationContext(TObject validatableObject, ValidationContextCache validationContextCache, string propertyName, IStringSource? displayPropertySource, TProp? propertyValue)
         {
             ValidatableObject = validatableObject;
             ValidationContextCache = validationContextCache;
@@ -69,7 +69,7 @@ namespace ReactiveValidation.Validators
         /// <summary>
         /// Value of validatable property.
         /// </summary>
-        public TProp PropertyValue { get; }
+        public TProp? PropertyValue { get; }
 
 
         /// <summary>

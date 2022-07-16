@@ -31,6 +31,9 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
 
         private async Task WaitValidatingCompletedAsync()
         {
+            if (Validator == null)
+                return;
+            
             await Validator.WaitValidatingCompletedAsync();
             MessageBox.Show("Async validation has ended");
         }
