@@ -13,6 +13,12 @@ namespace ReactiveValidation
         where TObject : IValidatableObject
     {
         /// <summary>
+        /// Specifies how rules of property should cascade when one fails.
+        /// </summary>
+        public CascadeMode? PropertyCascadeMode { get; set; }
+        
+        
+        /// <summary>
         /// Create validator for single strongly typed property.
         /// </summary>
         /// <typeparam name="TProp">The type of property.</typeparam>

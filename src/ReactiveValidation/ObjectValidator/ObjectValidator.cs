@@ -219,69 +219,80 @@ namespace ReactiveValidation
                 foreach (var validatableProperty in _validatableProperties)
                 {
                     var info = validatableProperty.Value;
-                    bool isTarget = string.IsNullOrEmpty(propertyName) || info.PropertyName == propertyName;
-                    bool isMessagesChanged = false;
-                    bool isPropertyValid = true;
-                    bool shouldRevalidateAsyncValidators = false;
-
-                    // First we check all sync validators.
-                    foreach (var propertyValidator in info.SyncValidators)
+                    var isTarget = string.IsNullOrEmpty(propertyName) || info.PropertyName == propertyName;
+                    if (!isTarget && !info.RelatedProperties.Contains(propertyName!))
+                        continue;
+                    
+                    var isMessagesChanged = false;
+                    var shouldIgnoreAllFollowing = false;
+                    var shouldRevalidateAllFollowing = isTarget;
+                    var shouldAsyncValidate = false;
+                    var asyncValidators = new List<IPropertyValidator<TObject>>();
+                    
+                    foreach (var propertyValidator in info.Validators)
                     {
-                        var isRelated = propertyValidator.RelatedProperties.Contains(propertyName);
-                        if (!isTarget && !isRelated)
+                        // Check if all following validators should be ignored and have empty message.
+                        if (shouldIgnoreAllFollowing)
+                        {
+                            if (info.ValidatorsValidationMessages[propertyValidator].Any())
+                            {
+                                info.ValidatorsValidationMessages[propertyValidator] = Array.Empty<ValidationMessage>();
+                                isMessagesChanged = true;
+                            }
+                            
                             continue;
+                        }
 
+                        // If changed property doesn't affect at property validator then we don't need to revalidate it.
+                        var isRelated = propertyValidator.RelatedProperties.Contains(propertyName);
+                        if (!shouldRevalidateAllFollowing && !isRelated)
+                        {
+                            shouldIgnoreAllFollowing |=
+                                info.ValidatorsValidationMessages[propertyValidator].Any()
+                                && info.PropertyCascadeMode == CascadeMode.Stop;
+                            continue;
+                        }
+
+                        // After first async validator - all others will be validated in ValidateInternalAsync.
+                        shouldAsyncValidate |= propertyValidator.IsAsync;
+                        if (shouldAsyncValidate)
+                        {
+                            // Reset messages, because we don't need them during async validation.
+                            // Also if this validator had messages and PropertyCascadeMode == CascadeMode.Stop then we need to revalidate all others validators.
+                            // Because they were skipped because of this validator.
+                            if (info.ValidatorsValidationMessages[propertyValidator].Any())
+                            {
+                                info.ValidatorsValidationMessages[propertyValidator] = Array.Empty<ValidationMessage>();
+                                isMessagesChanged = true;
+                                shouldRevalidateAllFollowing |= info.PropertyCascadeMode == CascadeMode.Stop;
+                            }
+
+                            // Add this validator to list only if should be revalidated.
+                            if (shouldRevalidateAllFollowing || isRelated)
+                            {
+                                // Cancel previous execution (if it is running) and create new token source for future execution.
+                                info.AsyncValidatorCancellationTokenSources[propertyValidator]?.Cancel();
+                                info.AsyncValidatorCancellationTokenSources[propertyValidator] = new CancellationTokenSource();
+
+                                asyncValidators.Add(propertyValidator);
+                            }
+
+                            continue;
+                        }
+                        
+                        // Validate sync validators here.
                         var contextProvider = aggregatedValidationContext.CreateContextFactory(info.PropertyName);
                         var messages = ValidatePropertyValidator(propertyValidator, contextProvider);
-                        isPropertyValid &= messages.IsValid();
+                        shouldIgnoreAllFollowing |= messages.Any() && info.PropertyCascadeMode == CascadeMode.Stop;
                         if (messages.SequenceEqual(info.ValidatorsValidationMessages[propertyValidator]))
                             continue;
-
+                        
                         info.ValidatorsValidationMessages[propertyValidator] = messages;
                         isMessagesChanged = true;
-
-                        // Async validators are using rule "first failure".
-                        // Because of that we need revalidate all async validators if validator with related property changed its messages. 
-                        if (!isTarget && isRelated)
-                            shouldRevalidateAsyncValidators = isPropertyValid;
+                        shouldRevalidateAllFollowing |=
+                            messages.Count == 0 && info.PropertyCascadeMode == CascadeMode.Stop;
                     }
 
-                    // Then we should reset messages of async validators.
-                    // They can be restored after async check.
-                    var asyncValidators = new List<IPropertyValidator<TObject>>();
-                    foreach (var propertyValidator in info.AsyncValidators)
-                    {
-                        // Async validators are using rule "first failure".
-                        // If some of previous validators of this property changed messages, we need revalidate async validators.
-                        var isRelated = propertyValidator.RelatedProperties.Contains(propertyName);
-                        if (!isTarget && !isRelated && !shouldRevalidateAsyncValidators)
-                            continue;
-                        
-                        var messages = info.ValidatorsValidationMessages[propertyValidator];
-                        if (messages.Any())
-                        {
-                            info.ValidatorsValidationMessages[propertyValidator] = Array.Empty<ValidationMessage>();
-                            isMessagesChanged = true;
-                        }
-
-                        // Cancel previous execution (if it is running).
-                        info.AsyncValidatorCancellationTokenSources[propertyValidator]?.Cancel();
-                        
-                        // We should use async validators only if all previous checks are success. 
-                        if (isPropertyValid)
-                        {
-                            // Create new token source for future execution.
-                            info.AsyncValidatorCancellationTokenSources[propertyValidator] =
-                                new CancellationTokenSource();
-                            
-                            asyncValidators.Add(propertyValidator);
-                            
-                            // All subsequent async validators should be revalidated.
-                            if (!isTarget && isRelated)
-                                shouldRevalidateAsyncValidators = true;
-                        }
-                    }
-                    
                     if (isMessagesChanged)
                         changedProperties.Add(info.PropertyName);
 
@@ -366,6 +377,10 @@ namespace ReactiveValidation
                     {
                         info.ValidatorsValidationMessages[propertyValidator] = messages;
                         NotifyChangedProperties(new[] { propertyName });
+                        
+                        // There are first messages, so we don't need to revalidate following validators.
+                        if (info.PropertyCascadeMode == CascadeMode.Stop)
+                            return;
                     }
                 }
             }
@@ -406,7 +421,11 @@ namespace ReactiveValidation
         {
             try
             {
-                return await propertyValidator.ValidatePropertyAsync(contextFactory, cancellationToken);
+                return propertyValidator.IsAsync
+                    ? await propertyValidator.ValidatePropertyAsync(contextFactory, cancellationToken)
+                    // ReSharper disable once MethodHasAsyncOverloadWithCancellation
+                    // It's not an async validator, so we should use sync method.
+                    : propertyValidator.ValidateProperty(contextFactory);
             }
             // Ignore only if exception was thrown by cancellationToken, not because of user code.
             catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -479,6 +498,8 @@ namespace ReactiveValidation
         private IDictionary<string, ValidatableProperty<TObject>> GetValidatableProperties(IReadOnlyList<IRuleBuilder<TObject>> ruleBuilders)
         {
             var propertyValidators = new Dictionary<string, List<IPropertyValidator<TObject>>>();
+            var propertyCascadeModes = new Dictionary<string, CascadeMode>();
+            
             foreach (var ruleBuilder in ruleBuilders)
             {
                 var validators = ruleBuilder.GetValidators();
@@ -488,12 +509,17 @@ namespace ReactiveValidation
                         propertyValidators[validatableProperty] = new List<IPropertyValidator<TObject>>();
 
                     propertyValidators[validatableProperty].AddRange(validators);
+                    
+                    if (ruleBuilder.PropertyCascadeMode != null)
+                        propertyCascadeModes[validatableProperty] = ruleBuilder.PropertyCascadeMode.Value;
+                    else if (!propertyCascadeModes.ContainsKey(validatableProperty))
+                        propertyCascadeModes[validatableProperty] = ValidationOptions.PropertyCascadeMode;
                 }
             }
 
             return propertyValidators.ToDictionary(
                 pv => pv.Key,
-                pv => new ValidatableProperty<TObject>(pv.Key, _displayNamesSources[pv.Key], pv.Value));
+                pv => new ValidatableProperty<TObject>(pv.Key, _displayNamesSources[pv.Key], propertyCascadeModes[pv.Key], pv.Value));
         }
 
         /// <summary>

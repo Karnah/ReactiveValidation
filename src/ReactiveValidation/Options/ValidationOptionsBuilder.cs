@@ -15,12 +15,28 @@ namespace ReactiveValidation
     /// </summary>
     public class ValidationOptionsBuilder
     {
+        private bool _isUseCascadeModeCalled;
         private bool _isUseStringProviderCalled;
         private bool _isTrackCultureChangedCalled;
         private bool _isUseCustomDisplayNameResolverCalled;
         private bool _isUseCustomValidatorFactoryCalled;
         private bool _isUsedDefaultValidatorFactory;
 
+        /// <summary>
+        /// Specifies how rules of property should cascade when one fails.
+        /// </summary>
+        /// <param name="propertyCascadeMode">The property cascade mode.</param>
+        public ValidationOptionsBuilder UsePropertyCascadeMode(CascadeMode propertyCascadeMode)
+        {
+            if (_isUseCascadeModeCalled)
+                throw new MethodAlreadyCalledException("Cannot change cascade mode twice");
+
+            ValidationOptions.PropertyCascadeMode = propertyCascadeMode;
+
+            _isUseCascadeModeCalled = true;
+            return this;
+        }
+        
         /// <summary>
         /// Set string provider for text and localized strings.
         /// It will use by <see cref="DisplayNameAttribute" /> and <see cref="LanguageStringSource" />.

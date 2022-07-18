@@ -35,21 +35,28 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
                 return;
             
             await Validator.WaitValidatingCompletedAsync();
-            MessageBox.Show("Async validation has ended");
+            MessageBox.Show("Async validation has completed");
         }
         
         private IObjectValidator GetValidator()
         {
             var builder = new ValidationBuilder<AsyncValidationViewModel>();
 
+            // For async validators it's better to use .WithPropertyCascadeMode(CascadeMode.Stop).
+            // Because it wouldn't validate if previous rules failed.
+            builder.PropertyCascadeMode = CascadeMode.Stop;
 
             builder.RuleFor(vm => vm.PhoneNumber)
+                // You can also specify CascadeMode like this.
+                // .WithPropertyCascadeMode(CascadeMode.Stop)
                 .NotEmpty()
                 .When(vm => vm.Email, email => string.IsNullOrEmpty(email))
                 .Matches(@"^\d{11}$")
                 .Must(CheckPhoneIsInUseAsync).WithMessage("Phone number is already using");
 
             builder.RuleFor(vm => vm.Email)
+                // You can also specify CascadeMode like this.
+                // .WithPropertyCascadeMode(CascadeMode.Stop)
                 .NotEmpty()
                 .When(vm => vm.PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber))
                 .Must(IsValidEmail)

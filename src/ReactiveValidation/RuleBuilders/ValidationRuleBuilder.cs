@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-
 using ReactiveValidation.Helpers;
-using ReactiveValidation.Internal;
 using ReactiveValidation.ValidatorFactory;
 using ReactiveValidation.Validators.PropertyValueTransformers;
 
@@ -28,6 +26,11 @@ namespace ReactiveValidation
             _rulesBuilders = new List<IRuleBuilder<TObject>>();
         }
 
+        /// <summary>
+        /// Specifies how rules of property should cascade when one fails.
+        /// </summary>
+        protected CascadeMode? PropertyCascadeMode { get; set; }
+        
         /// <summary>
         /// Create validator for instance.
         /// </summary>
@@ -143,8 +146,16 @@ namespace ReactiveValidation
         /// <summary>
         /// Create prepared builder.
         /// </summary>
-        internal IObjectValidatorBuilder CreateBuilder()
+        private IObjectValidatorBuilder CreateBuilder()
         {
+            if (PropertyCascadeMode != null)
+            {
+                foreach (var ruleBuilder in _rulesBuilders)
+                {
+                    ruleBuilder.PropertyCascadeMode ??= PropertyCascadeMode;
+                }
+            }
+            
             return new ObjectValidatorBuilder<TObject>(_rulesBuilders);
         }
 

@@ -23,7 +23,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
@@ -33,27 +32,28 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Phone number: " />
-            <TextBox Grid.Row="0" Grid.Column="1"
+            <Button Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                    HorizontalAlignment="Left"
+                    Content="Wait async validation completed"
+                    Command="{Binding WaitValidatingCompletedCommand}"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Phone number: " />
+            <TextBox Grid.Row="1" Grid.Column="1"
                      Text="{Binding PhoneNumber, Mode=TwoWay}" />
-            <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+            <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
                        Text="Phone number required if email is not specified.
 &#x0a;Must contains 11 digits.
 &#x0a;If '11111111111' then it is not valid (async check)." />
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Email: " />
-            <TextBox Grid.Row="1" Grid.Column="1"
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Email: " />
+            <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding Email, Mode=TwoWay}" />
-            <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+            <TextBlock Grid.Row="2" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
                        Text="Email required if phone number is not specified.
 &#x0a;Expected format - 'xxx@yyy.zz'.
 &#x0a;i=If 'foo@bar.com' then is not valid (async check)." />
 
-            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
-                <Button HorizontalAlignment="Left"
-                        Content="Wait async validation completed"
-                        Command="{Binding WaitValidatingCompletedCommand}"/>
-            </Grid>
+
         </Grid>
 
         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />

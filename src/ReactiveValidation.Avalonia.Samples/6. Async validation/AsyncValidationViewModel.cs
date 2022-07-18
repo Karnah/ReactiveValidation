@@ -36,7 +36,7 @@ namespace ReactiveValidation.Avalonia.Samples._6._Async_validation
             await Validator.WaitValidatingCompletedAsync();
             
             var dialog = MessageBox.Avalonia.MessageBoxManager
-                    .GetMessageBoxStandardWindow("", "Async validation has ended");
+                    .GetMessageBoxStandardWindow("", "Async validation has completed");
             await dialog.Show();
         }
         
@@ -44,14 +44,21 @@ namespace ReactiveValidation.Avalonia.Samples._6._Async_validation
         {
             var builder = new ValidationBuilder<AsyncValidationViewModel>();
 
+            // For async validators it's better to use .WithPropertyCascadeMode(CascadeMode.Stop).
+            // Because it wouldn't validate if previous rules failed.
+            builder.PropertyCascadeMode = CascadeMode.Stop;
 
             builder.RuleFor(vm => vm.PhoneNumber)
+                // You can also specify CascadeMode like this.
+                // .WithPropertyCascadeMode(CascadeMode.Stop)
                 .NotEmpty()
                 .When(vm => vm.Email, email => string.IsNullOrEmpty(email))
                 .Matches(@"^\d{11}$")
                 .Must(CheckPhoneIsInUseAsync).WithMessage("Phone number is already using");
 
             builder.RuleFor(vm => vm.Email)
+                // You can also specify CascadeMode like this.
+                // .WithPropertyCascadeMode(CascadeMode.Stop)
                 .NotEmpty()
                 .When(vm => vm.PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber))
                 .Must(IsValidEmail)

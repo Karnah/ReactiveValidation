@@ -16,6 +16,11 @@ namespace ReactiveValidation
         where TObject : IValidatableObject
     {
         /// <summary>
+        /// Specifies how rules of property should cascade when one fails.
+        /// </summary>
+        public CascadeMode? PropertyCascadeMode { get; set; }
+        
+        /// <summary>
         /// List of properties names which validating by this rules.
         /// </summary>
         IReadOnlyList<string> ValidatableProperties { get; }

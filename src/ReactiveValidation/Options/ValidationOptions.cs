@@ -14,6 +14,11 @@ namespace ReactiveValidation
         private static bool _isConfigured;
 
         /// <summary>
+        /// Specifies how rules of property should cascade when one fails.
+        /// </summary>
+        public static CascadeMode PropertyCascadeMode { get; internal set; } = CascadeMode.Continue;
+        
+        /// <summary>
         /// Manager, which allows use different localization for validation messages.
         /// </summary>
         public static LanguageManager LanguageManager { get; } = new LanguageManager();

@@ -11,6 +11,28 @@ namespace ReactiveValidation.Extensions
     public static class SettingsExtensions
     {
         /// <summary>
+        /// Specify how rules of property should cascade when one fails.
+        /// </summary>
+        /// <typeparam name="TNext">The type of the next rule builder.</typeparam>
+        /// <typeparam name="TObject">The type of validatable object.</typeparam>
+        /// <typeparam name="TProp">The type of validatable property.</typeparam>
+        /// <param name="ruleBuilder">The rule builder which property(-ies) should be tracking.</param>
+        /// <param name="propertyCascadeMode">Property cascade mode.</param>
+        public static IRuleBuilderInitial<TObject, TProp, TNext> WithPropertyCascadeMode<TNext, TObject, TProp>(
+            this IRuleBuilderInitial<TObject, TProp, TNext> ruleBuilder,
+            CascadeMode propertyCascadeMode)
+                where TNext : IRuleBuilder<TObject, TProp, TNext>
+                where TObject : IValidatableObject
+        {
+            var rb = (IRuleBuilder<TObject>) ruleBuilder;
+
+            rb.PropertyCascadeMode.GuardNotCallTwice("CascadeMode is already assigned");
+            rb.PropertyCascadeMode = propertyCascadeMode;
+
+            return ruleBuilder;
+        }
+        
+        /// <summary>
         /// Every time when property value will raise <see cref="INotifyPropertyChanged.PropertyChanged" /> event
         /// all rules which depend from this property will be revalidated.
         /// </summary>

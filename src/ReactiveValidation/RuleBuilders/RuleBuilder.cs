@@ -43,6 +43,9 @@ namespace ReactiveValidation
 
 
         /// <inheritdoc />
+        public CascadeMode? PropertyCascadeMode { get; set; }
+
+        /// <inheritdoc />
         public IReadOnlyList<string> ValidatableProperties { get; }
 
         /// <inheritdoc />

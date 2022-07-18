@@ -10,6 +10,13 @@ namespace ReactiveValidation
         where TObject : IValidatableObject
     {
         /// <inheritdoc />
+        public new CascadeMode? PropertyCascadeMode
+        {
+            get => base.PropertyCascadeMode;
+            set => base.PropertyCascadeMode = value;
+        }
+        
+        /// <inheritdoc />
         public new ISinglePropertyRuleBuilderInitial<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> property)
         {
             return base.RuleFor(property);
