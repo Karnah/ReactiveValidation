@@ -1,9 +1,15 @@
 ﻿using ReactiveValidation.Helpers;
 
-namespace ReactiveValidation.Languages
+namespace ReactiveValidation.Resources.Languages
 {
+    /// <summary>
+    /// Russian language.
+    /// </summary>
     internal sealed class RussianLanguage : StaticLanguage
     {
+        /// <summary>
+        /// Create new Russian language resource.
+        /// </summary>
         public RussianLanguage() : base("ru")
         {
             AddTranslations(ValidatorsNames.BetweenValidator, "Значение поля {PropertyName} должно быть от {From} и до {To}");

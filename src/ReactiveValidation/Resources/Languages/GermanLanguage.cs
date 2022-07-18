@@ -1,9 +1,15 @@
 ﻿using ReactiveValidation.Helpers;
 
-namespace ReactiveValidation.Languages
+namespace ReactiveValidation.Resources.Languages
 {
+    /// <summary>
+    /// German language.
+    /// </summary>
     internal sealed class GermanLanguage : StaticLanguage
     {
+        /// <summary>
+        /// Create new German language resource.
+        /// </summary>
         public GermanLanguage() : base("de")
         {
             AddTranslations(ValidatorsNames.BetweenValidator, "{PropertyName} muss zwischen {From} und {To} liegen");

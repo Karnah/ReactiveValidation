@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ReactiveValidation.Avalonia.Samples._5._Validation_builder_factory"
+             xmlns:s="clr-namespace:ReactiveValidation.Avalonia.Samples"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ReactiveValidation.Avalonia.Samples._5._Validation_builder_factory.ValidationBuilderFactoryView"
+             x:DataType="local:ValidationBuilderFactoryViewModel"
+             x:CompileBindings="True">
+    <Design.DataContext>
+        <local:ValidationBuilderFactoryViewModel />
+    </Design.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Phone number: " />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding PhoneNumber, Mode=TwoWay}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Phone number required if email is not specified. Must contains 11 digits" />
+
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Email: " />
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Text="{Binding Email, Mode=TwoWay}" />
+            <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Email required if phone number is not specified. Expected format - 'xxx@yyy.zz'" />
+
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Password: " />
+            <TextBox Grid.Row="2" Grid.Column="1"
+                     Text="{Binding Password, Mode=TwoWay}" />
+            <TextBlock Grid.Row="2" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Should be not empty. Preferably more than 8 characters" />
+
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Confirm password: " />
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Text="{Binding ConfirmPassword, Mode=TwoWay}" />
+            <TextBlock Grid.Row="3" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Should be equal password property" />
+
+
+            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
+                      Content="I want to specify additional information"
+                      IsChecked="{Binding AdditionalInformation, Mode=TwoWay}" />
+            <TextBlock Grid.Row="4" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Next two fields validating only when checked" />
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Country: " />
+            <TextBox Grid.Row="5" Grid.Column="1"
+                     IsEnabled="{Binding AdditionalInformation}"
+                     Text="{Binding Country, Mode=TwoWay}" />
+            <TextBlock Grid.Row="5" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Not validating if checkbox not checked" />
+
+            <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="City: " />
+            <TextBox Grid.Row="6" Grid.Column="1"
+                     IsEnabled="{Binding AdditionalInformation}"
+                     Text="{Binding City, Mode=TwoWay}" />
+            <TextBlock Grid.Row="6" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="Not validating if checkbox not checked" />
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+        <s:ValidationStateInfoControl Grid.Column="2" DataContext="{Binding Validator}" />
+    </Grid>
+</UserControl>

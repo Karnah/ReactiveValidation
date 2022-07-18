@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ReactiveValidation.Avalonia.Samples._4._Inner_validatable_object_and_collection"
+             xmlns:s="clr-namespace:ReactiveValidation.Avalonia.Samples"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ReactiveValidation.Avalonia.Samples._4._Inner_validatable_object_and_collection.InnerValidatableObjectAndCollectionView"
+             x:DataType="local:InnerValidatableObjectAndCollectionViewModel"
+             x:CompileBindings="True">
+    <Design.DataContext>
+        <local:InnerValidatableObjectAndCollectionViewModel />
+    </Design.DataContext>
+
+    <Grid x:Name="Root">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Inner object value: " />
+            <TextBox Grid.Row="0" Grid.Column="1"
+                     Text="{Binding InnerObjectValue.Name, Mode=TwoWay}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                       Text="In inner object value should be not empty" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Collection:" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" TextWrapping="Wrap"
+                       Text="Collection should contains from 3 to 5 elements and they should be valid" />
+
+            <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="3" Content="Add item"
+                    Command="{Binding AddItemCommand}" />
+            
+            <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+                <ItemsControl Items="{Binding InnerObjectsCollection}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Grid.Column="0"
+                                         Text="{Binding Name, Mode=TwoWay}" />
+
+                                <Button Grid.Column="1" Margin="3" Padding="6,3,6,3" Content="Delete"
+                                        Command="{ReflectionBinding  ElementName=Root, Path=DataContext.DeleteItemCommand}"
+                                        CommandParameter="{Binding }" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+        <s:ValidationStateInfoControl Grid.Column="2" DataContext="{Binding Validator}" />
+    </Grid>
+</UserControl>

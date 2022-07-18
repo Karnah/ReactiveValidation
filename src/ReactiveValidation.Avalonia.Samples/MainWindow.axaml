@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:bs="clr-namespace:ReactiveValidation.Avalonia.Samples._1._BaseSample"
+        xmlns:dp="clr-namespace:ReactiveValidation.Avalonia.Samples._2._Dependent_properties"
+        xmlns:samples="clr-namespace:ReactiveValidation.Avalonia.Samples"
+        xmlns:l="clr-namespace:ReactiveValidation.Avalonia.Samples._3._Localization"
+        xmlns:ivoac="clr-namespace:ReactiveValidation.Avalonia.Samples._4._Inner_validatable_object_and_collection"
+        xmlns:vbf="clr-namespace:ReactiveValidation.Avalonia.Samples._5._Validation_builder_factory"
+        xmlns:av="clr-namespace:ReactiveValidation.Avalonia.Samples._6._Async_validation"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ReactiveValidation.Avalonia.Samples.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="ReactiveValidation.Avalonia.Samples">
+    
+    <Grid>
+        <TabControl TabStripPlacement="Left">
+            <TabItem Padding="3" Header="1. Base samples">
+                <bs:BaseSampleView />
+            </TabItem>
+
+            <TabItem Padding="3" Header="2. Dependent properties">
+                <dp:DependentPropertiesView />
+            </TabItem>
+            
+            <TabItem Padding="3" Header="3. Localization">
+                <l:LocalizationView />
+            </TabItem>
+            
+            <TabItem Padding="3" Header="4. Inner property and collections">
+                <ivoac:InnerValidatableObjectAndCollectionView />
+            </TabItem>
+            
+            <TabItem Padding="3" Header="5. Validation builder factory">
+                <vbf:ValidationBuilderFactoryView />
+            </TabItem>
+            
+            <TabItem Padding="3" Header="6. Async validation">
+                <av:AsyncValidationView />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

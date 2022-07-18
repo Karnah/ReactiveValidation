@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageVersion>2.0.0-pre</PackageVersion>
+    <Authors>Vsevolod Pilipenko</Authors>
+    <Description>A small validation library for WPF and Avalonia that uses a fluent interface and allows display messages near controls in GUI with MVVM</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/Karnah/ReactiveValidation</RepositoryUrl>
+    <PackageTags>WPF, Avalonia, Reactive, Fluent validation</PackageTags>
+    <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <DocumentationFile>bin\Debug\ReactiveValidation.Wpf.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\ReactiveValidation.Wpf.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReactiveValidation\ReactiveValidation.csproj" />
+  </ItemGroup>
+</Project>
