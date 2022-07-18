@@ -23,7 +23,7 @@ namespace ReactiveValidation.WPF.Templates
         /// <summary>
         /// Error template which support different <see cref="ValidationMessage" />.
         /// </summary>
-        public static ControlTemplate ExtendedErrorTemplate { get; } = GetControlTemplate("ValidationErrorTemplate");
+        public static ControlTemplate ExtendedErrorTemplate { get; } = GetControlTemplate("ExtendedErrorTemplate");
 
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ReactiveValidation.WPF.Templates
             // If not we put default value from local resource file.
             // Else it will be used automatically.
             var applicationResources = Application.Current.Resources;
-            foreach (var brushName  in Brushes)
+            foreach (var brushName in Brushes)
             {
                 if (!applicationResources.Contains(brushName))
                     template.Resources.Add(brushName, templateDictionary[brushName]);

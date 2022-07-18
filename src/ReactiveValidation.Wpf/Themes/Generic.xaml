@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="ValidationMessageForegroundBrush" Color="Black" />
     <SolidColorBrush x:Key="ValidationMessageBackgroundBrush" Color="White" />
     
-    <ControlTemplate x:Key="ValidationErrorTemplate">
+    <ControlTemplate x:Key="ExtendedErrorTemplate">
         <ControlTemplate.Resources>
             <converters:ShowValidationPopupConverter x:Key="ShowValidationPopupConverter" />
             <converters:ErrorsToValidationMessagesConverter x:Key="ErrorsToValidationMessagesConverter" />

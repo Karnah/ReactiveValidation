@@ -6,9 +6,9 @@ namespace ReactiveValidation.Wpf.Samples._1._BaseSample
     {
         public BaseSampleView()
         {
+            DataContext = new BaseSampleViewModel();
+            
             InitializeComponent();
-
-            this.DataContext = new BaseSampleViewModel();
         }
     }
 }

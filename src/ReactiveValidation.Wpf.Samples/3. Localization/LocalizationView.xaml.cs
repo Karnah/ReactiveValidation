@@ -6,9 +6,9 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
     {
         public LocalizationView()
         {
+            DataContext = new LocalizationViewModel();
+            
             InitializeComponent();
-
-            this.DataContext = new LocalizationViewModel();
         }
     }
 }

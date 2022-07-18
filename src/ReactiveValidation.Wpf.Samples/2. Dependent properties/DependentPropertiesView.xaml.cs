@@ -6,9 +6,9 @@ namespace ReactiveValidation.Wpf.Samples._2._Dependent_properties
     {
         public DependentPropertiesView()
         {
+            DataContext = new DependentPropertiesViewModel();
+            
             InitializeComponent();
-
-            this.DataContext = new DependentPropertiesViewModel();
         }
     }
 }

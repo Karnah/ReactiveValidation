@@ -4,8 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ReactiveValidation.Wpf.Samples._5._Validation_builder_factory"
-             xmlns:b="clr-namespace:ReactiveValidation.WPF.Behaviors;assembly=ReactiveValidation.Wpf"
-             xmlns:t="clr-namespace:ReactiveValidation.WPF.Templates;assembly=ReactiveValidation.Wpf"
              xmlns:s="clr-namespace:ReactiveValidation.Wpf.Samples"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -13,96 +11,96 @@
     <UserControl.Resources>
         <!-- It is more convenient to create a base style for control.  -->
         <Style x:Key="TextBox" TargetType="TextBox">
-            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ExtendedErrorTemplate}" />
 
             <Setter Property="Margin" Value="3" />
         </Style>
 
         <Style x:Key="CheckBox" TargetType="CheckBox">
-            <Setter Property="b:ReactiveValidation.AutoRefreshErrorTemplate" Value="True" />
-            <Setter Property="b:ReactiveValidation.ErrorTemplate" Value="{x:Static t:ErrorTemplates.ExtendedErrorTemplate}" />
+            <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ExtendedErrorTemplate}" />
 
             <Setter Property="Margin" Value="3" />
         </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
+    <AdornerDecorator>
+        <Grid>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Phone number: " />
-            <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox}"
-                     Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Phone number required if email is not specified. Must contains 11 digits" />
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Phone number: " />
+                <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox}"
+                         Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Phone number required if email is not specified. Must contains 11 digits" />
 
 
-            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Email: " />
-            <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBox}"
-                     Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Email required if phone number is not specified. Expected format - 'xxx@yyy.zz'" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Email: " />
+                <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBox}"
+                         Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Email required if phone number is not specified. Expected format - 'xxx@yyy.zz'" />
 
 
-            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Password: " />
-            <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBox}"
-                     Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="2" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Should be not empty. Preferably more than 8 characters" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Password: " />
+                <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBox}"
+                         Text="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="2" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Should be not empty. Preferably more than 8 characters" />
 
 
-            <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Confirm password: " />
-            <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBox}"
-                     Text="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="3" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Should be equal password property" />
+                <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Confirm password: " />
+                <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBox}"
+                         Text="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="3" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Should be equal password property" />
 
 
-            <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource CheckBox}"
-                      Content="I want to specify additional information"
-                      IsChecked="{Binding AdditionalInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="4" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Next two fields validating only when checked" />
+                <CheckBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource CheckBox}"
+                          Content="I want to specify additional information"
+                          IsChecked="{Binding AdditionalInformation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="4" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Next two fields validating only when checked" />
 
-            <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Country: " />
-            <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBox}"
-                     IsEnabled="{Binding AdditionalInformation}"
-                     Text="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="5" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Not validating if checkbox not checked" />
+                <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Country: " />
+                <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBox}"
+                         IsEnabled="{Binding AdditionalInformation}"
+                         Text="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="5" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Not validating if checkbox not checked" />
 
-            <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="City: " />
-            <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource TextBox}"
-                     IsEnabled="{Binding AdditionalInformation}"
-                     Text="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="6" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
-                       Text="Not validating if checkbox not checked" />
+                <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="City: " />
+                <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource TextBox}"
+                         IsEnabled="{Binding AdditionalInformation}"
+                         Text="{Binding City, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="6" Grid.Column="2" Margin="3" MaxWidth="200" TextWrapping="Wrap"
+                           Text="Not validating if checkbox not checked" />
+            </Grid>
+
+            <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+            <s:ValidationStateInfoControl Grid.Column="2" DataContext="{Binding Validator}" />
         </Grid>
-
-        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
-
-        <s:ValidationStateInfoControl Grid.Column="2" DataContext="{Binding Validator}" />
-    </Grid>
+    </AdornerDecorator>
 </UserControl>

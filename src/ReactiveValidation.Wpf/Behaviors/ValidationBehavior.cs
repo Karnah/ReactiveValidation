@@ -3,17 +3,15 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-
+using System.Windows.Documents;
 using ReactiveValidation.WPF.Templates;
 
 namespace ReactiveValidation.WPF.Behaviors
 {
     /// <summary>
-    /// The class is designed to handle implicit validation behaviors in WPF
-    /// 1. If the control was not immediately initialized or it was called Unload() - when you call Load () ErrorTemplate will not be used with a high probability (the error is due to the fact that AdornedPlaceholder does not have time to initialize)
-    /// 2. If BindingMode is a OneWayToSource, then the validation error is not always displayed
-    /// 3. In some cases, even if the HasError property is false, ErrorTemplate is still used
+    /// You don't need this class, use <see cref="AdornerDecorator" /> instead.
     /// </summary>
+    [Obsolete("Don't use this class. Wrap with AdornerDecorator your controls to error template work correctly.")]
     public static class ReactiveValidation
     {
         #region AutoRefreshErrorTemplateProperty

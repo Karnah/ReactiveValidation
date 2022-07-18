@@ -6,9 +6,9 @@ namespace ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collec
     {
         public InnerValidatableObjectAndCollectionView()
         {
+            DataContext = new InnerValidatableObjectAndCollectionViewModel();
+            
             InitializeComponent();
-
-            this.DataContext = new InnerValidatableObjectAndCollectionViewModel();
         }
     }
 }
