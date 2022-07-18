@@ -66,5 +66,11 @@ namespace ReactiveValidation
         ICollectionRuleBuilderInitial<TObject, TCollection, TProp> RuleForCollection<TCollection, TProp>(
             Expression<Func<TObject, TCollection>> collection)
                 where TCollection : IEnumerable<TProp>;
+
+
+        /// <summary>
+        /// Create validator for instance.
+        /// </summary>
+        IObjectValidator Build(TObject instance);
     }
 }

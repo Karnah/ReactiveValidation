@@ -29,6 +29,7 @@
             <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
 
             <Setter Property="Margin" Value="3" />
+            <Setter Property="Padding" Value="6,3,6,3" />
         </Style>
     </UserControl.Resources>
 
@@ -44,8 +45,8 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -64,7 +65,12 @@
                 <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="3" TextWrapping="Wrap"
                            Text="Collection should contains from 3 to 5 elements and they should be valid" />
 
-                <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+                <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource Button}"
+                        HorizontalAlignment="Left"
+                        Content="Add item"
+                        Command="{Binding AddItemCommand}" />
+                
+                <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
                     <ItemsControl Style="{StaticResource ItemsControl}" ItemsSource="{Binding InnerObjectsCollection}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -85,9 +91,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </ScrollViewer>
-                
-                <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource Button}" Content="Add item"
-                        Command="{Binding AddItemCommand}" />
             </Grid>
 
             <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" />

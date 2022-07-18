@@ -48,13 +48,5 @@ namespace ReactiveValidation
         {
             return base.RuleForCollection<TCollection, TProp>(collection);
         }
-
-        /// <summary>
-        /// Create builder which allow create validator for object.
-        /// </summary>
-        public IObjectValidator Build(TObject instance)
-        {
-            return CreateBuilder().Build(instance);
-        }
     }
 }

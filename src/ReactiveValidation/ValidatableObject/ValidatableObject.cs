@@ -7,13 +7,24 @@ namespace ReactiveValidation
     /// <inheritdoc cref="IValidatableObject" />
     public class ValidatableObject : BaseNotifyPropertyChanged, IValidatableObject
     {
+        private IObjectValidator? _objectValidator;
+        
         /// <inheritdoc />
         public ValidatableObject()
         {}
 
 
         /// <inheritdoc />
-        public IObjectValidator? Validator { get; set; }
+        public IObjectValidator? Validator
+        {
+            get => _objectValidator;
+            set
+            {
+                _objectValidator?.Dispose();
+                _objectValidator = value;
+                _objectValidator?.Revalidate();
+            }
+        }
 
 
         /// <inheritdoc />

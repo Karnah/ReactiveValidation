@@ -7,8 +7,19 @@ namespace ReactiveValidation.Wpf.Samples
 {
     public abstract class ReactiveValidatableObject : ReactiveObject, IValidatableObject
     {
+        private IObjectValidator? _objectValidator;
+        
         /// <inheritdoc />
-        public IObjectValidator? Validator { get; set; }
+        public IObjectValidator? Validator
+        {
+            get => _objectValidator;
+            set
+            {
+                _objectValidator?.Dispose();
+                _objectValidator = value;
+                _objectValidator?.Revalidate();
+            }
+        }
 
 
         /// <inheritdoc />

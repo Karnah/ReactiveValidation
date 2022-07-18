@@ -15,6 +15,9 @@ namespace ReactiveValidation.Avalonia.Samples._5._Validation_builder_factory
             // For your project a better idea pass IValidatorFactory by constructor parameter using DI.
             // If this is possible you can setup your IoC in order to it create ViewModel, and after this set Validator using IValidatorFactory.
             Validator = ValidationOptions.ValidatorFactory.GetValidator(this);
+            
+            // If you don't want to use factory, you can create like this:
+            //Validator = new ViewModelValidation().Build(this);
         }
 
         [Reactive]

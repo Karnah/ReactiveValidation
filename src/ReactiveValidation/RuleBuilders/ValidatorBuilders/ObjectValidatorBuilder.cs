@@ -27,12 +27,7 @@ namespace ReactiveValidation
                 throw new ArgumentNullException(nameof(instance));
 
             if (instance is TObject i)
-            {
-                var validator = new ObjectValidator<TObject>(i, _rulesBuilders);
-                validator.Revalidate();
-
-                return validator;
-            }
+                return new ObjectValidator<TObject>(i, _rulesBuilders);
 
             throw new NotSupportedException($"Cannot create validator for type {instance.GetType()}, supported only {typeof(TObject)}");
         }

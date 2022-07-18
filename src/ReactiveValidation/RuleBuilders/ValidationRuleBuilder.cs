@@ -28,6 +28,13 @@ namespace ReactiveValidation
             _rulesBuilders = new List<IRuleBuilder<TObject>>();
         }
 
+        /// <summary>
+        /// Create validator for instance.
+        /// </summary>
+        public IObjectValidator Build(TObject instance)
+        {
+            return CreateBuilder().Build(instance);
+        }
 
         /// <inheritdoc />
         IObjectValidatorBuilder IObjectValidatorBuilderCreator.Create()
