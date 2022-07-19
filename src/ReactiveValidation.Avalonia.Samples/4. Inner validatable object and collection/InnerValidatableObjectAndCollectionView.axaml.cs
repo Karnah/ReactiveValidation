@@ -8,9 +8,8 @@ public partial class InnerValidatableObjectAndCollectionView : UserControl
 {
     public InnerValidatableObjectAndCollectionView()
     {
-        InitializeComponent();
-
         DataContext = new InnerValidatableObjectAndCollectionViewModel();
+        InitializeComponent();
     }
 
     private void InitializeComponent()

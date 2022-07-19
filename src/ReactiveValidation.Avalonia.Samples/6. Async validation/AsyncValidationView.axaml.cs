@@ -8,9 +8,8 @@ public partial class AsyncValidationView : UserControl
 {
     public AsyncValidationView()
     {
-        InitializeComponent();
-
         DataContext = new AsyncValidationViewModel();
+        InitializeComponent();
     }
 
     private void InitializeComponent()

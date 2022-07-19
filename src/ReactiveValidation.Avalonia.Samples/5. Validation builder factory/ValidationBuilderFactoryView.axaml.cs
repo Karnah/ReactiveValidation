@@ -8,9 +8,8 @@ public partial class ValidationBuilderFactoryView : UserControl
 {
     public ValidationBuilderFactoryView()
     {
-        InitializeComponent();
-
         DataContext = new ValidationBuilderFactoryViewModel();
+        InitializeComponent();
     }
 
     private void InitializeComponent()

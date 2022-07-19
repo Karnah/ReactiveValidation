@@ -8,9 +8,8 @@ public partial class BaseSampleView : UserControl
 {
     public BaseSampleView()
     {
+        DataContext = new BaseSampleViewModel();
         InitializeComponent();
-
-        this.DataContext = new BaseSampleViewModel();
     }
 
     private void InitializeComponent()

@@ -8,9 +8,8 @@ public partial class DependentPropertiesView : UserControl
 {
     public DependentPropertiesView()
     {
-        InitializeComponent();
-
         DataContext = new DependentPropertiesViewModel();
+        InitializeComponent();
     }
 
     private void InitializeComponent()

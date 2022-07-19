@@ -81,39 +81,15 @@ namespace ReactiveValidation
             return This;
         }
 
-
-        #region WithMessage/WithLocalizedMessage methods
-
         /// <inheritdoc />
-        public TBuilder WithMessage(string message)
+        public TBuilder WithMessageSource(IStringSource stringSource)
         {
             _currentValidator.GuardNotNull("Current validator hasn't set");
-            _currentValidator.SetStringSource(new StaticStringSource(message));
+            _currentValidator.SetStringSource(stringSource);
 
             return This;
         }
 
-        /// <inheritdoc />
-        public TBuilder WithLocalizedMessage(string messageKey)
-        {
-            _currentValidator.GuardNotNull("Current validator hasn't set");
-            _currentValidator.SetStringSource(new LanguageStringSource(messageKey));
-
-            return This;
-        }
-
-        /// <inheritdoc />
-        public TBuilder WithLocalizedMessage(string resource, string messageKey)
-        {
-            _currentValidator.GuardNotNull("Current validator hasn't set");
-            _currentValidator.SetStringSource(new LanguageStringSource(resource, messageKey));
-
-            return This;
-        }
-
-        #endregion
-
-        
         /// <inheritdoc />
         public IRuleBuilderOption<TObject, TProp> AllWhen(IValidationCondition<TObject> validationCondition)
         {

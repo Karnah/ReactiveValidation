@@ -8,9 +8,8 @@ public partial class LocalizationView : UserControl
 {
     public LocalizationView()
     {
-        InitializeComponent();
-
         DataContext = new LocalizationViewModel();
+        InitializeComponent();
     }
 
     private void InitializeComponent()

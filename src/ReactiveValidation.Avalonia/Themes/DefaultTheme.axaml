@@ -8,7 +8,6 @@
     <c:ValidationMessagesToBrushConverter x:Key="ValidationMessagesToBrushConverter" />
     
     <SolidColorBrush x:Key="WarningBrush" Color="Orange" />
-    <SolidColorBrush x:Key="NotificationCardErrorWarningBrush" Color="Orange" />
   </Styles.Resources>
   
   <Style Selector="DataValidationErrors"

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq.Expressions;
 using ReactiveValidation.ObjectObserver;
+using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators;
 using ReactiveValidation.Validators.Conditions;
 
@@ -54,25 +55,11 @@ namespace ReactiveValidation
         /// </summary>
         TBuilder When(IValidationCondition<TObject> condition);
 
-
         /// <summary>
-        /// Allow replace default last validator's message with static text.
+        /// Allow replace default last validator's message with string from source.
         /// </summary>
-        /// <param name="message">Validation message text</param>
-        TBuilder WithMessage(string message);
-
-        /// <summary>
-        /// Allow replace default last validator's message with localized text.
-        /// </summary>
-        /// <param name="messageKey">Message key in default resource.</param>
-        TBuilder WithLocalizedMessage(string messageKey);
-
-        /// <summary>
-        /// Allow replace default last validator's message with localized text.
-        /// </summary>
-        /// <param name="resource">Name of resource.</param>
-        /// <param name="messageKey">Message key in resource</param>
-        TBuilder WithLocalizedMessage(string resource, string messageKey);
+        /// <param name="stringSource">Validation message source.</param>
+        TBuilder WithMessageSource(IStringSource stringSource);
     }
 
 

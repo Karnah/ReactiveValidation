@@ -26,11 +26,6 @@ namespace ReactiveValidation
             }
         }
 
-
-        /// <inheritdoc />
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-     
-        
         /// <inheritdoc />
         public virtual void OnPropertyMessagesChanged(string propertyName)
         {
@@ -43,6 +38,9 @@ namespace ReactiveValidation
         /// <inheritdoc />
         bool INotifyDataErrorInfo.HasErrors => Validator?.IsValid == false || Validator?.HasWarnings == true;
 
+        /// <inheritdoc />
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        
         /// <inheritdoc />
         IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {

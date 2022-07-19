@@ -13,7 +13,7 @@ namespace ReactiveValidation
     /// Derive from this class to create validation rules for object.
     /// </summary>
     /// <typeparam name="TObject">Type of validatable object.</typeparam>
-    public abstract class ValidationRuleBuilder<TObject> : IObjectValidatorBuilderCreator
+    public abstract class ValidationRuleBuilder<TObject> : IValidationBuilder<TObject>, IObjectValidatorBuilderCreator
         where TObject : IValidatableObject
     {
         private readonly List<IRuleBuilder<TObject>> _rulesBuilders;
@@ -26,14 +26,10 @@ namespace ReactiveValidation
             _rulesBuilders = new List<IRuleBuilder<TObject>>();
         }
 
-        /// <summary>
-        /// Specifies how rules of property should cascade when one fails.
-        /// </summary>
-        protected CascadeMode? PropertyCascadeMode { get; set; }
+        /// <inheritdoc />
+        public CascadeMode? PropertyCascadeMode { get; set; }
         
-        /// <summary>
-        /// Create validator for instance.
-        /// </summary>
+        /// <inheritdoc />
         public IObjectValidator Build(TObject instance)
         {
             return CreateBuilder().Build(instance);
@@ -46,13 +42,8 @@ namespace ReactiveValidation
         }
 
 
-        /// <summary>
-        /// Create validator for single strongly typed property.
-        /// </summary>
-        /// <typeparam name="TProp">The type of property.</typeparam>
-        /// <param name="property">Validatable property.</param>
-        /// <returns>Single property validator for <typeparamref name="TProp" /> type.</returns>
-        protected ISinglePropertyRuleBuilderInitial<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> property)
+        /// <inheritdoc />
+        public ISinglePropertyRuleBuilderInitial<TObject, TProp> RuleFor<TProp>(Expression<Func<TObject, TProp>> property)
         {
             var propertyName = GetPropertyNameForValidator(property);
             var ruleBuilder = new SinglePropertyRuleBuilder<TObject, TProp>(propertyName);
@@ -62,12 +53,8 @@ namespace ReactiveValidation
             return ruleBuilder;
         }
 
-        /// <summary>
-        /// Create validator for single property with object type by its name.
-        /// </summary>
-        /// <param name="propertyName">Name of validatable property.</param>
-        /// <returns>Single property validator for <see cref="object"/> type.</returns>
-        protected ISinglePropertyRuleBuilderInitial<TObject, object?> RuleFor(string propertyName)
+        /// <inheritdoc />
+        public ISinglePropertyRuleBuilderInitial<TObject, object?> RuleFor(string propertyName)
         {
             var ruleBuilder = new SinglePropertyRuleBuilder<TObject, object?>(propertyName);
             _rulesBuilders.Add(ruleBuilder);
@@ -76,15 +63,8 @@ namespace ReactiveValidation
         }
 
         
-        /// <summary>
-        /// Create validator for single strongly typed property with transforming type.
-        /// </summary>
-        /// <param name="property">Validatable property.</param>
-        /// <param name="valueTransformer">Value converter.</param>
-        /// <typeparam name="TProp">The source type of property.</typeparam>
-        /// <typeparam name="TPropConverter">The target type of property.</typeparam>
-        /// <returns>Single property validator for <typeparamref name="TPropConverter" /> type.</returns>
-        protected ISinglePropertyRuleBuilderInitial<TObject, TPropConverter> Transform<TProp, TPropConverter>(
+        /// <inheritdoc />
+        public ISinglePropertyRuleBuilderInitial<TObject, TPropConverter> Transform<TProp, TPropConverter>(
             Expression<Func<TObject, TProp>> property,
             IValueTransformer<TObject, TPropConverter> valueTransformer)
         {
@@ -97,24 +77,16 @@ namespace ReactiveValidation
         }
         
 
-        /// <summary>
-        /// Create validator for collection of properties.
-        /// </summary>
-        /// <param name="properties">Validatable properties.</param>
-        /// <returns>Properties collection validator.</returns>
-        protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object?>>[] properties)
+        /// <inheritdoc />
+        public IPropertiesRuleBuilderInitial<TObject> RuleFor(params Expression<Func<TObject, object?>>[] properties)
         {
             var propertiesNames = properties.Select(GetPropertyNameForValidator).ToArray();
 
             return RuleFor(propertiesNames);
         }
 
-        /// <summary>
-        /// Create validator for collection of properties names.
-        /// </summary>
-        /// <param name="propertiesNames">Names of validatable properties.</param>
-        /// <returns>Properties collection validator.</returns>
-        protected IPropertiesRuleBuilderInitial<TObject> RuleFor(params string[] propertiesNames)
+        /// <inheritdoc />
+        public IPropertiesRuleBuilderInitial<TObject> RuleFor(params string[] propertiesNames)
         {
             var ruleBuilder = new PropertiesRuleBuilder<TObject>(propertiesNames);
             _rulesBuilders.Add(ruleBuilder);
@@ -123,14 +95,8 @@ namespace ReactiveValidation
         }
 
 
-        /// <summary>
-        /// Created validator for strongly typed collection.
-        /// </summary>
-        /// <typeparam name="TCollection">The type of collection.</typeparam>
-        /// <typeparam name="TItem">The type of item of collection.</typeparam>
-        /// <param name="collection">Property with collection type.</param>
-        /// <returns>Validator for property with <typeparamref name="TCollection" /> type.</returns>
-        protected ICollectionRuleBuilderInitial<TObject, TCollection, TItem> RuleForCollection<TCollection, TItem>(
+        /// <inheritdoc />
+        public ICollectionRuleBuilderInitial<TObject, TCollection, TItem> RuleForCollection<TCollection, TItem>(
             Expression<Func<TObject, TCollection>> collection)
             where TCollection : IEnumerable<TItem>
         {

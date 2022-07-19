@@ -21,11 +21,6 @@ namespace ReactiveValidation.Avalonia.Samples
             }
         }
 
-
-        /// <inheritdoc />
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-
-
         /// <inheritdoc />
         public virtual void OnPropertyMessagesChanged(string propertyName)
         {
@@ -38,6 +33,9 @@ namespace ReactiveValidation.Avalonia.Samples
         /// <inheritdoc />
         bool INotifyDataErrorInfo.HasErrors => Validator?.IsValid == false || Validator?.HasWarnings == true;
 
+        /// <inheritdoc />
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        
         /// <inheritdoc />
         IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {
