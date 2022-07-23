@@ -132,7 +132,7 @@ namespace ReactiveValidation.Extensions
             var rb = (IRuleBuilder<TObject>) ruleBuilder;
             rb.ObservingPropertiesSettings.TrackCollectionItemChanged = true;
 
-            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TCollection)))
+            if (typeof(INotifyCollectionChanged).IsAssignableFrom(typeof(TCollection)))
                 rb.ObservingPropertiesSettings.TrackCollectionChanged = true;
 
             return ruleBuilder;
@@ -150,12 +150,12 @@ namespace ReactiveValidation.Extensions
             this ICollectionRuleBuilderInitial<TObject, TCollection, TItem> ruleBuilder)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : INotifyPropertyChanged
+                where TItem : INotifyDataErrorInfo
         {
             var rb = (IRuleBuilder<TObject>) ruleBuilder;
             rb.ObservingPropertiesSettings.TrackCollectionItemErrorsChanged = true;
 
-            if (typeof(INotifyPropertyChanged).IsAssignableFrom(typeof(TCollection)))
+            if (typeof(INotifyCollectionChanged).IsAssignableFrom(typeof(TCollection)))
                 rb.ObservingPropertiesSettings.TrackCollectionChanged = true;
 
             return ruleBuilder;

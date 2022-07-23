@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 using ReactiveValidation.Helpers;
@@ -15,7 +16,7 @@ namespace ReactiveValidation.Validators
     public class CollectionElementsAreValidValidator<TObject, TCollection, TItem> : BaseSyncPropertyValidator<TObject, TCollection>
         where TObject : IValidatableObject
         where TCollection : IEnumerable<TItem>
-        where TItem : IValidatableObject
+        where TItem : INotifyDataErrorInfo
     {
         /// <summary>
         /// Initialize a new instance of <see cref="CollectionElementsAreValidValidator{TObject,TCollection,TItem}" /> class.
@@ -32,7 +33,16 @@ namespace ReactiveValidation.Validators
             if (context.PropertyValue?.Any() != true)
                 return true;
 
-            return context.PropertyValue.All(element => element?.Validator?.IsValid != false);
+            return context.PropertyValue.All(element =>
+            {
+                if (element == null)
+                    return true;
+
+                if (element is IValidatableObject validatableObject)
+                    return validatableObject.Validator?.IsValid != false;
+
+                return !element.HasErrors;
+            });
         }
     }
 }

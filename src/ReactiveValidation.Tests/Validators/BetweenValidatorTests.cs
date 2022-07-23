@@ -68,17 +68,17 @@ namespace ReactiveValidation.Tests.Validators
             AssertValidationMessage.EmptyMessage(validationMessage);
         }
 
-        private ValidationMessage Between<TProp>(
+        private ValidationMessage? Between<TProp>(
             TProp value,
             TProp from,
             TProp to,
-            IComparer comparer = null,
+            IComparer? comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
             var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
             var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
-            var validationMessage = betweenValidator.ValidateProperty(factory).FirstOrDefault();
+            var validationMessage = betweenValidator.ValidateProperty(factory).SingleOrDefault();
 
             return validationMessage;
         }

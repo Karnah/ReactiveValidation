@@ -30,7 +30,7 @@ namespace ReactiveValidation.ObjectObserver
 
             _observingProperties = settings.ToDictionary(
                 s => s.Key,
-                s => new ObservingProperty(s.Key, s.Value));
+                s => CreateObservingProperty(s.Key, s.Value));
 
             foreach (var observingProperty in _observingProperties)
             {
@@ -52,6 +52,31 @@ namespace ReactiveValidation.ObjectObserver
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// Create and setup <see cref="ObservingProperty" />.
+        /// </summary>
+        private ObservingProperty CreateObservingProperty(string propertyName, ObservingPropertySettings settings)
+        {
+            var observingProperty = new ObservingProperty(propertyName, settings);
+            
+            if (settings.TrackValueChanged || settings.TrackCollectionItemChanged)
+                observingProperty.ValueChangedAction = OnPropertyInternalValueChanged;
+            
+            if (settings.TrackValueErrorsChanged || settings.TrackCollectionItemErrorsChanged)
+                observingProperty.ErrorsChangedAction = OnPropertyInternalValueChanged;
+
+            if (settings.TrackCollectionChanged)
+                observingProperty.CollectionChangedAction = (_, args) => OnCollectionChanged(propertyName, args);
+
+            // Raise event when some of internal property of value changed.
+            void OnPropertyInternalValueChanged(object? sender, EventArgs args)
+            {
+                OnPropertyChanged(propertyName);
+            }
+
+            return observingProperty;
+        }
+        
         /// <summary>
         /// Unsubscribe from previous value of property and subscribe to new.
         /// </summary>
@@ -75,71 +100,34 @@ namespace ReactiveValidation.ObjectObserver
             var settings = observingProperty.Settings;
             observingProperty.PreviousValue = propertyValue;
 
-            if (settings.PropertyValueFactoryMethod != null)
-            {
-                var validatableObject = (IValidatableObject) propertyValue;
-                if (settings.PropertyValueFactoryMethod != null)
-                    validatableObject.Validator = settings.PropertyValueFactoryMethod.Invoke(validatableObject);
-            }
-
             if (settings.TrackValueChanged)
             {
-                if (observingProperty.ValueChangedAction == null)
-                    observingProperty.ValueChangedAction = (_, _) => OnPropertyChanged(propertyName);
-
                 var notifyPropertyChanged = (INotifyPropertyChanged) propertyValue;
                 notifyPropertyChanged.PropertyChanged += observingProperty.ValueChangedAction;
             }
 
             if (settings.TrackValueErrorsChanged)
             {
-                if (observingProperty.ErrorsChangedAction == null)
-                    observingProperty.ErrorsChangedAction = (_, _) => OnErrorsChanged(propertyName);
-
-                var validatableObject = (IValidatableObject) propertyValue;
+                var validatableObject = (INotifyDataErrorInfo) propertyValue;
                 validatableObject.ErrorsChanged += observingProperty.ErrorsChangedAction;
             }
 
+            if (settings.PropertyValueFactoryMethod != null)
+            {
+                var validatableObject = (IValidatableObject) propertyValue;
+                validatableObject.Validator = settings.PropertyValueFactoryMethod.Invoke(validatableObject);
+            }
+            
             if (settings.TrackCollectionChanged)
             {
-                if (observingProperty.CollectionChangedAction == null)
-                    observingProperty.CollectionChangedAction = (_, args) => OnCollectionChanged(propertyName, args);
-
                 var notifyCollectionChanged = (INotifyCollectionChanged) propertyValue;
                 notifyCollectionChanged.CollectionChanged += observingProperty.CollectionChangedAction;
             }
 
-            if (settings.TrackCollectionItemChanged)
+            if (settings.TrackCollectionItemChanged || settings.TrackCollectionItemErrorsChanged || settings.CollectionItemFactoryMethod != null)
             {
-                if (observingProperty.ValueChangedAction == null)
-                    observingProperty.ValueChangedAction = (_, _) => OnPropertyChanged(propertyName);
-
-                foreach (INotifyPropertyChanged? item in (IEnumerable) propertyValue)
-                {
-                    if (item != null)
-                        item.PropertyChanged += observingProperty.ValueChangedAction;
-                }
-            }
-
-            if (settings.TrackCollectionItemErrorsChanged)
-            {
-                if (observingProperty.ErrorsChangedAction == null)
-                    observingProperty.ErrorsChangedAction = (_, _) => OnErrorsChanged(propertyName);
-
-                foreach (IValidatableObject? item in (IEnumerable) propertyValue)
-                {
-                    if (item != null)
-                        item.ErrorsChanged += observingProperty.ErrorsChangedAction;
-                }
-            }
-
-            if (settings.CollectionItemFactoryMethod != null)
-            {
-                foreach (IValidatableObject? item in (IEnumerable) propertyValue)
-                {
-                    if (item != null)
-                        item.Validator = settings.CollectionItemFactoryMethod.Invoke(item);
-                }
+                foreach (var item in (IEnumerable) propertyValue)
+                    SubscribeCollectionItem(item, observingProperty);
             }
         }
 
@@ -160,11 +148,16 @@ namespace ReactiveValidation.ObjectObserver
                 notifyPropertyChanged.PropertyChanged -= observingProperty.ValueChangedAction;
             }
 
-            if (settings.TrackValueErrorsChanged || settings.PropertyValueFactoryMethod != null)
+            if (settings.TrackValueErrorsChanged)
+            {
+                var notifyDataErrorInfo = (INotifyDataErrorInfo)propertyValue;
+                notifyDataErrorInfo.ErrorsChanged -= observingProperty.ErrorsChangedAction;
+            }
+            
+            if (settings.PropertyValueFactoryMethod != null)
             {
                 var validatableObject = (IValidatableObject) propertyValue;
-                validatableObject.ErrorsChanged -= observingProperty.ErrorsChangedAction;
-                validatableObject.Validator?.Dispose();
+                validatableObject.Validator = null;
             }
 
             if (settings.TrackCollectionChanged)
@@ -173,25 +166,10 @@ namespace ReactiveValidation.ObjectObserver
                 notifyCollectionChanged.CollectionChanged -= observingProperty.CollectionChangedAction;
             }
 
-            if (settings.TrackCollectionItemChanged)
+            if (settings.TrackCollectionItemChanged || settings.TrackCollectionItemErrorsChanged || settings.CollectionItemFactoryMethod != null)
             {
-                foreach (INotifyPropertyChanged? item in (IEnumerable) propertyValue)
-                {
-                    if (item != null)
-                        item.PropertyChanged -= observingProperty.ValueChangedAction;
-                }
-            }
-
-            if (settings.TrackCollectionItemErrorsChanged || settings.CollectionItemFactoryMethod != null)
-            {
-                foreach (IValidatableObject? item in (IEnumerable) propertyValue)
-                {
-                    if (item != null)
-                    {
-                        item.ErrorsChanged -= observingProperty.ErrorsChangedAction;
-                        item.Validator?.Dispose();
-                    }
-                }
+                foreach (var item in (IEnumerable) propertyValue)
+                    UnsubscribeCollectionItem(item, observingProperty);
             }
         }
 
@@ -231,75 +209,85 @@ namespace ReactiveValidation.ObjectObserver
         }
 
         /// <summary>
-        /// Handle changed errors of value.
-        /// </summary>
-        /// <param name="propertyName">Name of property value or collection.</param>
-        private void OnErrorsChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
         /// Handle event of changing collection items.
         /// </summary>
         private void OnCollectionChanged(string propertyName, NotifyCollectionChangedEventArgs args)
         {
             var observingProperty = _observingProperties[propertyName];
-            var settings = observingProperty.Settings;
 
             // Unsubscribe from removed items.
             if (args.OldItems?.Count > 0)
             {
                 foreach (var oldItem in args.OldItems)
-                {
-                    if (oldItem == null)
-                        continue;
-                    
-                    if (settings.TrackCollectionItemChanged)
-                    {
-                        var notifyPropertyChanged = (INotifyPropertyChanged) oldItem;
-                        notifyPropertyChanged.PropertyChanged -= observingProperty.ValueChangedAction;
-                    }
-
-                    if (settings.TrackCollectionItemErrorsChanged)
-                    {
-                        var validatableObject = (IValidatableObject)oldItem;
-                        validatableObject.ErrorsChanged -= observingProperty.ErrorsChangedAction;
-                    }
-                }
+                    UnsubscribeCollectionItem(oldItem, observingProperty);
             }
 
             // Subscribe on new items.
             if (args.NewItems?.Count > 0)
             {
                 foreach (var newItem in args.NewItems)
-                {
-                    if (newItem == null)
-                        continue;
-                    
-                    if (settings.TrackCollectionItemChanged)
-                    {
-                        var notifyPropertyChanged = (INotifyPropertyChanged) newItem;
-                        notifyPropertyChanged.PropertyChanged += observingProperty.ValueChangedAction;
-                    }
-
-                    if (settings.TrackCollectionItemErrorsChanged)
-                    {
-                        var validatableObject = (IValidatableObject) newItem;
-                        validatableObject.ErrorsChanged += observingProperty.ErrorsChangedAction;
-                    }
-
-                    if (settings.CollectionItemFactoryMethod != null)
-                    {
-                        var validatableObject = (IValidatableObject) newItem;
-                        validatableObject.Validator = settings.CollectionItemFactoryMethod.Invoke(validatableObject);
-                    }
-                }
+                    SubscribeCollectionItem(newItem, observingProperty);
             }
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(observingProperty.PropertyName));
         }
 
+        /// <summary>
+        /// Subscribe to events of collection's item.
+        /// </summary>
+        private static void SubscribeCollectionItem(object? item, ObservingProperty observingProperty)
+        {
+            if (item == null)
+                return;
+
+            var settings = observingProperty.Settings;
+            if (settings.TrackCollectionItemChanged)
+            {
+                var notifyPropertyChanged = (INotifyPropertyChanged) item;
+                notifyPropertyChanged.PropertyChanged += observingProperty.ValueChangedAction;
+            }
+
+            if (settings.TrackCollectionItemErrorsChanged)
+            {
+                var validatableObject = (INotifyDataErrorInfo) item;
+                validatableObject.ErrorsChanged += observingProperty.ErrorsChangedAction;
+            }
+
+            if (settings.CollectionItemFactoryMethod != null)
+            {
+                var validatableObject = (IValidatableObject) item;
+                validatableObject.Validator = settings.CollectionItemFactoryMethod.Invoke(validatableObject);
+            }
+        }
+        
+        /// <summary>
+        /// Unsubscribe from events of collection's item.
+        /// </summary>
+        private static void UnsubscribeCollectionItem(object? item, ObservingProperty observingProperty)
+        {
+            if (item == null)
+                return;
+
+            var settings = observingProperty.Settings;
+            if (settings.TrackCollectionItemChanged)
+            {
+                var notifyPropertyChanged = (INotifyPropertyChanged)item;
+                notifyPropertyChanged.PropertyChanged -= observingProperty.ValueChangedAction;
+            }
+
+            if (settings.TrackCollectionItemErrorsChanged)
+            {
+                var validatableObject = (INotifyDataErrorInfo)item;
+                validatableObject.ErrorsChanged -= observingProperty.ErrorsChangedAction;
+            }
+
+            if (settings.CollectionItemFactoryMethod != null)
+            {
+                var validatableObject = (IValidatableObject)item;
+                validatableObject.Validator = null;
+            }
+        }
+        
         /// <summary>
         /// Unsubscribe from all events.
         /// </summary>
@@ -308,6 +296,8 @@ namespace ReactiveValidation.ObjectObserver
             if (!disposing)
                 return;
 
+            _instance.PropertyChanged -= OnInstancePropertyChanged;
+            
             foreach (var observingProperty in _observingProperties)
             {
                 UnsubscribePropertyValue(observingProperty.Value);

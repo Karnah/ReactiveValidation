@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq.Expressions;
 
 using ReactiveValidation.Validators;
@@ -241,7 +242,7 @@ namespace ReactiveValidation.Extensions
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TObject : IValidatableObject
                 where TCollection : IEnumerable<TItem>
-                where TItem : IValidatableObject
+                where TItem : INotifyDataErrorInfo
         {
             return ruleBuilder
                 .TrackCollectionItemErrorsChanged()
