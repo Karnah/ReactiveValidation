@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace ReactiveValidation
     /// <summary>
     /// Class which store all validation information about object.
     /// </summary>
-    public interface IObjectValidator : IDisposable
+    public interface IObjectValidator : INotifyPropertyChanged, IDisposable
     {
         /// <summary>
         /// <see langword="true" /> if doesn't exists any message with <see cref="ValidationMessageType.Error" /> or <see cref="ValidationMessageType.SimpleError" /> type.
