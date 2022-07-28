@@ -155,6 +155,93 @@ public partial class ObjectValidatorTests
     }
     
     /// <summary>
+    /// Check if <see cref="CascadeMode.Stop" /> and message changes for first sync validator, then async validator will be cancelled.
+    /// </summary>
+    [Fact]
+    public async Task AsyncValidate_TwoValidatorsCascadeModeStop_SecondValidatorIsCancelled()
+    {
+        // ARRANGE.
+        const string propertyName = nameof(TestValidatableObject.Number);
+        ValidationOptions.PropertyCascadeMode = CascadeMode.Stop;
+        
+        var instance = new TestValidatableObject();
+        var events = new List<DataErrorsChangedEventArgs>();
+        instance.ErrorsChanged += (_, args) => { events.Add(args); };
+
+        var firstPropertyValidator = PropertyValidatorExtensions
+            .CreateSyncPropertyValidator()
+            .WithMessages(Array.Empty<ValidationMessage>());
+        var secondPropertyValidatorWaiter = new AsyncManualResetEvent(false);
+        var secondPropertyValidator = PropertyValidatorExtensions
+            .CreateAsyncPropertyValidator()
+            .WithMessages(secondPropertyValidatorWaiter, new ValidationMessage(SECOND_VALIDATION_MESSAGE));
+        var ruleBuilder = RuleBuilderExtensions.CreateRuleBuilder(propertyName, firstPropertyValidator, secondPropertyValidator);
+        var objectValidator = new ObjectValidator<TestValidatableObject>(instance, new[] { ruleBuilder.Object });
+
+        // ACT + ASSERT.
+        // STEP 1: Run and check validation.
+        instance.RaisePropertyChangedEvent(propertyName);
+
+        CheckEvents(events);
+        CheckAsyncObjectValidator(objectValidator, true, false,
+            Array.Empty<ValidationMessage>());
+        
+        // STEP 2: Change first validator's messages and run validation again.
+        firstPropertyValidator.WithMessages(new ValidationMessage(FIRST_VALIDATION_MESSAGE));
+        instance.RaisePropertyChangedEvent(propertyName);
+
+        // Internal cancellation token should be cancelled and task completed.
+        // If not there is will be TaskCanceledException.
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        await objectValidator.WaitValidatingCompletedAsync(cts.Token);
+
+        CheckEvents(events, propertyName);
+        CheckSyncObjectValidator(objectValidator, false, false,
+            new ValidationMessage(FIRST_VALIDATION_MESSAGE));
+    }
+    
+    /// <summary>
+    /// Check if <see cref="CascadeMode.Stop" /> and message changes for first sync validator, then async validator will be cancelled.
+    /// </summary>
+    [Fact]
+    public async Task AsyncValidate_TwoAsyncValidatorsCascadeModeStop_SecondValidatorIsCancelled()
+    {
+        // ARRANGE.
+        const string propertyName = nameof(TestValidatableObject.Number);
+        ValidationOptions.PropertyCascadeMode = CascadeMode.Stop;
+        
+        var instance = new TestValidatableObject();
+        var events = new List<DataErrorsChangedEventArgs>();
+        instance.ErrorsChanged += (_, args) => { events.Add(args); };
+
+        var firstPropertyValidatorWaiter = new AsyncManualResetEvent(true);
+        var firstPropertyValidator = PropertyValidatorExtensions
+            .CreateAsyncPropertyValidator()
+            .WithMessages(firstPropertyValidatorWaiter, new ValidationMessage(FIRST_VALIDATION_MESSAGE));
+        var secondPropertyValidatorWaiter = new AsyncManualResetEvent(false);
+        var secondPropertyValidator = PropertyValidatorExtensions
+            .CreateAsyncPropertyValidator()
+            .WithMessages(secondPropertyValidatorWaiter, new ValidationMessage(SECOND_VALIDATION_MESSAGE));
+        var ruleBuilder = RuleBuilderExtensions.CreateRuleBuilder(propertyName, firstPropertyValidator, secondPropertyValidator);
+        var objectValidator = new ObjectValidator<TestValidatableObject>(instance, new[] { ruleBuilder.Object });
+
+        // ACT.
+        instance.RaisePropertyChangedEvent(propertyName);
+        
+        // ASSERT.
+        // Internal cancellation token should be cancelled and task completed.
+        // If not there is will be TaskCanceledException.
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        await objectValidator.WaitValidatingCompletedAsync(cts.Token);
+        
+        CheckEvents(events, propertyName);
+        CheckSyncObjectValidator(objectValidator, false, false,
+            new ValidationMessage(FIRST_VALIDATION_MESSAGE));
+    }
+    
+    /// <summary>
     /// Check properties of <see cref="ObjectValidator{TObject}" /> when async running.
     /// </summary>
     private static void CheckAsyncObjectValidator(

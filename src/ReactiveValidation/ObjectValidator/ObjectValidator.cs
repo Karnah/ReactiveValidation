@@ -234,9 +234,16 @@ namespace ReactiveValidation
                     
                     foreach (var propertyValidator in info.Validators)
                     {
+                        // After first async validator - all others will be validated in ValidateInternalAsync.
+                        shouldAsyncValidate |= propertyValidator.IsAsync;
+                        
                         // Check if all following validators should be ignored and have empty message.
                         if (shouldIgnoreAllFollowing)
                         {
+                            // Cancel async validation if it's running.
+                            if (shouldAsyncValidate)
+                                info.AsyncValidatorCancellationTokenSources[propertyValidator]?.Cancel();
+                            
                             if (info.ValidatorsValidationMessages[propertyValidator].Any())
                             {
                                 info.ValidatorsValidationMessages[propertyValidator] = Array.Empty<ValidationMessage>();
@@ -256,8 +263,6 @@ namespace ReactiveValidation
                             continue;
                         }
 
-                        // After first async validator - all others will be validated in ValidateInternalAsync.
-                        shouldAsyncValidate |= propertyValidator.IsAsync;
                         if (shouldAsyncValidate)
                         {
                             // Reset messages, because we don't need them during async validation.
@@ -383,7 +388,19 @@ namespace ReactiveValidation
                         
                         // There are first messages, so we don't need to revalidate following validators.
                         if (info.PropertyCascadeMode == CascadeMode.Stop)
+                        {
+                            // But we should cancel all tokens for them.
+                            var followingValidators = propertyValidators
+                                .SkipWhile(pv => pv != propertyValidator)
+                                .Skip(1);
+                            foreach (var followingValidator in followingValidators)
+                            {
+                                var followingTokenSource = info.AsyncValidatorCancellationTokenSources[followingValidator];
+                                followingTokenSource!.Cancel();
+                            }
+                            
                             return;
+                        }
                     }
                 }
             }
