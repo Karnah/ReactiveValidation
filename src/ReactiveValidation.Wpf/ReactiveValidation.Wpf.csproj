@@ -6,13 +6,15 @@
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>2.0.0-pre</PackageVersion>
+    <PackageVersion>2.0.1</PackageVersion>
     <Authors>Vsevolod Pilipenko</Authors>
     <Description>A small validation library for WPF and Avalonia that uses a fluent interface and allows display messages near controls in GUI with MVVM</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Karnah/ReactiveValidation</RepositoryUrl>
     <PackageTags>WPF, Avalonia, Reactive, Fluent validation</PackageTags>
     <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
+    <PackageProjectUrl>https://github.com/Karnah/ReactiveValidation</PackageProjectUrl>
+    <PackageReleaseNotes>Fixed small bugs</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

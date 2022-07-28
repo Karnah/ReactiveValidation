@@ -4,13 +4,26 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>2.0.0-pre</PackageVersion>
+    <PackageVersion>2.0.1</PackageVersion>
     <Authors>Vsevolod Pilipenko</Authors>
     <Description>A small validation library for WPF and Avalonia that uses a fluent interface and allows display messages near controls in GUI with MVVM</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/Karnah/ReactiveValidation</RepositoryUrl>
     <PackageTags>WPF, Avalonia, Reactive, Fluent validation</PackageTags>
     <TargetFrameworks>net461;netcoreapp3.0;netstandard2.0</TargetFrameworks>
+    <PackageProjectUrl>https://github.com/Karnah/ReactiveValidation</PackageProjectUrl>
+    <PackageReleaseNotes>New features:
+- Multitargeting (+netstandart2.0, +netcore3.1), upgraded from net4.5 to net4.6.1
+- Supported Avalonia
+- Property cascade mode (https://github.com/Karnah/ReactiveValidation/wiki/Property-cascade-mode)
+- Async validation support (https://github.com/Karnah/ReactiveValidation/wiki/Async-validation)
+- Transforming property value support (if property string, it's possible to create validation rules for int/long etc.) (https://github.com/Karnah/ReactiveValidation/wiki/Property-value-transforming)
+- Overriding default brushes (https://github.com/Karnah/ReactiveValidation/wiki/WPF.-Error-templates)
+- Separate class for rules + validator factory (https://github.com/Karnah/ReactiveValidation/wiki/Separate-validation-classes-and-validator-factory)
+- Better work with localization and resources (https://github.com/Karnah/ReactiveValidation/wiki/Localization)
+- Nullable reference support
+- Better documentation support
+- A lot of small fixes and refactoring</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
