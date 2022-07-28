@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -30,14 +31,13 @@ namespace ReactiveValidation.Tests.ObjectObserver
             };
             var events = new List<PropertyChangedEventArgs>();
             var objectObserver = new ObjectObserver<TestValidatableObject>(instance, properties);
-            objectObserver.PropertyChanged += (sender, args) => { events.Add(args); };
+            objectObserver.PropertyChanged += (_, args) => { events.Add(args); };
             
             // ACT.
             instance.Number = 1;
 
             // ASSERT.
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Number));
+            CheckEvents(events, nameof(instance.Number));
         }
         
         /// <summary>
@@ -56,14 +56,13 @@ namespace ReactiveValidation.Tests.ObjectObserver
             };
             var events = new List<PropertyChangedEventArgs>();
             var objectObserver = new ObjectObserver<TestValidatableObject>(instance, properties);
-            objectObserver.PropertyChanged += (sender, args) => { events.Add(args); };
+            objectObserver.PropertyChanged += (_, args) => { events.Add(args); };
             
             // ACT.
             instance.RaisePropertyChangedEvent(propertyName);
 
             // ASSERT.
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(propertyName);
+            CheckEvents(events, propertyName);
         }
 
         #endregion
@@ -91,22 +90,16 @@ namespace ReactiveValidation.Tests.ObjectObserver
             // Step 1 -  create and set inner object.
             var firstValidatableObject = new TestValidatableObject();
             instance.InnerValidatableObject = firstValidatableObject;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
 
             // Step 2 - change property of inner object.
             firstValidatableObject.Number = 1;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 3 - change inner object.
             var secondValidatableObject = new TestValidatableObject();
             instance.InnerValidatableObject = secondValidatableObject;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 4 - check unsubscription of first object.
             firstValidatableObject.Number = 10;
@@ -114,13 +107,11 @@ namespace ReactiveValidation.Tests.ObjectObserver
             
             // Step 5 - change inner property to null.
             instance.InnerValidatableObject = null;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 6 - check unsubscription of second object.
             secondValidatableObject.Number = 10;
-            events.Count.Should().Be(0);
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -144,36 +135,28 @@ namespace ReactiveValidation.Tests.ObjectObserver
             // Step 1 -  create and set inner object.
             var firstValidatableObject = new TestValidatableObject();
             instance.InnerValidatableObject = firstValidatableObject;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
 
             // Step 2 - raise messages changed of inner object.
             firstValidatableObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 3 - change inner object.
             var secondValidatableObject = new TestValidatableObject();
             instance.InnerValidatableObject = secondValidatableObject;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 4 - check unsubscription of first object.
             firstValidatableObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
-            events.Count.Should().Be(0);
+            CheckEvents(events);
             
             // Step 5 - change inner property to null.
             instance.InnerValidatableObject = null;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 6 - check unsubscription of second object.
             secondValidatableObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
-            events.Count.Should().Be(0);
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -203,9 +186,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             firstObjectValidator.Verify(v => v.Revalidate(), Times.Once);
             firstObjectValidator.VerifyNoOtherCalls();
             
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
             
             // Step 2 - change inner object.
             var secondValidatableObject = new TestValidatableObject();
@@ -220,9 +201,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             secondObjectValidator.Verify(v => v.Revalidate(), Times.Once);
             secondObjectValidator.VerifyNoOtherCalls();
             
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.InnerValidatableObject));
-            events.Clear();
+            CheckEvents(events, nameof(instance.InnerValidatableObject));
         }
         
         /// <summary>
@@ -246,36 +225,28 @@ namespace ReactiveValidation.Tests.ObjectObserver
             // Step 1 -  create and set collection.
             var firstCollection = new ObservableCollection<TestValidatableObject?>();
             instance.Collection = firstCollection;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
 
             // Step 2 - add new object to collection.
             firstCollection.Add(new TestValidatableObject());
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 3 - change collection.
             var secondCollection = new ObservableCollection<TestValidatableObject?>();
             instance.Collection = secondCollection;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 4 - check unsubscription of first object.
             firstCollection.Add(new TestValidatableObject());
-            events.Count.Should().Be(0);
+            CheckEvents(events);
             
             // Step 5 - change inner property to null.
             instance.Collection = null;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 6 - check unsubscription of second object.
             secondCollection.Add(new TestValidatableObject());
-            events.Count.Should().Be(0);
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -300,46 +271,34 @@ namespace ReactiveValidation.Tests.ObjectObserver
             // Step 1 -  create and add item to collection.
             var firstObject = new TestValidatableObject();
             collection.Add(firstObject);
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 2 - change item.
             firstObject.Number = 1;
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 3 - remove item.
             collection.Remove(firstObject);
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 4 - change removed item.
             firstObject.Number = 10;
-            events.Count.Should().Be(0);
+            CheckEvents(events);
             
             // Step 5 - add and remove null item.
             collection.Add(null);
             collection.Remove(null);
-            events.Count.Should().Be(2);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events[1].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection), nameof(instance.Collection));
             
             // Step 6 - add item and change collection.
             var secondObject = new TestValidatableObject();
             collection.Add(secondObject);
             instance.Collection = null;
-            events.Count.Should().Be(2);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events[1].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection), nameof(instance.Collection));
             
             // Step 7 - change object from removed collection.
             secondObject.Number = 10;
-            events.Count.Should().Be(0);
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -364,46 +323,34 @@ namespace ReactiveValidation.Tests.ObjectObserver
             // Step 1 -  create and add item to collection.
             var firstObject = new TestValidatableObject();
             collection.Add(firstObject);
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 2 - raise messages changed of item.
             firstObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 3 - remove item.
             collection.Remove(firstObject);
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
             
             // Step 4 - change removed item.
             firstObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
-            events.Count.Should().Be(0);
+            CheckEvents(events);
             
             // Step 5 - add and remove null item.
             collection.Add(null);
             collection.Remove(null);
-            events.Count.Should().Be(2);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events[1].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection), nameof(instance.Collection));
             
             // Step 6 - add item and change collection.
             var secondObject = new TestValidatableObject();
             collection.Add(secondObject);
             instance.Collection = null;
-            events.Count.Should().Be(2);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events[1].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection), nameof(instance.Collection));
             
             // Step 7 - raise event for object from removed collection.
             secondObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
-            events.Count.Should().Be(0);
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -434,9 +381,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             firstObjectValidator.Verify(v => v.Revalidate(), Times.Once);
             firstObjectValidator.VerifyNoOtherCalls();
             
-            events.Count.Should().Be(1);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection));
 
             // Step 2 - remove item.
             collection.Remove(firstObject);
@@ -452,10 +397,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             // Step 3 - add and remove null item.
             collection.Add(null);
             collection.Remove(null);
-            events.Count.Should().Be(2);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events[1].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection), nameof(instance.Collection));
             
             // Step 4 - add item and change collection.
             var secondObject = new TestValidatableObject();
@@ -472,10 +414,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             secondObjectValidator.Verify(v => v.Dispose(), Times.Once);
             secondObjectValidator.VerifyNoOtherCalls();
             
-            events.Count.Should().Be(2);
-            events[0].PropertyName.Should().Be(nameof(instance.Collection));
-            events[1].PropertyName.Should().Be(nameof(instance.Collection));
-            events.Clear();
+            CheckEvents(events, nameof(instance.Collection), nameof(instance.Collection));
         }
 
         #endregion
@@ -503,7 +442,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             instance.Number = 1;
 
             // ASSERT.
-            events.Should().BeEmpty();
+            CheckEvents(events);
         }
 
         /// <summary>
@@ -527,7 +466,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             instance.InnerValidatableObject.Number = 1;
 
             // ASSERT.
-            events.Should().BeEmpty();
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -551,7 +490,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             instance.InnerValidatableObject.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
 
             // ASSERT.
-            events.Should().BeEmpty();
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -601,7 +540,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             collection.Add(new TestValidatableObject());
 
             // ASSERT.
-            events.Should().BeEmpty();
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -627,7 +566,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             item.Number = 1;
 
             // ASSERT.
-            events.Should().BeEmpty();
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -653,7 +592,7 @@ namespace ReactiveValidation.Tests.ObjectObserver
             item.OnPropertyMessagesChanged(nameof(TestValidatableObject.Number));
 
             // ASSERT.
-            events.Should().BeEmpty();
+            CheckEvents(events);
         }
         
         /// <summary>
@@ -684,5 +623,18 @@ namespace ReactiveValidation.Tests.ObjectObserver
         }
         
         #endregion
+
+        /// <summary>
+        /// Check raised property changed events.
+        /// </summary>
+        private static void CheckEvents(List<PropertyChangedEventArgs> events, params string?[] properties)
+        {
+            events
+                .Select(e => e.PropertyName)
+                .Should()
+                .BeEquivalentTo(properties, options => options.WithStrictOrdering());
+
+            events.Clear();
+        }
     }
 }

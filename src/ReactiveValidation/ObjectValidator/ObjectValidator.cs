@@ -67,6 +67,9 @@ namespace ReactiveValidation
                 _cultureChangedEventHandler = OnCultureChanged;
                 ValidationOptions.LanguageManager.CultureChanged += _cultureChangedEventHandler;
             }
+
+            IsValid = true;
+            HasWarnings = false;
         }
 
         #region IObjectValidator
