@@ -41,6 +41,7 @@
                 <Button Margin="3" Padding="6,3,6,3" Content="Set English language" Command="{Binding SetEnglishLanguageCommand}" />
                 <Button Margin="3" Padding="6,3,6,3" Content="Set Russian language" Command="{Binding SetRussianLanguageCommand}" />
                 <Button Margin="3" Padding="6,3,6,3" Content="Set German language" Command="{Binding SetGermanLanguageCommand}" />
+                <Button Margin="3" Padding="6,3,6,3" Content="Set Czech language" Command="{Binding SetCzechLanguageCommand}" />
             </StackPanel>
             
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Phone number: " />

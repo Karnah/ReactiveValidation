@@ -40,6 +40,12 @@ namespace ReactiveValidation.Avalonia.Samples._3._Localization
                 CultureInfo.CurrentUICulture = culture;
                 ValidationOptions.LanguageManager.Culture = culture;
             });
+            SetCzechLanguageCommand = ReactiveCommand.Create(() =>
+            {
+                var culture = new CultureInfo("cs-CZ");
+                CultureInfo.CurrentUICulture = culture;
+                ValidationOptions.LanguageManager.Culture = culture;
+            });
         }
 
         private IObjectValidator GetValidator()
@@ -119,5 +125,7 @@ namespace ReactiveValidation.Avalonia.Samples._3._Localization
         public ICommand SetRussianLanguageCommand { get; }
 
         public ICommand SetGermanLanguageCommand { get; }
+
+        public ICommand SetCzechLanguageCommand { get; }
     }
 }

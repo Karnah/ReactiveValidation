@@ -14,10 +14,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Additional.cs.Designer.cs">
+      <DependentUpon>Additional.cs.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resources\Additional.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Additional.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Default.cs.Designer.cs">
+      <DependentUpon>Default.cs.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="Resources\Default.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -40,6 +50,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Additional.cs.resx">
+      <LastGenOutput>Additional.cs.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Default.cs.resx">
+      <LastGenOutput>Default.cs.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Default.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Default.Designer.cs</LastGenOutput>

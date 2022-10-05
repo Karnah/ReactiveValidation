@@ -41,6 +41,12 @@ namespace ReactiveValidation.Wpf.Samples._3._Localization
                 CultureInfo.CurrentUICulture = culture;
                 ValidationOptions.LanguageManager.Culture = culture;
             });
+            SetGermanLanguageCommand = ReactiveCommand.Create(() =>
+            {
+                var culture = new CultureInfo("cs-CZ");
+                CultureInfo.CurrentUICulture = culture;
+                ValidationOptions.LanguageManager.Culture = culture;
+            });
         }
 
         private IObjectValidator GetValidator()
