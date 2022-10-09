@@ -94,11 +94,11 @@ namespace ReactiveValidation.ObjectObserver
         {
             var propertyName = observingProperty.PropertyName;
             var propertyValue = ReactiveValidationHelper.GetPropertyValue<object?>(_instance, propertyName);
-            if (propertyValue == null)
-                return;
-
             var settings = observingProperty.Settings;
             observingProperty.PreviousValue = propertyValue;
+            
+            if (propertyValue == null)
+                return;
 
             if (settings.TrackValueChanged)
             {
