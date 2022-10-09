@@ -38,10 +38,10 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
-                <Button Margin="3" Padding="6,3,6,3" Content="Set English language" Command="{Binding SetEnglishLanguageCommand}" />
-                <Button Margin="3" Padding="6,3,6,3" Content="Set Russian language" Command="{Binding SetRussianLanguageCommand}" />
-                <Button Margin="3" Padding="6,3,6,3" Content="Set German language" Command="{Binding SetGermanLanguageCommand}" />
-                <Button Margin="3" Padding="6,3,6,3" Content="Set Czech language" Command="{Binding SetCzechLanguageCommand}" />
+                <Button Margin="3" Padding="6,3,6,3" Content="Set English language" Command="{Binding SetLanguageCommand}" CommandParameter="en-US" />
+                <Button Margin="3" Padding="6,3,6,3" Content="Set Russian language" Command="{Binding SetLanguageCommand}" CommandParameter="ru-RU" />
+                <Button Margin="3" Padding="6,3,6,3" Content="Set German language" Command="{Binding SetLanguageCommand}" CommandParameter="de-DE" />
+                <Button Margin="3" Padding="6,3,6,3" Content="Set Czech language" Command="{Binding SetLanguageCommand}" CommandParameter="cs-CZ" />
             </StackPanel>
             
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Phone number: " />
