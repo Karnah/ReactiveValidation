@@ -21,25 +21,7 @@ namespace ReactiveValidation.Avalonia.Samples._3._Localization
         {
             Validator = GetValidator();
 
-
-            SetEnglishLanguageCommand = ReactiveCommand.Create(() =>
-            {
-                var culture = new CultureInfo("en-US");
-                CultureInfo.CurrentUICulture = culture;
-                ValidationOptions.LanguageManager.Culture = culture;
-            });
-            SetRussianLanguageCommand = ReactiveCommand.Create(() =>
-            {
-                var culture = new CultureInfo("ru-RU");
-                CultureInfo.CurrentUICulture = culture;
-                ValidationOptions.LanguageManager.Culture = culture;
-            });
-            SetGermanLanguageCommand = ReactiveCommand.Create(() =>
-            {
-                var culture = new CultureInfo("de-DE");
-                CultureInfo.CurrentUICulture = culture;
-                ValidationOptions.LanguageManager.Culture = culture;
-            });
+            SetLanguageCommand = ReactiveCommand.Create<string>(SetLanguage);
         }
 
         private IObjectValidator GetValidator()
@@ -114,10 +96,13 @@ namespace ReactiveValidation.Avalonia.Samples._3._Localization
         public string? City { get; set; }
 
 
-        public ICommand SetEnglishLanguageCommand { get; }
+        public ICommand SetLanguageCommand { get; }
 
-        public ICommand SetRussianLanguageCommand { get; }
-
-        public ICommand SetGermanLanguageCommand { get; }
+        private static void SetLanguage(string cultureCode)
+        {
+            var culture = new CultureInfo(cultureCode);
+            CultureInfo.CurrentUICulture = culture;
+            ValidationOptions.LanguageManager.Culture = culture;
+        }
     }
 }

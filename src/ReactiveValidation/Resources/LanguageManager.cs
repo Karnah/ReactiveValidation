@@ -51,7 +51,8 @@ namespace ReactiveValidation
             {
                 new RussianLanguage(),
                 new EnglishLanguage(),
-                new GermanLanguage()
+                new GermanLanguage(),
+                new CzechLanguage()
             };
             _languages = languages.ToDictionary(l => l.Name, l => l);
             _cultureChangedCollection = new WeakCollection<EventHandler<CultureChangedEventArgs>>();
