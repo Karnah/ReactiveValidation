@@ -1,6 +1,6 @@
 # ReactiveValidation
-A small validation library for WPF and Avalonia that uses a fluent interface and allow display messages near controls in GUI with MVVM
-Inspired [FluentValidation](https://github.com/JeremySkinner/FluentValidation) by Jeremy Skinner
+A small validation library for WPF and Avalonia which uses a fluent interface and allows display messages near controls in GUI with MVVM
+Inspired [FluentValidation](https://github.com/JeremySkinner/FluentValidation) by Jeremy Skinner.
 
 ## Sample
 ```csharp
