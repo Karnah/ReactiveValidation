@@ -62,15 +62,15 @@ namespace ReactiveValidation.Tests.Validators
         }
 
 
-        private ValidationMessage GreaterThanOrEqualTo<TProp>(
+        private static ValidationMessage? GreaterThanOrEqualTo<TProp>(
             TProp value,
             TProp valueToCompare,
-            IComparer comparer = null,
+            IComparer? comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
                 where TProp : IComparable<TProp>
         {
             var greaterThanOrEqualToValidator = new GreaterThanOrEqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
             var validationMessage = greaterThanOrEqualToValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;

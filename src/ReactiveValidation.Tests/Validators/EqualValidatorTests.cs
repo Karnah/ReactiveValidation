@@ -42,14 +42,14 @@ namespace ReactiveValidation.Tests.Validators
         }
 
 
-        private ValidationMessage Equal<TProp>(
+        private static ValidationMessage? Equal<TProp>(
             TProp value,
             TProp valueToCompare,
-            IEqualityComparer comparer = null,
+            IEqualityComparer? comparer = null,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             var equalValidator = new EqualValidator<TestValidatableObject, TProp>(_ => valueToCompare, comparer, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
             var validationMessage = equalValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;

@@ -10,6 +10,7 @@
         xmlns:ivoac="clr-namespace:ReactiveValidation.Wpf.Samples._4._Inner_validatable_object_and_collection"
         xmlns:vbf="clr-namespace:ReactiveValidation.Wpf.Samples._5._Validation_builder_factory"
         xmlns:av="clr-namespace:ReactiveValidation.Wpf.Samples._6._Async_validation"
+        xmlns:throttle="clr-namespace:ReactiveValidation.Wpf.Samples._7._Throttle"
         mc:Ignorable="d"
         Title="ReactiveValidation samples" Height="500" Width="1000">
     <Grid>
@@ -36,6 +37,10 @@
             
             <TabItem Padding="3" Header="6. Async validation">
                 <av:AsyncValidationView />
+            </TabItem>
+            
+            <TabItem Padding="3" Header="7. Throttle">
+                <throttle:ThrottleView />
             </TabItem>
         </TabControl>
     </Grid>

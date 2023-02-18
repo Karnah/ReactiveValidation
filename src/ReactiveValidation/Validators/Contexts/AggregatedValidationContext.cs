@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Resources.StringSources;
+using ReactiveValidation.ValidatorFactory;
 
 namespace ReactiveValidation.Validators
 {
@@ -14,16 +15,19 @@ namespace ReactiveValidation.Validators
         private readonly TObject _validatableObject;
         private readonly IReadOnlyDictionary<string, IStringSource?> _displayNamesSources;
         private readonly ValidationContextCache _validationContextCache;
+        private readonly IReadOnlyDictionary<string, PropertyChangedStopwatch> _propertyChangedStopwatches;
 
         /// <summary>
         /// Create new aggregated validation context.
         /// </summary>
         /// <param name="validatableObject">Object which being validating.</param>
         /// <param name="displayNamesSources">Sources of display names.</param>
-        public AggregatedValidationContext(TObject validatableObject, IReadOnlyDictionary<string, IStringSource?> displayNamesSources)
+        /// <param name="propertyChangedStopwatches">Stopwatches for property changed event.</param>
+        public AggregatedValidationContext(TObject validatableObject, IReadOnlyDictionary<string, IStringSource?> displayNamesSources, IReadOnlyDictionary<string, PropertyChangedStopwatch> propertyChangedStopwatches)
         {
             _validatableObject = validatableObject;
             _displayNamesSources = displayNamesSources;
+            _propertyChangedStopwatches = propertyChangedStopwatches;
             _validationContextCache = new ValidationContextCache();
         }
 
@@ -32,7 +36,7 @@ namespace ReactiveValidation.Validators
         /// </summary>
         public ValidationContextFactory<TObject> CreateContextFactory(string propertyName)
         {
-            return new ValidationContextFactory<TObject>(_validatableObject, _validationContextCache, propertyName, _displayNamesSources[propertyName], GetPropertyValue(propertyName));
+            return new ValidationContextFactory<TObject>(_validatableObject, _validationContextCache, _propertyChangedStopwatches, propertyName, _displayNamesSources[propertyName], GetPropertyValue(propertyName));
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace ReactiveValidation.Validators
                 propertyValue = ReactiveValidationHelper.GetPropertyValue<object>(_validatableObject, propertyName);
                 _validationContextCache.SetPropertyValue(propertyName, propertyValue);
             }
-            
+
             return propertyValue;
         }
     }

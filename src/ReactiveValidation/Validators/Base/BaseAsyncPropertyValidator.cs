@@ -30,7 +30,7 @@ namespace ReactiveValidation.Validators
         }
 
         /// <inheritdoc />
-        public override bool IsAsync => true;
+        public sealed override bool IsAsync => true;
 
         /// <inheritdoc />
         public sealed override IReadOnlyList<ValidationMessage> ValidateProperty(ValidationContextFactory<TObject> contextFactory)
@@ -43,9 +43,12 @@ namespace ReactiveValidation.Validators
         {
             if (CheckIgnoreValidation(contextFactory))
                 return Array.Empty<ValidationMessage>();
-            
+
+            if (HasThrottle)
+                await ThrottleAsync(contextFactory, cancellationToken).ConfigureAwait(false);
+
             var context = contextFactory.CreateContext<TProp>();
-            if (await IsValidAsync(context, cancellationToken))
+            if (await IsValidAsync(context, cancellationToken).ConfigureAwait(false))
                 return Array.Empty<ValidationMessage>();
 
             return GetValidationMessages(context);

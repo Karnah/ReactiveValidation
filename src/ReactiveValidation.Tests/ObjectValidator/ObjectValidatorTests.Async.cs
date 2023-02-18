@@ -155,6 +155,74 @@ public partial class ObjectValidatorTests
     }
     
     /// <summary>
+    /// When there are two async validators, the second run only when first is completed.
+    /// </summary>
+    [Fact]
+    public async Task AsyncValidate_TwoAsyncValidators_SecondValidatorIsNotCalledUntilFirstIsCompleted()
+    {
+        // ARRANGE.
+        const string propertyName = nameof(TestValidatableObject.Number);
+        ValidationOptions.PropertyCascadeMode = CascadeMode.Continue;
+
+        var instance = new TestValidatableObject();
+        var events = new List<DataErrorsChangedEventArgs>();
+        instance.ErrorsChanged += (_, args) => { events.Add(args); };
+
+        var firstPropertyValidatorWaiter = new AsyncManualResetEvent(false);
+        var firstPropertyValidator = PropertyValidatorExtensions
+            .CreateAsyncPropertyValidator()
+            .WithMessages(firstPropertyValidatorWaiter, new ValidationMessage(FIRST_VALIDATION_MESSAGE));
+        var secondPropertyValidatorWaiter = new AsyncManualResetEvent(false);
+        var secondPropertyValidator = PropertyValidatorExtensions
+            .CreateAsyncPropertyValidator()
+            .WithMessages(secondPropertyValidatorWaiter, new ValidationMessage(SECOND_VALIDATION_MESSAGE));
+        var ruleBuilder = RuleBuilderExtensions.CreateRuleBuilder(propertyName, firstPropertyValidator, secondPropertyValidator);
+        var objectValidator = new ObjectValidator<TestValidatableObject>(instance, new[] { ruleBuilder.Object });
+
+        // ACT + ASSERT.
+        // STEP 1: Run and check validation.
+        instance.RaisePropertyChangedEvent(propertyName);
+
+        CheckEvents(events);
+        CheckAsyncObjectValidator(objectValidator, true, false,
+            Array.Empty<ValidationMessage>());
+
+        // Second is not called until first validator is not completed.
+        firstPropertyValidator.VerifyValidateProperty(Times.Once());
+        secondPropertyValidator.VerifyValidateProperty(Times.Never());
+
+        // STEP 2: Rerun validation again.
+        instance.RaisePropertyChangedEvent(propertyName);
+
+        CheckEvents(events);
+        CheckAsyncObjectValidator(objectValidator, true, false,
+            Array.Empty<ValidationMessage>());
+
+        // The same - second is not called until first validator is not completed.
+        firstPropertyValidator.VerifyValidateProperty(Times.Once());
+        secondPropertyValidator.VerifyValidateProperty(Times.Never());
+
+        // STEP 3: Allow to complete validation.
+        firstPropertyValidatorWaiter.Set();
+        secondPropertyValidatorWaiter.Set();
+
+        // Internal cancellation token should be cancelled and task completed.
+        // If not there is will be TaskCanceledException.
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        await objectValidator.WaitValidatingCompletedAsync(cts.Token);
+
+        // Two async validators - two events.
+        CheckEvents(events, propertyName, propertyName);
+        CheckSyncObjectValidator(objectValidator, false, false,
+            new ValidationMessage(FIRST_VALIDATION_MESSAGE), new ValidationMessage(SECOND_VALIDATION_MESSAGE));
+
+        // First has been already called. The second is called for the first time.
+        firstPropertyValidator.VerifyValidateProperty(Times.Never());
+        secondPropertyValidator.VerifyValidateProperty(Times.Once());
+    }
+
+    /// <summary>
     /// Check if <see cref="CascadeMode.Stop" /> and message changes for first sync validator, then async validator will be cancelled.
     /// </summary>
     [Fact]

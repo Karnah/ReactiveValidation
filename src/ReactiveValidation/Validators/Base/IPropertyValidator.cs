@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators.Conditions;
+using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation.Validators
 {
@@ -57,6 +58,12 @@ namespace ReactiveValidation.Validators
         /// </summary>
         /// <param name="condition">Condition.</param>
         void ValidateWhen(IValidationCondition<TObject> condition);
+
+        /// <summary>
+        /// Allows to setup delay before property validation execution.
+        /// If property changes value while this delay, previous value won't be validated.
+        /// </summary>
+        void Throttle(IPropertiesThrottle propertiesThrottle);
 
         #endregion
     }

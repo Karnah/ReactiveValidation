@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq.Expressions;
 using ReactiveValidation.ObjectObserver;
 using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators;
 using ReactiveValidation.Validators.Conditions;
+using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation
 {
@@ -60,6 +59,12 @@ namespace ReactiveValidation
         /// </summary>
         /// <param name="stringSource">Validation message source.</param>
         TBuilder WithMessageSource(IStringSource stringSource);
+
+        /// <summary>
+        /// Allows to setup delay before property validation execution.
+        /// If property changes value while this delay, previous value won't be validated.
+        /// </summary>
+        TBuilder Throttle(IPropertiesThrottle propertiesThrottle);
     }
 
 

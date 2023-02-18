@@ -8,6 +8,7 @@ using ReactiveValidation.Helpers;
 using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators.Conditions;
 using ReactiveValidation.Validators.PropertyValueTransformers;
+using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation.Validators
 {
@@ -21,21 +22,25 @@ namespace ReactiveValidation.Validators
     {
         private readonly IValidationCondition<TObject>? _condition;
         private readonly IValueTransformer<TObject, TProp>? _valueTransformer;
+        private readonly IPropertiesThrottle? _throttle;
 
         /// <summary>
         /// Create new instance of wrapping validator.
         /// </summary>
         /// <param name="condition">Condition the using inner validator.</param>
         /// <param name="valueTransformer"></param>
+        /// <param name="throttle">The properties throttle.</param>
         /// <param name="innerValidator">Inner validator.</param>
         public WrappingValidator(
             IValidationCondition<TObject>? condition,
             IValueTransformer<TObject, TProp>? valueTransformer,
+            IPropertiesThrottle? throttle,
             IPropertyValidator<TObject> innerValidator)
         {
             _condition = condition;
             _valueTransformer = valueTransformer;
-            
+            _throttle = throttle;
+
             InnerValidator = innerValidator;
             RelatedProperties = GetUnionRelatedProperties(innerValidator.RelatedProperties, condition?.RelatedProperties);
         }
@@ -47,7 +52,10 @@ namespace ReactiveValidation.Validators
         public IPropertyValidator<TObject> InnerValidator { get; }
 
         /// <inheritdoc />
-        public bool IsAsync => InnerValidator.IsAsync;
+        /// <remarks>
+        /// Sync validator becomes async when there are throttles.
+        /// </remarks>
+        public bool IsAsync => InnerValidator.IsAsync || _throttle != null;
 
         /// <inheritdoc />
         public IReadOnlyList<string> RelatedProperties { get; }
@@ -58,12 +66,12 @@ namespace ReactiveValidation.Validators
         {
             if (IsAsync)
                 throw new NotSupportedException();
-            
-            if (_condition?.ShouldIgnoreValidation(contextFactory) == true)
-                return Array.Empty<ValidationMessage>();
 
             if (_valueTransformer != null)
                 contextFactory = GetTransformedContextFactory(contextFactory, _valueTransformer);
+
+            if (_condition != null)
+                contextFactory.RegisterValidationCondition(_condition);
 
             return InnerValidator.ValidateProperty(contextFactory);
         }
@@ -74,11 +82,13 @@ namespace ReactiveValidation.Validators
             if (!IsAsync)
                 throw new NotSupportedException();
             
-            if (_condition?.ShouldIgnoreValidation(contextFactory) == true)
-                return Array.Empty<ValidationMessage>();
-
             if (_valueTransformer != null)
                 contextFactory = GetTransformedContextFactory(contextFactory, _valueTransformer);
+            
+            if (_condition != null)
+                contextFactory.RegisterValidationCondition(_condition);
+            if (_throttle != null)
+                contextFactory.RegisterPropertiesThrottle(_throttle);
             
             return await InnerValidator.ValidatePropertyAsync(contextFactory, cancellationToken);
         }
@@ -91,6 +101,12 @@ namespace ReactiveValidation.Validators
 
         /// <inheritdoc />
         public void ValidateWhen(IValidationCondition<TObject> condition)
+        {
+            throw new NotSupportedException("Wrapping validator doesn't support settings");
+        }
+
+        /// <inheritdoc />
+        public void Throttle(IPropertiesThrottle propertiesThrottle)
         {
             throw new NotSupportedException("Wrapping validator doesn't support settings");
         }
@@ -133,6 +149,7 @@ namespace ReactiveValidation.Validators
             return new ValidationContextFactory<TObject>(
                 contextFactory.ValidatableObject,
                 contextFactory.ValidationContextCache,
+                contextFactory.PropertyChangedStopwatches,
                 contextFactory.PropertyName,
                 contextFactory.DisplayNameSource,
                 transformedPropertyValue);
