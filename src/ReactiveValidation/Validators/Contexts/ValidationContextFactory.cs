@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.ValidatorFactory;
 using ReactiveValidation.Validators.Conditions;
+using ReactiveValidation.Validators.PropertyValueTransformers;
 using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation.Validators
@@ -36,6 +37,38 @@ namespace ReactiveValidation.Validators
             IStringSource? displayNameSource,
             object? propertyValue)
         {
+            ValidatableObject = validatableObject;
+            PropertyName = propertyName;
+            DisplayNameSource = displayNameSource;
+            PropertyValue = propertyValue;
+            ValidationContextCache = validationContextCache;
+            PropertyChangedStopwatches = propertyChangedStopwatches;
+        }
+
+        /// <summary>
+        /// Create new validation context factory.
+        /// </summary>
+        /// <param name="validatableObject">Object which being validating.</param>
+        /// <param name="validationContextCache">Cache which store property values, result of functions and etc.</param>
+        /// <param name="propertyChangedStopwatches">Stopwatches for property changed event.</param>
+        /// <param name="conditions">Validations conditions.</param>
+        /// <param name="throttles">Properties throttles.</param>
+        /// <param name="propertyName">Name of property which being validating.</param>
+        /// <param name="displayNameSource">Display name of validatable property.</param>
+        /// <param name="propertyValue">Value of property  which being validating.</param>
+        private ValidationContextFactory(
+            TObject validatableObject,
+            ValidationContextCache validationContextCache,
+            IReadOnlyDictionary<string, PropertyChangedStopwatch> propertyChangedStopwatches,
+            List<IValidationCondition<TObject>> conditions,
+            List<IPropertiesThrottle> throttles,
+            string propertyName,
+            IStringSource? displayNameSource,
+            object? propertyValue)
+        {
+            _conditions = conditions;
+            _throttles = throttles;
+
             ValidatableObject = validatableObject;
             PropertyName = propertyName;
             DisplayNameSource = displayNameSource;
@@ -81,6 +114,31 @@ namespace ReactiveValidation.Validators
         public ValidationContext<TObject, TProp> CreateContext<TProp>()
         {
             return new ValidationContext<TObject, TProp>(ValidatableObject, ValidationContextCache, PropertyName, DisplayNameSource, (TProp) PropertyValue!);
+        }
+
+        /// <summary>
+        /// Create new validation context factory with transformed property value.
+        /// </summary>
+        /// <typeparam name="TProp">The new type of property value.</typeparam>
+        /// <param name="valueTransformer">Property value transformer.</param>
+        /// <returns>New validation context factory with transformed property value.</returns>
+        public ValidationContextFactory<TObject> GetTransformedContextFactory<TProp>(IValueTransformer<TObject, TProp> valueTransformer)
+        {
+            if (!ValidationContextCache.TryGetValue(valueTransformer, out var transformedPropertyValue))
+            {
+                transformedPropertyValue = valueTransformer.Transform(ValidatableObject, PropertyValue);
+                ValidationContextCache.SetValue(valueTransformer, transformedPropertyValue);
+            }
+
+            return new ValidationContextFactory<TObject>(
+                ValidatableObject,
+                ValidationContextCache,
+                PropertyChangedStopwatches,
+                _conditions,
+                _throttles,
+                PropertyName,
+                DisplayNameSource,
+                transformedPropertyValue);
         }
 
         /// <summary>

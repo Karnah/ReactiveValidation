@@ -52,6 +52,8 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
                 .NotEmpty()
                 .When(vm => vm.Email, email => string.IsNullOrEmpty(email))
                 .Matches(@"^\d{11}$")
+                // For async validation is good idea to use Throttle.
+                // See ThrottleViewModel.
                 .Must(CheckPhoneIsInUseAsync).WithMessage("Phone number is already using");
 
             builder.RuleFor(vm => vm.Email)
@@ -60,6 +62,8 @@ namespace ReactiveValidation.Wpf.Samples._6._Async_validation
                 .NotEmpty()
                 .When(vm => vm.PhoneNumber, phoneNumber => string.IsNullOrEmpty(phoneNumber))
                 .Must(IsValidEmail)
+                // For async validation is good idea to use Throttle.
+                // See ThrottleViewModel.
                 .Must(CheckEmailIsInUseAsync).WithMessage("Email is already using");
 
             return builder.Build(this);

@@ -57,14 +57,14 @@ namespace ReactiveValidation.Validators
         /// <inheritdoc />
         public void SetStringSource(IStringSource stringSource)
         {
-            _overriddenStringSource.GuardNotCallTwice($"Methods 'WithMessage'/'WithLocalizedMessage' already have been called for {this.GetType()}");
+            _overriddenStringSource.GuardNotCallTwice($"Methods 'WithMessage'/'WithLocalizedMessage' already has been called for {this.GetType()}");
             _overriddenStringSource = stringSource;
         }
 
         /// <inheritdoc />
         public void ValidateWhen(IValidationCondition<TObject> condition)
         {
-            _condition.GuardNotCallTwice($"Method 'When' already have been called for {this.GetType()}");
+            _condition.GuardNotCallTwice($"Method 'When' already has been called for {this.GetType()}");
             _condition = condition;
 
             RelatedProperties = GetUnionRelatedProperties(condition.RelatedProperties);
@@ -73,7 +73,7 @@ namespace ReactiveValidation.Validators
         /// <inheritdoc />
         public void Throttle(IPropertiesThrottle propertiesThrottle)
         {
-            _throttle.GuardNotCallTwice($"Method 'When' already have been called for {this.GetType()}");
+            _throttle.GuardNotCallTwice($"Method 'Throttle' already has been called for {this.GetType()}");
             _throttle = propertiesThrottle;
         }
 

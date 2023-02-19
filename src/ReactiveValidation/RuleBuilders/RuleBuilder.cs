@@ -61,7 +61,7 @@ namespace ReactiveValidation
                 return _propertyValidators;
 
             return _propertyValidators
-                .Select(pv => new WrappingValidator<TObject, TProp>(_commonCondition, _valueTransformer, _commonThrottle, pv))
+                .Select(pv => new WrappingValidator<TObject, TProp>(pv, _commonCondition, _valueTransformer, _commonThrottle))
                 .ToList();
         }
 

@@ -85,8 +85,8 @@ public class PropertiesThrottleBuilder<TObject>
     public PropertiesThrottleBuilder<TObject> AddRelatedPropertyThrottle(string propertyName, TimeSpan relatedPropertyDueTime)
     {
         if (_relatedPropertiesDueTo.ContainsKey(propertyName))
-            throw new ArgumentException($"Throttle for property {propertyName} is already added", nameof(propertyName));
-        
+            throw new ArgumentException($"Throttle for property {propertyName} has been already added", nameof(propertyName));
+
         _relatedPropertiesDueTo.Add(propertyName, relatedPropertyDueTime);
 
         return this;

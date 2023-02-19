@@ -25,17 +25,17 @@ namespace ReactiveValidation.Validators
         private readonly IPropertiesThrottle? _throttle;
 
         /// <summary>
-        /// Create new instance of wrapping validator.
+        /// Create instance of <see cref="WrappingValidator{TObject,TProp}" /> class.
         /// </summary>
-        /// <param name="condition">Condition the using inner validator.</param>
-        /// <param name="valueTransformer"></param>
-        /// <param name="throttle">The properties throttle.</param>
         /// <param name="innerValidator">Inner validator.</param>
+        /// <param name="condition">Condition the using inner validator.</param>
+        /// <param name="valueTransformer">Property value transformer.</param>
+        /// <param name="throttle">The properties throttle.</param>
         public WrappingValidator(
-            IValidationCondition<TObject>? condition,
-            IValueTransformer<TObject, TProp>? valueTransformer,
-            IPropertiesThrottle? throttle,
-            IPropertyValidator<TObject> innerValidator)
+            IPropertyValidator<TObject> innerValidator,
+            IValidationCondition<TObject>? condition = null,
+            IValueTransformer<TObject, TProp>? valueTransformer = null,
+            IPropertiesThrottle? throttle = null)
         {
             _condition = condition;
             _valueTransformer = valueTransformer;
@@ -68,7 +68,7 @@ namespace ReactiveValidation.Validators
                 throw new NotSupportedException();
 
             if (_valueTransformer != null)
-                contextFactory = GetTransformedContextFactory(contextFactory, _valueTransformer);
+                contextFactory = contextFactory.GetTransformedContextFactory(_valueTransformer);
 
             if (_condition != null)
                 contextFactory.RegisterValidationCondition(_condition);
@@ -83,7 +83,7 @@ namespace ReactiveValidation.Validators
                 throw new NotSupportedException();
             
             if (_valueTransformer != null)
-                contextFactory = GetTransformedContextFactory(contextFactory, _valueTransformer);
+                contextFactory = contextFactory.GetTransformedContextFactory(_valueTransformer);
             
             if (_condition != null)
                 contextFactory.RegisterValidationCondition(_condition);
@@ -96,19 +96,19 @@ namespace ReactiveValidation.Validators
         /// <inheritdoc />
         public void SetStringSource(IStringSource stringSource)
         {
-            throw new NotSupportedException("Wrapping validator doesn't support settings");
+            throw new NotSupportedException($"{nameof(WrappingValidator<TObject, TProp>)} doesn't support settings");
         }
 
         /// <inheritdoc />
         public void ValidateWhen(IValidationCondition<TObject> condition)
         {
-            throw new NotSupportedException("Wrapping validator doesn't support settings");
+            throw new NotSupportedException($"{nameof(WrappingValidator<TObject, TProp>)} doesn't support settings");
         }
 
         /// <inheritdoc />
         public void Throttle(IPropertiesThrottle propertiesThrottle)
         {
-            throw new NotSupportedException("Wrapping validator doesn't support settings");
+            throw new NotSupportedException($"{nameof(WrappingValidator<TObject, TProp>)} doesn't support settings");
         }
 
         /// <summary>
@@ -130,29 +130,6 @@ namespace ReactiveValidation.Validators
             }
 
             return relatedProperties.ToList();
-        }
-
-        /// <summary>
-        /// Get new context factory with transformed property value.
-        /// </summary>
-        private static ValidationContextFactory<TObject> GetTransformedContextFactory(
-            ValidationContextFactory<TObject> contextFactory,
-            IValueTransformer<TObject, TProp> valueTransformer)
-        {
-            var validationContextCache = contextFactory.ValidationContextCache;
-            if (!validationContextCache.TryGetValue(valueTransformer, out var transformedPropertyValue))
-            {
-                transformedPropertyValue = valueTransformer.Transform(contextFactory.ValidatableObject, contextFactory.PropertyValue);
-                validationContextCache.SetValue(valueTransformer, transformedPropertyValue);
-            }
-
-            return new ValidationContextFactory<TObject>(
-                contextFactory.ValidatableObject,
-                contextFactory.ValidationContextCache,
-                contextFactory.PropertyChangedStopwatches,
-                contextFactory.PropertyName,
-                contextFactory.DisplayNameSource,
-                transformedPropertyValue);
         }
     }
 }
