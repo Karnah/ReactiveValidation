@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ReactiveValidation.Extensions;
 using ReactiveValidation.ObjectObserver;
@@ -6,6 +7,7 @@ using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators;
 using ReactiveValidation.Validators.Conditions;
 using ReactiveValidation.Validators.PropertyValueTransformers;
+using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation
 {
@@ -26,6 +28,7 @@ namespace ReactiveValidation
 
         private IPropertyValidator<TObject>? _currentValidator;
         private IValidationCondition<TObject>? _commonCondition;
+        private IPropertiesThrottle? _commonThrottle;
 
         /// <summary>
         /// Create new base rule builder instance.
@@ -54,17 +57,20 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public IReadOnlyList<IPropertyValidator<TObject>> GetValidators()
         {
-            if (_commonCondition == null && _valueTransformer == null)
+            if (_commonCondition == null && _valueTransformer == null && _commonThrottle == null)
                 return _propertyValidators;
 
             return _propertyValidators
-                .Select(pv => new WrappingValidator<TObject, TProp>(_commonCondition, _valueTransformer, pv))
+                .Select(pv => new WrappingValidator<TObject, TProp>(pv, _commonCondition, _valueTransformer, _commonThrottle))
                 .ToList();
         }
 
         /// <inheritdoc />
         public TBuilder SetValidator(IPropertyValidator<TObject> validator)
         {
+            if (validator == null)
+                throw new ArgumentNullException(nameof(validator));
+
             _propertyValidators.Add(validator);
             _currentValidator = validator;
 
@@ -75,6 +81,9 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder When(IValidationCondition<TObject> condition)
         {
+            if (condition == null)
+                throw new ArgumentNullException(nameof(condition));
+
             _currentValidator.GuardNotNull("Current validator hasn't set");
             _currentValidator.ValidateWhen(condition);
 
@@ -84,6 +93,9 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public TBuilder WithMessageSource(IStringSource stringSource)
         {
+            if (stringSource == null)
+                throw new ArgumentNullException(nameof(stringSource));
+
             _currentValidator.GuardNotNull("Current validator hasn't set");
             _currentValidator.SetStringSource(stringSource);
 
@@ -91,15 +103,42 @@ namespace ReactiveValidation
         }
 
         /// <inheritdoc />
+        public TBuilder Throttle(IPropertiesThrottle propertiesThrottle)
+        {
+            if (propertiesThrottle == null)
+                throw new ArgumentNullException(nameof(propertiesThrottle));
+
+            _currentValidator.GuardNotNull("Current validator hasn't set");
+            _currentValidator.Throttle(propertiesThrottle);
+
+            return This;
+        }
+
+        /// <inheritdoc />
         public IRuleBuilderOption<TObject, TProp> AllWhen(IValidationCondition<TObject> validationCondition)
         {
-            _commonCondition.GuardNotCallTwice("Method 'AllWhen' already have been called");
+            if (validationCondition == null)
+                throw new ArgumentNullException(nameof(validationCondition));
+
+            _commonCondition.GuardNotCallTwice("Method 'AllWhen' has already been called");
             _commonCondition = validationCondition;
 
             return This;
         }
 
-        
+        /// <inheritdoc />
+        public IRuleBuilderOption<TObject, TProp> CommonThrottle(IPropertiesThrottle propertiesThrottle)
+        {
+            if (propertiesThrottle == null)
+                throw new ArgumentNullException(nameof(propertiesThrottle));
+
+            _commonThrottle.GuardNotCallTwice("Method 'CommonThrottle' has already been called");
+            _commonThrottle = propertiesThrottle;
+
+            return This;
+        }
+
+
         /// <summary>
         /// Reference to strong-typed current object.
         /// </summary>

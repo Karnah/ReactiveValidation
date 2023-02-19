@@ -75,4 +75,11 @@
       <Version>18.3.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Page Update="7. Throttle\ThrottleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>

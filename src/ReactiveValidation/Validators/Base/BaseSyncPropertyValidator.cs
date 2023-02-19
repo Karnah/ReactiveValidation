@@ -30,14 +30,17 @@ namespace ReactiveValidation.Validators
         }
 
         /// <inheritdoc />
-        public override bool IsAsync => false;
+        /// <remarks>
+        /// Sync validator becomes async when there are throttles.
+        /// </remarks>
+        public sealed override bool IsAsync => HasThrottle;
 
         /// <inheritdoc />
         public sealed override IReadOnlyList<ValidationMessage> ValidateProperty(ValidationContextFactory<TObject> contextFactory)
         {
             if (CheckIgnoreValidation(contextFactory))
                 return Array.Empty<ValidationMessage>();
-            
+
             var context = contextFactory.CreateContext<TProp>();
             if (IsValid(context))
                 return Array.Empty<ValidationMessage>();
@@ -46,9 +49,18 @@ namespace ReactiveValidation.Validators
         }
 
         /// <inheritdoc />
-        public sealed override Task<IReadOnlyList<ValidationMessage>> ValidatePropertyAsync(ValidationContextFactory<TObject> contextFactory, CancellationToken cancellationToken)
+        public sealed override async Task<IReadOnlyList<ValidationMessage>> ValidatePropertyAsync(ValidationContextFactory<TObject> contextFactory, CancellationToken cancellationToken)
         {
-            throw new NotSupportedException();
+            if (CheckIgnoreValidation(contextFactory))
+                return Array.Empty<ValidationMessage>();
+
+            await ThrottleAsync(contextFactory, cancellationToken).ConfigureAwait(false);
+
+            var context = contextFactory.CreateContext<TProp>();
+            if (IsValid(context))
+                return Array.Empty<ValidationMessage>();
+
+            return GetValidationMessages(context);
         }
 
         /// <summary>

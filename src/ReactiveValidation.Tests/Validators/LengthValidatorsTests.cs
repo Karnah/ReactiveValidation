@@ -33,14 +33,14 @@ namespace ReactiveValidation.Tests.Validators
             AssertValidationMessage.NotEmptyMessage(validationMessage);
         }
 
-        private ValidationMessage BetweenLength(
+        private static ValidationMessage? BetweenLength(
             string value,
             int minLength,
             int maxLength,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             var betweenLengthValidator = new LengthValidator<TestValidatableObject>(_ => minLength, _ => maxLength, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
             var validationMessage = betweenLengthValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;
@@ -71,13 +71,13 @@ namespace ReactiveValidation.Tests.Validators
             AssertValidationMessage.NotEmptyMessage(validationMessage);
         }
 
-        private ValidationMessage MinLength(
+        private static ValidationMessage? MinLength(
             string value,
             int minLength,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             var betweenLengthValidator = new MinLengthValidator<TestValidatableObject>(_ => minLength, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
             var validationMessage = betweenLengthValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;
@@ -108,13 +108,13 @@ namespace ReactiveValidation.Tests.Validators
             AssertValidationMessage.NotEmptyMessage(validationMessage);
         }
 
-        private ValidationMessage MaxLength(
+        private static ValidationMessage? MaxLength(
             string value,
             int maxLength,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             var betweenLengthValidator = new MaxLengthValidator<TestValidatableObject>(_ => maxLength, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
             var validationMessage = betweenLengthValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;
@@ -147,13 +147,13 @@ namespace ReactiveValidation.Tests.Validators
             AssertValidationMessage.NotEmptyMessage(validationMessage);
         }
 
-        private ValidationMessage ExactLength(
+        private static ValidationMessage? ExactLength(
             string value,
             int length,
             ValidationMessageType validationMessageType = ValidationMessageType.Error)
         {
             var betweenLengthValidator = new ExactLengthValidator<TestValidatableObject>(_ => length, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
             var validationMessage = betweenLengthValidator.ValidateProperty(factory).FirstOrDefault();
 
             return validationMessage;

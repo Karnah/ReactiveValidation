@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 
 using Moq;
@@ -68,24 +67,6 @@ namespace ReactiveValidation.Tests.Validators
             AssertValidationMessage.EmptyMessage(validationMessage);
         }
 
-        private ValidationMessage? Between<TProp>(
-            TProp value,
-            TProp from,
-            TProp to,
-            IComparer? comparer = null,
-            ValidationMessageType validationMessageType = ValidationMessageType.Error)
-                where TProp : IComparable<TProp>
-        {
-            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
-            var factory = new ValidationContextFactory<TestValidatableObject>(null, new ValidationContextCache(), nameof(TestValidatableObject.Number), null, value);
-            var validationMessage = betweenValidator.ValidateProperty(factory).SingleOrDefault();
-
-            return validationMessage;
-        }
-
-
-
-
         [Fact]
         public void BetweenExtensions_Between20And10_Exception()
         {
@@ -94,6 +75,21 @@ namespace ReactiveValidation.Tests.Validators
 
             var ruleBuilder = Mock.Of<ISinglePropertyRuleBuilder<TestValidatableObject, int>>();
             Assert.Throws<ArgumentException>(() => ruleBuilder.Between(from, to));
+        }
+
+        private static ValidationMessage? Between<TProp>(
+            TProp value,
+            TProp from,
+            TProp to,
+            IComparer? comparer = null,
+            ValidationMessageType validationMessageType = ValidationMessageType.Error)
+            where TProp : IComparable<TProp>
+        {
+            var betweenValidator = new BetweenValidator<TestValidatableObject, TProp>(_ => from, _ => to, comparer, validationMessageType);
+            var factory = ValidationContextFactoryExtensions.CreateValidationContextFactory(nameof(TestValidatableObject.Number), value);
+            var validationMessage = betweenValidator.ValidateProperty(factory).SingleOrDefault();
+
+            return validationMessage;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +11,7 @@ using ReactiveValidation.Helpers;
 using ReactiveValidation.Helpers.Nito.AsyncEx;
 using ReactiveValidation.ObjectObserver;
 using ReactiveValidation.Resources.StringSources;
+using ReactiveValidation.ValidatorFactory;
 using ReactiveValidation.Validators;
 
 namespace ReactiveValidation
@@ -46,6 +48,8 @@ namespace ReactiveValidation
         /// </remarks>
         /// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly EventHandler<CultureChangedEventArgs>? _cultureChangedEventHandler;
+
+        private readonly ConcurrentDictionary<string, PropertyChangedStopwatch> _propertyChangedStopwatches = new();
 
         /// <summary>
         /// Create new instance of object validator.
@@ -133,6 +137,10 @@ namespace ReactiveValidation
         /// <inheritdoc />
         public void Revalidate()
         {
+            // If force revalidate is called, then throttle should be ignored.
+            // Remove all stopwatches for this.
+            _propertyChangedStopwatches.Clear();
+
             RevalidateInternal();
         }
 
@@ -201,6 +209,11 @@ namespace ReactiveValidation
         /// </summary>
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs args)
         {
+            _propertyChangedStopwatches.AddOrUpdate(
+                args.PropertyName,
+                _ => new PropertyChangedStopwatch(),
+                (_, stopwatch) => stopwatch.Restart());
+
             RevalidateInternal(args.PropertyName);
         }
 
@@ -215,7 +228,7 @@ namespace ReactiveValidation
         {
             lock (_lock)
             {
-                var aggregatedValidationContext = new AggregatedValidationContext<TObject>(_instance, _displayNamesSources);
+                var aggregatedValidationContext = new AggregatedValidationContext<TObject>(_instance, _displayNamesSources, _propertyChangedStopwatches);
                 var changedProperties = new List<string>();
                 var propertiesAsyncValidators = new Dictionary<string, List<IPropertyValidator<TObject>>>();
 
@@ -225,7 +238,7 @@ namespace ReactiveValidation
                     var isTarget = string.IsNullOrEmpty(propertyName) || info.PropertyName == propertyName;
                     if (!isTarget && !info.RelatedProperties.Contains(propertyName!))
                         continue;
-                    
+
                     var isMessagesChanged = false;
                     var shouldIgnoreAllFollowing = false;
                     var shouldRevalidateAllFollowing = isTarget;
@@ -358,10 +371,13 @@ namespace ReactiveValidation
             IReadOnlyList<IPropertyValidator<TObject>> propertyValidators)
         {
             var info = _validatableProperties[propertyName];
+            var tokenSources = propertyValidators
+                .ToDictionary(pv => pv, pv => info.AsyncValidatorCancellationTokenSources[pv]);
+
             foreach (var propertyValidator in propertyValidators)
             {
                 // Skip this validator because it should be revalidated with new property value.
-                var tokenSource = info.AsyncValidatorCancellationTokenSources[propertyValidator];
+                var tokenSource = tokenSources[propertyValidator];
                 if (tokenSource!.IsCancellationRequested)
                     continue;
 
@@ -371,7 +387,7 @@ namespace ReactiveValidation
 
                 if (tokenSource.IsCancellationRequested)
                     continue;
-                
+
                 lock (_lock)
                 {
                     if (tokenSource.IsCancellationRequested)
@@ -417,7 +433,11 @@ namespace ReactiveValidation
         {
             try
             {
-                return propertyValidator.ValidateProperty(contextFactory);
+                var messages = propertyValidator.ValidateProperty(contextFactory);
+                if (messages == null)
+                    throw new NullReferenceException("Invalid return value of PropertyValidator");
+
+                return messages;
             }
             catch (Exception e)
             {
@@ -441,17 +461,21 @@ namespace ReactiveValidation
         {
             try
             {
-                return propertyValidator.IsAsync
+                var messages =  propertyValidator.IsAsync
                     ? await propertyValidator.ValidatePropertyAsync(contextFactory, cancellationToken)
                     // ReSharper disable once MethodHasAsyncOverloadWithCancellation
                     // It's not an async validator, so we should use sync method.
                     : propertyValidator.ValidateProperty(contextFactory);
+                if (messages == null)
+                    throw new NullReferenceException("Invalid return value of PropertyValidator");
+
+                return messages;
             }
-            // Ignore only if exception was thrown by cancellationToken, not because of user code.
-            catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+            // If cancellation requested - result won't be used.
+            catch (Exception) when (cancellationToken.IsCancellationRequested)
             {
                 return Array.Empty<ValidationMessage>();
-            } 
+            }
             catch (Exception e)
             {
                 return new[]

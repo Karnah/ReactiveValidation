@@ -1,5 +1,5 @@
-﻿using ReactiveValidation.Validators;
-using ReactiveValidation.Validators.Conditions;
+﻿using ReactiveValidation.Validators.Conditions;
+using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation
 {
@@ -15,5 +15,11 @@ namespace ReactiveValidation
         /// The validation of the rule will occur only if the condition is <see langword="true" />.
         /// </summary>
         IRuleBuilderOption<TObject, TProp> AllWhen(IValidationCondition<TObject> validationCondition);
+
+        /// <summary>
+        /// Allows to setup delay before property validation execution.
+        /// If property changes value while this delay, previous value won't be validated.
+        /// </summary>
+        IRuleBuilderOption<TObject, TProp> CommonThrottle(IPropertiesThrottle propertiesThrottle);
     }
 }
