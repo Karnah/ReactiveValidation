@@ -66,6 +66,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Additional.resx</DependentUpon>
       </Compile>
+      <Compile Update="7. Throttle\ThrottleView.axaml.cs">
+        <DependentUpon>AsyncValidationView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Update="Resources\Additional.cs.resx">

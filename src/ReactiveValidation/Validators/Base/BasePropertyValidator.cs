@@ -8,6 +8,7 @@ using ReactiveValidation.Extensions;
 using ReactiveValidation.Helpers;
 using ReactiveValidation.Resources.StringSources;
 using ReactiveValidation.Validators.Conditions;
+using ReactiveValidation.Validators.Throttle;
 
 namespace ReactiveValidation.Validators
 {
@@ -24,6 +25,7 @@ namespace ReactiveValidation.Validators
 
         private IValidationCondition<TObject>? _condition;
         private IStringSource? _overriddenStringSource;
+        private IPropertiesThrottle? _throttle;
 
         /// <summary>
         /// Create new validator for property value.
@@ -46,21 +48,33 @@ namespace ReactiveValidation.Validators
         /// <inheritdoc />
         public IReadOnlyList<string> RelatedProperties { get; private set; }
 
-        
+        /// <summary>
+        /// Check if validator has throttle.
+        /// </summary>
+        protected bool HasThrottle => _throttle != null;
+
+
         /// <inheritdoc />
         public void SetStringSource(IStringSource stringSource)
         {
-            _overriddenStringSource.GuardNotCallTwice($"Methods 'WithMessage'/'WithLocalizedMessage' already have been called for {this.GetType()}");
+            _overriddenStringSource.GuardNotCallTwice($"Methods 'WithMessage'/'WithLocalizedMessage' already has been called for {this.GetType()}");
             _overriddenStringSource = stringSource;
         }
 
         /// <inheritdoc />
         public void ValidateWhen(IValidationCondition<TObject> condition)
         {
-            _condition.GuardNotCallTwice($"Method 'When' already have been called for {this.GetType()}");
+            _condition.GuardNotCallTwice($"Method 'When' already has been called for {this.GetType()}");
             _condition = condition;
 
             RelatedProperties = GetUnionRelatedProperties(condition.RelatedProperties);
+        }
+
+        /// <inheritdoc />
+        public void Throttle(IPropertiesThrottle propertiesThrottle)
+        {
+            _throttle.GuardNotCallTwice($"Method 'Throttle' already has been called for {this.GetType()}");
+            _throttle = propertiesThrottle;
         }
 
 
@@ -78,7 +92,10 @@ namespace ReactiveValidation.Validators
         /// </summary>
         protected virtual bool CheckIgnoreValidation(ValidationContextFactory<TObject> validationContextFactory)
         {
-            return _condition?.ShouldIgnoreValidation(validationContextFactory) == true;
+            if (_condition != null)
+                validationContextFactory.RegisterValidationCondition(_condition);
+
+            return validationContextFactory.ShouldIgnoreValidation();
         }
 
         /// <summary>
@@ -91,6 +108,16 @@ namespace ReactiveValidation.Validators
             return new []{ validationMessage };
         }
 
+        /// <summary>
+        /// Execute delay because of throttle.
+        /// </summary>
+        protected async Task ThrottleAsync(ValidationContextFactory<TObject> contextFactory, CancellationToken cancellationToken)
+        {
+            if (_throttle != null)
+                contextFactory.RegisterPropertiesThrottle(_throttle);
+
+            await contextFactory.ThrottleAsync(cancellationToken);
+        }
 
         /// <summary>
         /// Get names of related properties.

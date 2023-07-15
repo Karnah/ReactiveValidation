@@ -88,10 +88,36 @@ internal static class PropertyValidatorExtensions
             .Setup(pv => pv.ValidatePropertyAsync(It.IsAny<ValidationContextFactory<TestValidatableObject>>(), It.IsAny<CancellationToken>()))
             .Returns<ValidationContextFactory<TestValidatableObject>, CancellationToken>(async (_, cancellationToken) =>
             {
-                await waitingEvent.WaitAsync(cancellationToken);
+                await waitingEvent.WaitAsync(cancellationToken).ConfigureAwait(false);
                 return validationMessages;
             });
-        
+
+        return propertyValidator;
+    }
+
+    /// <summary>
+    /// Verify times of calling ValidateProperty and ValidatePropertyAsync.
+    /// </summary>
+    public static Mock<IPropertyValidator<TestValidatableObject>> VerifyValidateProperty(
+        this Mock<IPropertyValidator<TestValidatableObject>> propertyValidator,
+        Times times)
+    {
+        var syncTimes = propertyValidator.Object.IsAsync
+            ? Times.Never()
+            : times;
+        propertyValidator.Verify(
+            v => v.ValidateProperty(It.IsAny<ValidationContextFactory<TestValidatableObject>>()),
+            syncTimes);
+
+        var asyncTimes = propertyValidator.Object.IsAsync
+            ? times
+            : Times.Never();
+        propertyValidator.Verify(
+            v => v.ValidatePropertyAsync(It.IsAny<ValidationContextFactory<TestValidatableObject>>(), It.IsAny<CancellationToken>()),
+            asyncTimes);
+
+        propertyValidator.Invocations.Clear();
+
         return propertyValidator;
     }
 }
