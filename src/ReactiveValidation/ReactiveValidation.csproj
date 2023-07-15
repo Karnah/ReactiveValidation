@@ -4,7 +4,7 @@
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>2.0.2</PackageVersion>
+    <PackageVersion>2.0.3</PackageVersion>
     <Authors>Vsevolod Pilipenko</Authors>
     <Description>A small validation library for WPF and Avalonia that uses a fluent interface and allows display messages near controls in GUI with MVVM</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -12,11 +12,9 @@
     <PackageTags>WPF, Avalonia, Reactive, Fluent validation</PackageTags>
     <TargetFrameworks>net461;netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <PackageProjectUrl>https://github.com/Karnah/ReactiveValidation</PackageProjectUrl>
-    <PackageReleaseNotes>Changelog (from 2.0.1 version):
-- Added Czech language support (thanks @blahetal)
-- Fixed: ObjectObserver remove reference to previous value if new value is null
-      
-      
+    <PackageReleaseNotes>Changelog (from 2.0.2 version):
+- Added Throttle settings (delay before execute validation)
+
 New features (from 1.x.x versions):
 - Multitargeting (+netstandart2.0, +netcore3.1), upgraded from net4.5 to net4.6.1
 - Supported Avalonia
