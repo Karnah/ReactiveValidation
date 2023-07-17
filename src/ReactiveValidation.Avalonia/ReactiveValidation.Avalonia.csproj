@@ -13,8 +13,8 @@
         <RepositoryUrl>https://github.com/Karnah/ReactiveValidation</RepositoryUrl>
         <PackageTags>WPF, Avalonia, Reactive, Fluent validation</PackageTags>
         <PackageProjectUrl>https://github.com/Karnah/ReactiveValidation</PackageProjectUrl>
-        <PackageReleaseNotes>Changelog (from 2.0.2 version):
-- Added Throttle settings (delay before execute validation)</PackageReleaseNotes>
+        <PackageReleaseNotes>Changelog (from 2.0.3 version):
+- Supported Avalonia 11.0.0-rc1.1 and upper.</PackageReleaseNotes>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
