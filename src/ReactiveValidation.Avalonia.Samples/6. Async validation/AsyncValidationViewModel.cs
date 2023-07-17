@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MsBox.Avalonia;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveValidation.Extensions;
@@ -35,11 +36,11 @@ namespace ReactiveValidation.Avalonia.Samples._6._Async_validation
             
             await Validator.WaitValidatingCompletedAsync();
             
-            var dialog = MessageBox.Avalonia.MessageBoxManager
-                    .GetMessageBoxStandardWindow("", "Async validation has completed");
-            await dialog.Show();
+            var dialog = MessageBoxManager
+                    .GetMessageBoxStandard("", "Async validation has completed");
+            await dialog.ShowWindowDialogAsync(App.MainWindow);
         }
-        
+
         private IObjectValidator GetValidator()
         {
             var builder = new ValidationBuilder<AsyncValidationViewModel>();

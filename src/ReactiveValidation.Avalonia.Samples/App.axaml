@@ -8,14 +8,16 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-        <FluentTheme Mode="Light" />
-        
+        <FluentTheme />
+        <!--<SimpleTheme />-->
+
         <!-- It's contains styles for FluentTheme with overridden behavior. -->
         <!-- You should use it when: -->
         <!-- 1. You are using warnings (not only errors).  -->
         <!-- 2. You need runtime localization.  -->
         <!-- Otherwise you can use just default Avalonia theme. -->
         <rvThemes:FluentTheme />
+        <!--<rvThemes:SimpleTheme />-->
         
         <Style Selector="TextBox">
             <Setter Property="Margin" Value="3" />
@@ -29,4 +31,12 @@
             <Setter Property="Margin" Value="3" />
         </Style>
     </Application.Styles>
+
+    <Application.Resources>
+        <!-- If you use FluentTheme, you can override Warning brush like that. -->
+        <!--<SolidColorBrush x:Key="SystemControlWarningTextForegroundBrush" Color="Purple" />-->
+
+        <!-- If you use SimpleTheme, you can override Warning brush like that. -->
+        <!--<SolidColorBrush x:Key="WarningBrush" Color="Purple" />-->
+    </Application.Resources>
 </Application>

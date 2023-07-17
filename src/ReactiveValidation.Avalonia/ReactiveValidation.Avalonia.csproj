@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -6,7 +6,7 @@
         <TargetFrameworks>net461;netcoreapp3.0;netstandard2.0</TargetFrameworks>
         <LangVersion>latest</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2.0.3</PackageVersion>
+        <PackageVersion>2.0.4-pre</PackageVersion>
         <Authors>Vsevolod Pilipenko</Authors>
         <Description>A small validation library for WPF and Avalonia that uses a fluent interface and allows display messages near controls in GUI with MVVM</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -32,7 +32,7 @@
 
     <ItemGroup>
       <PackageReference Include="Avalonia">
-        <Version>[0.10.7,)</Version>
+        <Version>[11.0.0-rc1.1,)</Version>
       </PackageReference>
     </ItemGroup>
 

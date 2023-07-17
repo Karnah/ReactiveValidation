@@ -1,4 +1,4 @@
-using Avalonia.Controls;
+using Avalonia;
 
 namespace ReactiveValidation.Avalonia;
 
@@ -12,12 +12,10 @@ public static class AppBuilderExtensions
     /// </summary>
     /// <param name="builder">The application builder.</param>
     /// <param name="optionsBuilder">Action to set up additional properties of validation.</param>
-    /// <typeparam name="TAppBuilder">The type of application.</typeparam>
     /// <returns>The application builder.</returns>
-    public static TAppBuilder UseReactiveValidation<TAppBuilder>(
-        this TAppBuilder builder,
+    public static AppBuilder UseReactiveValidation(
+        this AppBuilder builder,
         Action<ValidationOptionsBuilder>? optionsBuilder = null)
-            where TAppBuilder : AppBuilderBase<TAppBuilder>, new()
     {
         optionsBuilder?.Invoke(ValidationOptions.Setup());
         return builder;

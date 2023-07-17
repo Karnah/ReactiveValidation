@@ -47,7 +47,7 @@
                     Command="{Binding AddItemCommand}" />
             
             <ScrollViewer Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
-                <ItemsControl Items="{Binding InnerObjectsCollection}">
+                <ItemsControl ItemsSource="{Binding InnerObjectsCollection}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
