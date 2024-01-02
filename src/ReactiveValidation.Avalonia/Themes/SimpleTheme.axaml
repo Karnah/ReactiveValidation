@@ -1,0 +1,115 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:rv="clr-namespace:ReactiveValidation;assembly=ReactiveValidation"
+        xmlns:c="clr-namespace:ReactiveValidation.Avalonia.Converters"
+        x:Class="ReactiveValidation.Avalonia.Themes.SimpleTheme">
+  <Styles.Resources>
+      <ResourceDictionary>
+          <c:ValidationMessageTypeToForegroundConverter x:Key="ValidationMessageTypeToForegroundConverter" />
+          <c:ValidationMessagesToBrushConverter x:Key="ValidationMessagesToBrushConverter" />
+
+          <SolidColorBrush x:Key="WarningBrush" Color="Orange" />
+
+          <ControlTheme x:Key="{x:Type DataValidationErrors}"
+                        TargetType="DataValidationErrors">
+            <Setter Property="Template">
+              <ControlTemplate>
+                <DockPanel LastChildFill="True">
+                  <ContentControl x:DataType="DataValidationErrors"
+                                  Content="{Binding (DataValidationErrors.Errors)}"
+                                  ContentTemplate="{TemplateBinding ErrorTemplate}"
+                                  DataContext="{TemplateBinding Owner}"
+                                  DockPanel.Dock="Right"
+                                  IsVisible="{Binding (DataValidationErrors.HasErrors)}" />
+                  <ContentPresenter Name="PART_ContentPresenter"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Content="{TemplateBinding Content}"
+                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                    CornerRadius="{TemplateBinding CornerRadius}" />
+                </DockPanel>
+              </ControlTemplate>
+            </Setter>
+            <Setter Property="ErrorTemplate">
+              <DataTemplate>
+                <Canvas Width="14"
+                        Height="14"
+                        Margin="4,0,1,0"
+                        Background="Transparent">
+                  <Canvas.Styles>
+                    <Style Selector="ToolTip">
+                      <Setter Property="BorderBrush">
+                          <Setter.Value>
+                              <MultiBinding x:DataType="DataValidationErrors"
+                                            Converter="{StaticResource ValidationMessagesToBrushConverter}">
+                                  <Binding />
+                                  <DynamicResource ResourceKey="ErrorBrush" />
+                                  <DynamicResource ResourceKey="WarningBrush" />
+                              </MultiBinding>
+                          </Setter.Value>
+                      </Setter>
+                    </Style>
+                  </Canvas.Styles>
+                  <ToolTip.Tip>
+                    <ItemsControl x:DataType="DataValidationErrors"
+                                  ItemsSource="{Binding}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type rv:ValidationMessage}">
+                                <TextBlock Text="{Binding Message}">
+                                    <TextBlock.Foreground>
+                                        <MultiBinding Converter="{StaticResource ValidationMessageTypeToForegroundConverter}">
+                                            <Binding Path="ValidationMessageType" />
+                                            <DynamicResource ResourceKey="ErrorBrush" />
+                                            <DynamicResource ResourceKey="WarningBrush" />
+                                        </MultiBinding>
+                                    </TextBlock.Foreground>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </ToolTip.Tip>
+                  <Path Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2"
+                        StrokeThickness="2">
+                      <Path.Stroke>
+                          <MultiBinding x:DataType="DataValidationErrors"
+                                        Converter="{StaticResource ValidationMessagesToBrushConverter}">
+                              <Binding />
+                              <DynamicResource ResourceKey="ErrorBrush" />
+                              <DynamicResource ResourceKey="WarningBrush" />
+                          </MultiBinding>
+                      </Path.Stroke>
+                  </Path>
+                </Canvas>
+              </DataTemplate>
+            </Setter>
+          </ControlTheme>
+      </ResourceDictionary>
+  </Styles.Resources>
+
+  <!-- Overridden styles for controls. If there aren't errors but there are warnings - border will be orange instead of red. -->
+  <Style Selector="ButtonSpinner:error /template/ Border#border">
+      <Setter Property="BorderBrush">
+          <Setter.Value>
+              <MultiBinding Converter="{StaticResource ValidationMessagesToBrushConverter}">
+                  <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="(DataValidationErrors.Errors)" />
+                  <DynamicResource ResourceKey="ErrorBrush" />
+                  <DynamicResource ResourceKey="WarningBrush" />
+              </MultiBinding>
+          </Setter.Value>
+      </Setter>
+  </Style>
+
+  <Style Selector="TextBox:error /template/ Border#border">
+    <Setter Property="BorderBrush">
+      <Setter.Value>
+        <MultiBinding Converter="{StaticResource ValidationMessagesToBrushConverter}">
+          <Binding RelativeSource="{RelativeSource TemplatedParent}" Path="(DataValidationErrors.Errors)" />
+          <DynamicResource ResourceKey="ErrorBrush" />
+          <DynamicResource ResourceKey="WarningBrush" />
+        </MultiBinding>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>

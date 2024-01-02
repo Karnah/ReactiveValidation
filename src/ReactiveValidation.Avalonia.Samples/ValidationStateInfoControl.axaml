@@ -18,7 +18,7 @@
 
         <TextBlock Grid.Row="0" Margin="3" FontWeight="Bold" Text="Validation messages:" />
         <ScrollViewer Grid.Row="1">
-            <ItemsControl Margin="3" Items="{Binding ValidationMessages}">
+            <ItemsControl Margin="3" ItemsSource="{Binding ValidationMessages}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid>

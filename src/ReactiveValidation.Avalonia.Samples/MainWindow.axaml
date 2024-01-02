@@ -11,7 +11,7 @@
         xmlns:av="clr-namespace:ReactiveValidation.Avalonia.Samples._6._Async_validation"
         xmlns:throttle="clr-namespace:ReactiveValidation.Avalonia.Samples._7._Throttle"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="ReactiveValidation.Avalonia.Samples.Views.MainWindow"
+        x:Class="ReactiveValidation.Avalonia.Samples.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="ReactiveValidation.Avalonia.Samples">
     
