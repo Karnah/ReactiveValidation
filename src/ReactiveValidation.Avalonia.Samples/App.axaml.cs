@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
-using ReactiveValidation.Avalonia.Samples.Views;
 
 namespace ReactiveValidation.Avalonia.Samples
 {
@@ -12,11 +10,6 @@ namespace ReactiveValidation.Avalonia.Samples
         /// Main window of application.
         /// </summary>
         public static Window? MainWindow { get; private set; }
-
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
 
         public override void OnFrameworkInitializationCompleted()
         {

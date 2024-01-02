@@ -69,10 +69,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="ReactiveUI.Fody">
-      <Version>18.3.1</Version>
+      <Version>19.5.31</Version>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF">
-      <Version>18.3.1</Version>
+      <Version>19.5.31</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

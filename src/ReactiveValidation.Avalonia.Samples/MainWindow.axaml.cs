@@ -1,18 +1,12 @@
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace ReactiveValidation.Avalonia.Samples.Views
+namespace ReactiveValidation.Avalonia.Samples
 {
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-        }
-        
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
         }
     }
 }
